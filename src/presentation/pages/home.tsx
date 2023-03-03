@@ -30,7 +30,7 @@ export function HomePage(): JSX.Element {
                   </h2>
                   <p className="text md:text-base">
                     Serve até {product.people} pessoa
-                    {product.people !== 1 && 's'}. (aprox.{product.size}g)
+                    {product.people !== 1 && 's'}. (aprox.{product.quantity}g)
                   </p>
                 </div>
                 <span className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter">

@@ -1,7 +1,7 @@
-export function ComplementsPage (): JSX.Element {
+export function ComplementsPage(): JSX.Element {
   return (
     <>
-     <h1>Hello</h1> 
+      <h1>Hello</h1>
     </>
   )
 }

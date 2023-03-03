@@ -1,8 +1,4 @@
-export type Size =
-  | 'p'
-  | 'm'
-  | 'g'
-  | 'gg'
+export type Size = 'p' | 'm' | 'g' | 'gg'
 
 export type Product = {
   img: string

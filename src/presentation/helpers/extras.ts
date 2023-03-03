@@ -9,7 +9,7 @@ export const extras: Extra = {
     m: 2.5,
     p: 2
   },
-  'Bis': {
+  Bis: {
     gg: 3,
     g: 2.5,
     m: 2,
@@ -21,7 +21,7 @@ export const extras: Extra = {
     m: 2,
     p: 2
   },
-  'Batom': {
+  Batom: {
     gg: 3,
     g: 3,
     m: 2,
@@ -39,13 +39,13 @@ export const extras: Extra = {
     m: 2,
     p: 2
   },
-  'Laka': {
+  Laka: {
     gg: 3,
     g: 3,
     m: 2,
     p: 1.5
   },
-  'Charge': {
+  Charge: {
     gg: 4,
     g: 3,
     m: 3,
@@ -57,7 +57,7 @@ export const extras: Extra = {
     m: 3,
     p: 3
   },
-  'Stikadinho': {
+  Stikadinho: {
     gg: 3,
     g: 3,
     m: 2,
@@ -87,16 +87,16 @@ export const extras: Extra = {
     m: 2,
     p: 1.5
   },
-  'M&M\'s': {
+  "M&M's": {
     gg: 3,
     g: 3,
     m: 2,
     p: 2
   },
-  'Bib\'s': {
+  "Bib's": {
     gg: 4,
     g: 4,
     m: 3,
     p: 3
-  },
+  }
 }
