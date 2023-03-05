@@ -1,3 +1,4 @@
+import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { BiMinus, BiPlus } from 'react-icons/bi'
 import { ComplementEvent, ComplementState } from '../pages'
 
@@ -5,13 +6,6 @@ export interface ItemListProps {
   title: string
   complements: ComplementState[]
   addComplementEvent: (event: ComplementEvent) => void
-}
-
-function formatCurrency(value: number): string {
-  return value
-    .toFixed(2)
-    .replace('.', ',')
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 }
 
 export function ItemList(props: ItemListProps): JSX.Element {

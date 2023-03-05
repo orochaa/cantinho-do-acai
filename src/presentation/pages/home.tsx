@@ -16,7 +16,7 @@ export function HomePage(): JSX.Element {
             to={slang(product.name)}
             className="rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
           >
-            <div className="relative flex max-h-[350px] items-center justify-center overflow-hidden rounded-xl">
+            <div className="relative flex max-h-[350px] items-end justify-center overflow-hidden rounded-xl">
               <img
                 src={product.img}
                 alt={`Imagem ${product.name}`}

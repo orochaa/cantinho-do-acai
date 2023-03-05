@@ -23,7 +23,7 @@ export const products: Product[] = [
     extras: 10
   },
   {
-    img: '/img/acai.jpg',
+    img: '/img/marmitex.jpeg',
     name: 'Marmitex do Cantinho',
     people: 3,
     price: 30,
@@ -33,7 +33,7 @@ export const products: Product[] = [
     extras: 10
   },
   {
-    img: '/img/acai.jpg',
+    img: '/img/copo-grande.jpeg',
     name: 'Copo Grande',
     people: 1,
     price: 26,

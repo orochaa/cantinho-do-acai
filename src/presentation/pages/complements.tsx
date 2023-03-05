@@ -1,3 +1,4 @@
+import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { useEffect, useMemo, useReducer } from 'react'
 import { useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
@@ -96,9 +97,15 @@ export function ComplementsPage(): JSX.Element {
     }))
   )
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+  const total = useMemo(() => {
+    let result = 0
+    result += products.find(product => slang(product.name) === item)
+      ?.price as number
+    extras.forEach(extra => {
+      result += extra.count * (extra.price as number)
+    })
+    return result
+  }, [item, extras])
 
   return (
     <div className="flex flex-col gap-8">
@@ -112,6 +119,9 @@ export function ComplementsPage(): JSX.Element {
         complements={extras}
         title="Adicionais"
       />
+      <button className="rounded bg-red-500 p-2 text-white/90">
+        Adicionar R${formatCurrency(total)}
+      </button>
     </div>
   )
 }
