@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import { exhaustive } from 'exhaustive'
 import { createContext, useCallback, useContext, useReducer } from 'react'
-import { BiInfoCircle } from 'react-icons/bi'
 
 interface IAlertContext {
   popMessage: (message: string) => void
@@ -116,7 +115,7 @@ export function AlertProvider({ children }: any): JSX.Element {
 
       <div
         data-testid="alert-container"
-        className="fixed top-20 left-1/2 -translate-x-1/2 z-50"
+        className="fixed top-20 left-1/2 z-50 -translate-x-1/2"
       >
         {alerts.map(alert => (
           <button
@@ -131,7 +130,6 @@ export function AlertProvider({ children }: any): JSX.Element {
             )}
             onClick={() => void clickAlert(alert)}
           >
-            <BiInfoCircle size={20} />
             {alert.message}
           </button>
         ))}

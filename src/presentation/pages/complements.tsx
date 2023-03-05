@@ -1,11 +1,14 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { useEffect, useMemo, useReducer } from 'react'
-import { useParams } from 'react-router-dom'
+import { useId, useMemo, useReducer } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
+import { useAlert, useCart } from '../context'
 import {
+  Product,
   Size,
   complements as complementOptions,
   extras as extraOptions,
+  parseSlang,
   products,
   slang
 } from '../helpers'
@@ -59,20 +62,13 @@ function complementReducer(
 
 export function ComplementsPage(): JSX.Element {
   const { item } = useParams()
+  const product = products.find(
+    product => slang(product.name) === item
+  ) as Product
 
-  const maxComplements = useMemo(() => {
-    return products.find(product => slang(product.name) === item)
-      ?.complements as number
-  }, [item])
-
-  const maxExtras = useMemo(() => {
-    return products.find(product => slang(product.name) === item)
-      ?.extras as number
-  }, [item])
-
-  const productSize = useMemo(() => {
-    return products.find(product => slang(product.name) === item)?.size as Size
-  }, [item])
+  const { addCartEvent } = useCart()
+  const { popMessage } = useAlert()
+  const navigate = useNavigate()
 
   const [complements, addComplementEvent] = useReducer<
     typeof complementReducer
@@ -81,7 +77,7 @@ export function ComplementsPage(): JSX.Element {
     complementOptions.map(complement => ({
       name: complement,
       count: 0,
-      max: maxComplements,
+      max: product.complements,
       total: 0
     }))
   )
@@ -91,21 +87,20 @@ export function ComplementsPage(): JSX.Element {
     Object.entries(extraOptions).map(([extra, sizes]) => ({
       name: extra,
       count: 0,
-      max: maxExtras,
+      max: product.extras,
       total: 0,
-      price: sizes[productSize]
+      price: sizes[product.size]
     }))
   )
 
   const total = useMemo(() => {
     let result = 0
-    result += products.find(product => slang(product.name) === item)
-      ?.price as number
+    result += product.price
     extras.forEach(extra => {
       result += extra.count * (extra.price as number)
     })
     return result
-  }, [item, extras])
+  }, [product, extras])
 
   return (
     <div className="flex flex-col gap-8">
@@ -119,9 +114,37 @@ export function ComplementsPage(): JSX.Element {
         complements={extras}
         title="Adicionais"
       />
-      <button className="rounded bg-red-500 p-2 text-white/90">
-        Adicionar R${formatCurrency(total)}
-      </button>
+      <div className="mx-auto flex gap-2">
+        <button
+          className="w-20 rounded border border-white bg-zinc-200 p-2 hover:border-zinc-400 hover:bg-zinc-300/90"
+          onClick={() => navigate('/')}
+        >
+          Voltar
+        </button>
+        <button
+          className="rounded border border-red-300 bg-red-500 p-2 text-white/90 hover:border-red-400 hover:bg-red-500/90"
+          onClick={() => {
+            addCartEvent({
+              type: 'ADD',
+              item: {
+                name: product.name,
+                price: product.price,
+                complements: complements
+                  .concat(extras)
+                  .filter(i => i.count > 0)
+                  .map(i => ({
+                    count: i.count,
+                    name: i.name,
+                    price: i.price
+                  }))
+              }
+            })
+            popMessage(`${product.name} adicionado ao carrinho`)
+          }}
+        >
+          Adicionar R${formatCurrency(total)}
+        </button>
+      </div>
     </div>
   )
 }
