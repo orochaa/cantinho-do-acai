@@ -1,5 +1,5 @@
+import { products, slang } from '@/presentation/helpers'
 import { Link } from 'react-router-dom'
-import { products, slang } from '../helpers'
 
 export function HomePage(): JSX.Element {
   return (
@@ -9,12 +9,12 @@ export function HomePage(): JSX.Element {
         alt="logo cantinho do açaí"
         className="mx-auto mb-8 max-h-48 w-11/12 max-w-fit"
       />
-      <div className="mx-auto grid w-11/12 max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {products.map(product => (
           <Link
             key={slang(product.name)}
             to={slang(product.name)}
-            className="rounded-xl border-2 border-violet-500/90 p-2"
+            className="rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
           >
             <div className="relative flex max-h-[350px] items-center justify-center overflow-hidden rounded-xl">
               <img

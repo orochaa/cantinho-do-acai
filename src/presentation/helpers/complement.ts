@@ -6,4 +6,4 @@ export const complements = [
   'Ovomaltine',
   'Paçoca',
   'Sucrilhos'
-]
+] as const

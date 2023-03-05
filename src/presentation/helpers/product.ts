@@ -7,6 +7,8 @@ export type Product = {
   quantity: number
   size: Size
   price: number
+  complements: number
+  extras: number
 }
 
 export const products: Product[] = [
@@ -16,7 +18,9 @@ export const products: Product[] = [
     people: 4,
     price: 45,
     quantity: 1000,
-    size: 'gg'
+    size: 'gg',
+    complements: 7,
+    extras: 10
   },
   {
     img: '/img/acai.jpg',
@@ -24,7 +28,9 @@ export const products: Product[] = [
     people: 3,
     price: 30,
     quantity: 900,
-    size: 'g'
+    size: 'g',
+    complements: 5,
+    extras: 10
   },
   {
     img: '/img/acai.jpg',
@@ -32,7 +38,9 @@ export const products: Product[] = [
     people: 1,
     price: 26,
     quantity: 770,
-    size: 'g'
+    size: 'g',
+    complements: 5,
+    extras: 10
   },
   {
     img: '/img/copo-medio.jpeg',
@@ -40,7 +48,9 @@ export const products: Product[] = [
     people: 1,
     price: 17,
     quantity: 440,
-    size: 'm'
+    size: 'm',
+    complements: 3,
+    extras: 10
   },
   {
     img: '/img/copo-pequeno.jpeg',
@@ -48,6 +58,8 @@ export const products: Product[] = [
     people: 1,
     price: 12,
     quantity: 250,
-    size: 'p'
+    size: 'p',
+    complements: 3,
+    extras: 5
   }
 ]
