@@ -10,11 +10,6 @@ export default defineConfig({
     port: 3000,
     strictPort: true
   },
-  build: {
-    target: 'ES5',
-    outDir: 'dist',
-    minify: 'esbuild'
-  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
