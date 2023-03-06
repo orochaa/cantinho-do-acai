@@ -1,6 +1,7 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { useId, useMemo, useReducer } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { MdOutlineShoppingCart } from 'react-icons/md'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import {
@@ -103,48 +104,58 @@ export function ComplementsPage(): JSX.Element {
   }, [product, extras])
 
   return (
-    <div className="flex flex-col gap-8">
-      <ItemList
-        addComplementEvent={addComplementEvent}
-        complements={complements}
-        title="Acompanhamentos"
-      />
-      <ItemList
-        addComplementEvent={addExtraEvent}
-        complements={extras}
-        title="Adicionais"
-      />
-      <div className="mx-auto flex gap-2">
-        <button
-          className="w-20 rounded border border-white bg-zinc-200 p-2 hover:border-zinc-400 hover:bg-zinc-300/90"
-          onClick={() => navigate('/')}
-        >
-          Voltar
-        </button>
-        <button
-          className="rounded border border-red-300 bg-red-500 p-2 text-white/90 hover:border-red-400 hover:bg-red-500/90"
-          onClick={() => {
-            addCartEvent({
-              type: 'ADD',
-              item: {
-                name: product.name,
-                price: product.price,
-                complements: complements
-                  .concat(extras)
-                  .filter(i => i.count > 0)
-                  .map(i => ({
-                    count: i.count,
-                    name: i.name,
-                    price: i.price
-                  }))
-              }
-            })
-            popMessage(`${product.name} adicionado ao carrinho`)
-          }}
-        >
-          Adicionar R${formatCurrency(total)}
-        </button>
+    <>
+      <div className="flex flex-col gap-8">
+        <ItemList
+          addComplementEvent={addComplementEvent}
+          complements={complements}
+          title="Acompanhamentos"
+        />
+        <ItemList
+          addComplementEvent={addExtraEvent}
+          complements={extras}
+          title="Adicionais"
+        />
       </div>
-    </div>
+      <div className="mx-auto mt-8 grid grid-rows-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 text-center">
+          <Link
+            to="/"
+            className="rounded border border-white bg-zinc-200 p-2 hover:border-zinc-400 hover:bg-zinc-300/90"
+          >
+            Voltar
+          </Link>
+          <button
+            className="rounded border border-red-300 bg-red-500 p-2 text-white hover:border-red-400 hover:bg-red-500/90"
+            onClick={() => {
+              addCartEvent({
+                type: 'ADD',
+                item: {
+                  product: product,
+                  complements: complements
+                    .concat(extras)
+                    .filter(i => i.count > 0)
+                    .map(i => ({
+                      count: i.count,
+                      name: i.name,
+                      price: i.price
+                    }))
+                }
+              })
+              popMessage(`${product.name} adicionado ao carrinho`)
+            }}
+          >
+            Adicionar R${formatCurrency(total)}
+          </button>
+        </div>
+        <Link
+          to="/cart"
+          className="flex items-center justify-center gap-2 rounded border-2 border-red-600 bg-zinc-50 p-2 font-semibold"
+        >
+          <MdOutlineShoppingCart size={22} className="text-red-600" /> Ver
+          carrinho
+        </Link>
+      </div>
+    </>
   )
 }
