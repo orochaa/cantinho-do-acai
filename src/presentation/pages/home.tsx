@@ -1,9 +1,20 @@
 import { products, slang } from '@/presentation/helpers'
+import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useCart } from '../context'
 
 export function HomePage(): JSX.Element {
+  const { cart } = useCart()
   return (
     <>
+      {cart.length && (
+        <Link
+          to="/cart"
+          className="absolute top-6 right-6 rounded border border-red-300 bg-red-500/90 p-2 text-white/90 "
+        >
+          <ShoppingCart size={20} />
+        </Link>
+      )}
       <img
         src="/img/logo.png"
         alt="logo cantinho do açaí"

@@ -1,15 +1,13 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { useId, useMemo, useReducer } from 'react'
-import { MdOutlineShoppingCart } from 'react-icons/md'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ShoppingCart } from 'lucide-react'
+import { useMemo, useReducer } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import {
   Product,
-  Size,
   complements as complementOptions,
   extras as extraOptions,
-  parseSlang,
   products,
   slang
 } from '../helpers'
@@ -69,7 +67,6 @@ export function ComplementsPage(): JSX.Element {
 
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
-  const navigate = useNavigate()
 
   const [complements, addComplementEvent] = useReducer<
     typeof complementReducer
@@ -152,8 +149,7 @@ export function ComplementsPage(): JSX.Element {
           to="/cart"
           className="flex items-center justify-center gap-2 rounded border-2 border-red-600 bg-zinc-50 p-2 font-semibold"
         >
-          <MdOutlineShoppingCart size={22} className="text-red-600" /> Ver
-          carrinho
+          <ShoppingCart size={22} className="text-red-600" /> Ver carrinho
         </Link>
       </div>
     </>
