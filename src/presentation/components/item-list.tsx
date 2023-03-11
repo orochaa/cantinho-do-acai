@@ -1,5 +1,5 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { BiMinus, BiPlus } from 'react-icons/bi'
+import { Minus, Plus } from 'lucide-react'
 import { ComplementEvent, ComplementState } from '../pages'
 
 export interface ItemListProps {
@@ -42,7 +42,7 @@ export function ItemList(props: ItemListProps): JSX.Element {
                 })
               }
             >
-              <BiMinus size={20} className="text-red-500" />
+              <Minus size={20} className="text-red-500" />
             </button>
             <span>{complement.count}</span>
             <button
@@ -53,7 +53,7 @@ export function ItemList(props: ItemListProps): JSX.Element {
                 })
               }
             >
-              <BiPlus size={20} className="text-red-500" />
+              <Plus size={20} className="text-red-500" />
             </button>
           </div>
         </div>

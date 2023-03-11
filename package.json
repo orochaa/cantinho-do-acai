@@ -13,9 +13,9 @@
     "@brazilian-utils/brazilian-utils": "1.0.0-rc.12",
     "clsx": "^1.2.1",
     "exhaustive": "^1.1.1",
+    "lucide-react": "^0.125.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.2"
   },
   "devDependencies": {

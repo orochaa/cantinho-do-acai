@@ -1,7 +1,6 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { useCallback, useEffect, useMemo } from 'react'
-import { BsPlusCircle } from 'react-icons/bs'
-import { MdClose } from 'react-icons/md'
+import { PlusSquare, Square, XIcon } from 'lucide-react'
+import { useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context'
 
@@ -61,7 +60,7 @@ export function CartPage(): JSX.Element {
                 className="absolute top-1 right-1 text-red-600"
                 onClick={() => addCartEvent({ type: 'REMOVE', id })}
               >
-                <MdClose size={22} />
+                <XIcon size={22} />
               </button>
               <h3 className="text-center font-semibold">
                 {product.name} - R$
@@ -70,7 +69,7 @@ export function CartPage(): JSX.Element {
               <ul className="flex flex-col gap-1">
                 {complements.map(complement => (
                   <li key={complement.name} className="flex items-center gap-1">
-                    <BsPlusCircle size={20} className="text-pink-600" />{' '}
+                    <PlusSquare size={20} className="text-pink-600" />
                     {complement.count} - {complement.name}
                     {!!complement.price &&
                       ` - R$${formatCurrency(
