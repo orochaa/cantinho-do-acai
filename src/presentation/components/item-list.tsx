@@ -1,6 +1,6 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { Minus, Plus } from 'lucide-react'
-import { ComplementEvent, ComplementState } from '../pages'
+import { ComplementEvent, ComplementState } from '../types'
 
 export interface ItemListProps {
   title: string

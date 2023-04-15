@@ -1,5 +1,5 @@
 import { Background } from '@/presentation/components'
-import { CartPage, ComplementsPage, HomePage } from '@/presentation/pages'
+import { AcaiPage, CartPage, HomePage, PaletaPage } from '@/presentation/pages'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ScrollToTop } from './scrool-to-top'
 
@@ -10,7 +10,8 @@ export function Router(): JSX.Element {
         <Routes>
           <Route path="" element={<Background />}>
             <Route path="" element={<HomePage />} />
-            <Route path=":item" element={<ComplementsPage />} />
+            <Route path="acai/:item" element={<AcaiPage />} />
+            <Route path="paleta/:item" element={<PaletaPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>

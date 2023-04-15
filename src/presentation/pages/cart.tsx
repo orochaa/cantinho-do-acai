@@ -10,11 +10,10 @@ export function CartPage(): JSX.Element {
   const navigate = useNavigate()
 
   const totalOrder = useMemo(() => {
-    let result = 0
-    cart.forEach(item => {
-      result += item.total
-    })
-    return result
+    return cart.reduce((prev, current) => {
+      prev.total += current.total
+      return prev
+    }).total
   }, [cart])
 
   useEffect(() => {
@@ -57,7 +56,7 @@ export function CartPage(): JSX.Element {
               className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
             >
               <button
-                className="absolute top-1 right-1 text-red-600"
+                className="absolute right-1 top-1 text-red-600"
                 onClick={() => addCartEvent({ type: 'REMOVE', id })}
               >
                 <XIcon size={22} />

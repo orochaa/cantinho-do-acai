@@ -115,7 +115,7 @@ export function AlertProvider({ children }: any): JSX.Element {
 
       <div
         data-testid="alert-container"
-        className="fixed top-20 left-1/2 z-50 -translate-x-1/2"
+        className="fixed left-1/2 top-20 z-50 -translate-x-1/2"
       >
         {alerts.map(alert => (
           <button

@@ -4,65 +4,13 @@ import { useMemo, useReducer } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
-import {
-  Product,
-  complements as complementOptions,
-  extras as extraOptions,
-  products,
-  slang
-} from '../helpers'
+import { acai, complementReducer, slang } from '../data'
+import { Product } from '../types'
 
-export type ComplementState = {
-  name: string
-  count: number
-  total: number
-  max: number
-  price?: number
-}
-
-export type ComplementEvent = {
-  type: 'ADD' | 'REMOVE'
-  complement: string
-}
-
-function complementReducer(
-  state: ComplementState[],
-  event: ComplementEvent
-): ComplementState[] {
-  return state.map(complement => {
-    const calc = (field: 'count' | 'total'): number => {
-      const result = complement[field] + (event.type === 'ADD' ? 1 : -1)
-      return complement.total < complement.max
-        ? result > 0
-          ? result < complement.max
-            ? result
-            : complement.max
-          : 0
-        : event.type === 'REMOVE'
-        ? result
-        : complement[field]
-    }
-    const total = calc('total')
-    if (complement.name === event.complement) {
-      return {
-        name: complement.name,
-        count: calc('count'),
-        max: complement.max,
-        price: complement.price,
-        total
-      }
-    }
-    return {
-      ...complement,
-      total
-    }
-  })
-}
-
-export function ComplementsPage(): JSX.Element {
+export function AcaiPage(): JSX.Element {
   const { item } = useParams()
-  const product = products.find(
-    product => slang(product.name) === item
+  const product = acai.products.find(
+    product => slang(product.name) === slang(item as string)
   ) as Product
 
   const { addCartEvent } = useCart()
@@ -72,7 +20,7 @@ export function ComplementsPage(): JSX.Element {
     typeof complementReducer
   >(
     complementReducer,
-    complementOptions.map(complement => ({
+    acai.complements.map(complement => ({
       name: complement,
       count: 0,
       max: product.complements,
@@ -82,7 +30,7 @@ export function ComplementsPage(): JSX.Element {
 
   const [extras, addExtraEvent] = useReducer<typeof complementReducer>(
     complementReducer,
-    Object.entries(extraOptions).map(([extra, sizes]) => ({
+    Object.entries(acai.extras).map(([extra, sizes]) => ({
       name: extra,
       count: 0,
       max: product.extras,
@@ -92,8 +40,7 @@ export function ComplementsPage(): JSX.Element {
   )
 
   const total = useMemo(() => {
-    let result = 0
-    result += product.price
+    let result = product.price
     extras.forEach(extra => {
       result += extra.count * (extra.price as number)
     })
@@ -128,7 +75,7 @@ export function ComplementsPage(): JSX.Element {
               addCartEvent({
                 type: 'ADD',
                 item: {
-                  product: product,
+                  product,
                   complements: complements
                     .concat(extras)
                     .filter(i => i.count > 0)
@@ -137,7 +84,8 @@ export function ComplementsPage(): JSX.Element {
                       name: i.name,
                       price: i.price
                     }))
-                }
+                },
+                initialPrice: product.price
               })
               popMessage(`${product.name} adicionado ao carrinho`)
             }}

@@ -1,6 +1,6 @@
 import { exhaustive } from 'exhaustive'
 import { ReactNode, createContext, useContext, useReducer } from 'react'
-import { Product } from '../helpers'
+import { Product } from '../types'
 
 type CartItem = {
   id: number
@@ -17,6 +17,7 @@ type CartEvent =
   | {
       type: 'ADD'
       item: Omit<CartItem, 'id' | 'total'>
+      initialPrice: number
     }
   | {
       type: 'REMOVE'
@@ -33,7 +34,7 @@ const CartContext = createContext<ICartContext>({} as ICartContext)
 function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   return exhaustive(event, 'type', {
     ADD: e => {
-      let total = e.item.product.price
+      let total = e.initialPrice
       e.item.complements.forEach(complement => {
         total += complement.price ?? 0
       })
