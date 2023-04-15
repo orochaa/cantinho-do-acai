@@ -1,4 +1,4 @@
-import { Category, Product, Size } from '../types'
+import { Product, Size } from '../types'
 
 const products: Product[] = [
   {

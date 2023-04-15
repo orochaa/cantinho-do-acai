@@ -33,12 +33,12 @@ const CartContext = createContext<ICartContext>({} as ICartContext)
 
 function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   return exhaustive(event, 'type', {
-    ADD: e => {
-      let total = e.initialPrice
-      e.item.complements.forEach(complement => {
-        total += complement.price ?? 0
+    ADD: ({ initialPrice, item }) => {
+      let total = initialPrice
+      item.complements.forEach(complement => {
+        total += (complement.price ?? 0) * complement.count
       })
-      return [...state, { ...e.item, id: state.length, total }]
+      return [...state, { ...item, id: state.length, total }]
     },
     REMOVE: e => state.filter(item => item.id !== e.id)
   })

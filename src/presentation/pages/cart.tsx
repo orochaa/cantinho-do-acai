@@ -1,5 +1,5 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { PlusSquare, Square, XIcon } from 'lucide-react'
+import { PlusSquare, XIcon } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context'
@@ -10,11 +10,12 @@ export function CartPage(): JSX.Element {
   const navigate = useNavigate()
 
   const totalOrder = useMemo(() => {
-    return cart.reduce((prev, current) => {
-      prev.total += current.total
-      return prev
-    }).total
-  }, [cart])
+    let total = 0
+    cart.forEach(item => {
+      total += item.total
+    })
+    return total
+  }, [cart.length])
 
   useEffect(() => {
     if (cart.length === 0) {
