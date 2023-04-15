@@ -2,7 +2,7 @@ import { Product } from '../types'
 
 const products: Product[] = [
   {
-    img: '/img/copo-pequeno.jpeg',
+    img: '/img/cachorro-quente.jpeg',
     name: 'Cachorro Quente de Salsicha + Mini Coca',
     people: 1,
     price: 15,
@@ -12,10 +12,10 @@ const products: Product[] = [
     extras: 0
   },
   {
-    img: '/img/copo-pequeno.jpeg',
+    img: '/img/cachorro-quente.jpeg',
     name: 'Cachorro Quente de Calabresa + Mini Coca',
     people: 1,
-    price: 15,
+    price: 17,
     quantity: 500,
     size: 'm',
     complements: 0,
@@ -30,7 +30,8 @@ const complements: string[] = [
   'Maionese',
   'Katchup',
   'Mostarda',
-  'Batata Palha'
+  'Batata Palha',
+  'Queiro Ralado'
 ]
 
 export const hotdog = {

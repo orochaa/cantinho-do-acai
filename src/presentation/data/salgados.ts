@@ -2,37 +2,41 @@ import { Product } from '../types'
 
 const products: Product[] = [
   {
-    img: '/img/copo-pequeno.jpeg',
-    name: 'Salgados Pequeno + Molho + Mini Coca', // + Molhos
+    img: '/img/salgados-pequeno.jpeg',
+    name: 'Salgados Pequeno + Molho + Mini Coca',
     people: 1,
     price: 20,
-    quantity: 300, // salgados
+    quantity: 300,
     size: 'p',
     complements: 15,
     extras: 0
   },
   {
-    img: '/img/copo-pequeno.jpeg',
+    img: '/img/salgados-medio.jpeg',
     name: 'Salgados Médio + Molho',
     people: 2,
     price: 35,
     quantity: 500,
     size: 'm',
-    complements: 25,
+    complements: 5,
     extras: 0
   }
 ]
 
 const complements: string[] = [
-  'Bolinha de Queijo',
+  'Churros de Doce de Leite',
+  'Croquete',
   'Coxinha de Frango',
-  'Enroladinho de Salsicha',
-  'Churros de Doce de Leite'
+  'Almofadinha de Presunto e Queijo',
+  'Risoles de Carne',
+  'Risoles de Frango',
+  'Bolinha de Queijo',
+  'Enroladinho de Salsicha'
 ]
 
 const sauces: string[] = ['Cheddar', 'Catupiri']
 
-export const salts = {
+export const salgados = {
   to: 'salgados',
   products,
   complements,

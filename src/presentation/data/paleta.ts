@@ -2,7 +2,7 @@ import { Product } from '../types'
 
 const products: Product[] = [
   {
-    img: '/img/copo-pequeno.jpeg',
+    img: '/img/paleta.jpg',
     name: 'Paleta Italiana',
     people: 1,
     price: 10,

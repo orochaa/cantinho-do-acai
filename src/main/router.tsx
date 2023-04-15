@@ -4,7 +4,8 @@ import {
   CartPage,
   HomePage,
   HotdogPage,
-  PaletaPage
+  PaletaPage,
+  SalgadosPage
 } from '@/presentation/pages'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ScrollToTop } from './scrool-to-top'
@@ -19,6 +20,7 @@ export function Router(): JSX.Element {
             <Route path="acai/:item" element={<AcaiPage />} />
             <Route path="paleta/:item" element={<PaletaPage />} />
             <Route path="hotdog/:item" element={<HotdogPage />} />
+            <Route path="salgados/:item" element={<SalgadosPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>
