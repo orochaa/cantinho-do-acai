@@ -3,7 +3,7 @@ import { Product } from '../types'
 const products: Product[] = [
   {
     img: '/img/salgados-pequeno.jpeg',
-    name: 'Salgados Pequeno + Molho + Mini Coca',
+    name: 'Kit Salgados Pequeno + Mini Coca',
     people: 1,
     price: 20,
     quantity: 300,
@@ -13,7 +13,7 @@ const products: Product[] = [
   },
   {
     img: '/img/salgados-medio.jpeg',
-    name: 'Salgados Médio + Molho',
+    name: 'Kit Salgados Médio',
     people: 2,
     price: 35,
     quantity: 500,

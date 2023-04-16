@@ -23,7 +23,7 @@ const products: Product[] = [
   },
   {
     img: '/img/copo-grande.jpeg',
-    name: 'Copo Grande',
+    name: 'Copo de Açaí Grande',
     people: 1,
     price: 26,
     quantity: 770,
@@ -33,7 +33,7 @@ const products: Product[] = [
   },
   {
     img: '/img/copo-medio.jpeg',
-    name: 'Copo Médio',
+    name: 'Copo de Açaí Médio',
     people: 1,
     price: 17,
     quantity: 440,
@@ -43,7 +43,7 @@ const products: Product[] = [
   },
   {
     img: '/img/copo-pequeno.jpeg',
-    name: 'Copo Pequeno',
+    name: 'Copo de Açaí Pequeno',
     people: 1,
     price: 12,
     quantity: 250,

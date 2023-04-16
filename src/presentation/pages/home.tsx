@@ -37,7 +37,7 @@ export function HomePage(): JSX.Element {
                     <img
                       src={product.img}
                       alt={`Imagem ${product.name}`}
-                      className="bg- bg-center"
+                      className="object-cover h-full w-full"
                     />
                     <div className="absolute inset-0 z-10 bg-black/30" />
                     <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-between bg-zinc-50/80 p-6">
