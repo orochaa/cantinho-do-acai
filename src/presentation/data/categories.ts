@@ -8,5 +8,4 @@ export const categories: Record<string, Category> = {
   Acaí: acai,
   Paletas: paleta,
   Salgados: salgados,
-  'Cachorro Quente': hotdog
 }
