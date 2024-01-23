@@ -5,9 +5,10 @@ import { useCart } from '../context'
 
 export function HomePage(): JSX.Element {
   const { cart } = useCart()
+
   return (
     <>
-      {cart.length && (
+      {cart.length > 0 && (
         <Link
           to="/cart"
           className="absolute -top-8 right-4 rounded border border-red-300 bg-red-500/90 p-2 text-white/90 "
@@ -30,14 +31,14 @@ export function HomePage(): JSX.Element {
               {products.map(product => (
                 <Link
                   key={slang(product.name)}
-                  to={slang(to + '/' + product.name)}
+                  to={slang(`${to}/${product.name}`)}
                   className="rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
                 >
                   <div className="relative flex max-h-[350px] items-end justify-center overflow-hidden rounded-xl">
                     <img
                       src={product.img}
                       alt={`Imagem ${product.name}`}
-                      className="object-cover h-full w-full"
+                      className="h-full w-full object-cover"
                     />
                     <div className="absolute inset-0 z-10 bg-black/30" />
                     <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-between bg-zinc-50/80 p-6">

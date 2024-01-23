@@ -1,20 +1,30 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { ShoppingCart } from 'lucide-react'
-import { useReducer } from 'react'
+import { useMemo, useReducer } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import { complementReducer, salgados, slang } from '../data'
-import { Product } from '../types'
 
 export function SalgadosPage(): JSX.Element {
   const { item } = useParams()
-  const product = salgados.products.find(
-    product => slang(product.name) === slang(item as string)
-  ) as Product
 
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
+
+  const product = useMemo(() => {
+    const defaultValue = salgados.products[0]
+
+    if (!item) {
+      return defaultValue
+    }
+
+    const desiredProduct = salgados.products.find(
+      product => slang(product.name) === slang(item)
+    )
+
+    return desiredProduct ?? defaultValue
+  }, [item])
 
   const [complements, addComplementEvent] = useReducer<
     typeof complementReducer
@@ -24,7 +34,7 @@ export function SalgadosPage(): JSX.Element {
       name: complement,
       count: 0,
       max: product.complements,
-      total: 0
+      total: 0,
     }))
   )
 
@@ -34,7 +44,7 @@ export function SalgadosPage(): JSX.Element {
       name: sauce,
       count: 0,
       max: product.size === 'p' ? 1 : 2,
-      total: 0
+      total: 0,
     }))
   )
 
@@ -64,9 +74,11 @@ export function SalgadosPage(): JSX.Element {
             className="rounded border border-red-300 bg-red-500 p-2 text-white hover:border-red-400 hover:bg-red-500/90"
             onClick={() => {
               let totalItems = 0
-              complements.forEach(complement => {
+
+              for (const complement of complements) {
                 totalItems += complement.count
-              })
+              }
+
               if (totalItems === product.complements) {
                 addCartEvent({
                   type: 'ADD',
@@ -76,10 +88,10 @@ export function SalgadosPage(): JSX.Element {
                       .filter(i => i.count > 0)
                       .map(i => ({
                         count: i.count,
-                        name: i.name
-                      }))
+                        name: i.name,
+                      })),
                   },
-                  initialPrice: product.price
+                  initialPrice: product.price,
                 })
                 popMessage(`${product.name} adicionado ao carrinho`)
               } else {

@@ -1,11 +1,11 @@
 export type Size = 'p' | 'm' | 'g' | 'gg'
 
-export type Category = {
+export interface Category {
   to: string
   products: Product[]
 }
 
-export type Product = {
+export interface Product {
   img: string
   name: string
   people: number
@@ -16,7 +16,7 @@ export type Product = {
   extras: number
 }
 
-export type ComplementState = {
+export interface ComplementState {
   name: string
   count: number
   total: number
@@ -24,7 +24,7 @@ export type ComplementState = {
   price?: number
 }
 
-export type ComplementEvent = {
+export interface ComplementEvent {
   type: 'ADD' | 'REMOVE'
   complement: string
 }

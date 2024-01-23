@@ -11,24 +11,26 @@ export function CartPage(): JSX.Element {
 
   const totalOrder = useMemo(() => {
     let total = 0
-    cart.forEach(item => {
+
+    for (const item of cart) {
       total += item.total
-    })
+    }
+
     return total
-  }, [cart.length])
+  }, [cart])
 
   useEffect(() => {
     if (cart.length === 0) {
       navigate('/')
     }
-  }, [cart])
+  }, [cart, navigate])
 
   const goToWhatsappLink = useMemo((): string => {
     const base = 'https://wa.me/5554984312998?text='
     let text = 'Olá Cantinho do Açaí gostaria de pedir:\n\n'
     let total = 0
 
-    cart.forEach(item => {
+    for (const item of cart) {
       total += item.total
       text += [
         `${item.product.name} - R$${formatCurrency(item.product.price)}`,
@@ -37,9 +39,9 @@ export function CartPage(): JSX.Element {
             complement.price ? ` - R$${formatCurrency(complement.price)}` : ''
           }`
         }),
-        '\n'
+        '\n',
       ].join('\n')
-    })
+    }
 
     text += `Total: R$${formatCurrency(total)}`
 

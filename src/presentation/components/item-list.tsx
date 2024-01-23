@@ -1,6 +1,6 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { Minus, Plus } from 'lucide-react'
-import { ComplementEvent, ComplementState } from '../types'
+import { type ComplementEvent, type ComplementState } from '../types'
 
 export interface ItemListProps {
   title: string
@@ -41,7 +41,7 @@ export function ItemList(props: ItemListProps): JSX.Element {
               onClick={() =>
                 addComplementEvent({
                   type: 'REMOVE',
-                  complement: complement.name
+                  complement: complement.name,
                 })
               }
             >
@@ -52,7 +52,7 @@ export function ItemList(props: ItemListProps): JSX.Element {
               onClick={() =>
                 addComplementEvent({
                   type: 'ADD',
-                  complement: complement.name
+                  complement: complement.name,
                 })
               }
             >

@@ -19,17 +19,21 @@ export function PaletaPage(): JSX.Element {
       price: 10,
       count: 0,
       total: 0,
-      max: 20
+      max: 20,
     }))
   )
 
   const total = useMemo(() => {
     let result = 0
-    flavors.forEach(flavor => {
-      result += flavor.count * (flavor.price as number)
-    })
+
+    for (const flavor of flavors) {
+      if (flavor.price !== undefined) {
+        result += flavor.count * flavor.price
+      }
+    }
+
     return result
-  }, [product, flavors])
+  }, [flavors])
 
   return (
     <>
@@ -56,16 +60,17 @@ export function PaletaPage(): JSX.Element {
                 .map(i => ({
                   count: i.count,
                   name: i.name,
-                  price: i.price
+                  price: i.price,
                 }))
+
               if (complements.length > 0) {
                 addCartEvent({
                   type: 'ADD',
                   item: {
                     product,
-                    complements
+                    complements,
                   },
-                  initialPrice: 0
+                  initialPrice: 0,
                 })
                 popMessage(`${product.name} adicionada ao carrinho`)
               } else {

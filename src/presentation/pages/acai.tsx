@@ -5,16 +5,26 @@ import { Link, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import { acai, complementReducer, slang } from '../data'
-import { Product } from '../types'
 
 export function AcaiPage(): JSX.Element {
   const { item } = useParams()
-  const product = acai.products.find(
-    product => slang(product.name) === slang(item as string)
-  ) as Product
 
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
+
+  const product = useMemo(() => {
+    const defaultValue = acai.products[0]
+
+    if (!item) {
+      return defaultValue
+    }
+
+    const desiredProduct = acai.products.find(
+      product => slang(product.name) === slang(item)
+    )
+
+    return desiredProduct ?? defaultValue
+  }, [item])
 
   const [complements, addComplementEvent] = useReducer<
     typeof complementReducer
@@ -24,7 +34,7 @@ export function AcaiPage(): JSX.Element {
       name: complement,
       count: 0,
       max: product.complements,
-      total: 0
+      total: 0,
     }))
   )
 
@@ -35,15 +45,19 @@ export function AcaiPage(): JSX.Element {
       count: 0,
       max: product.extras,
       total: 0,
-      price: sizes[product.size]
+      price: sizes[product.size],
     }))
   )
 
   const total = useMemo(() => {
     let result = product.price
-    extras.forEach(extra => {
-      result += extra.count * (extra.price as number)
-    })
+
+    for (const extra of extras) {
+      if (extra.price !== undefined) {
+        result += extra.count * extra.price
+      }
+    }
+
     return result
   }, [product, extras])
 
@@ -76,16 +90,15 @@ export function AcaiPage(): JSX.Element {
                 type: 'ADD',
                 item: {
                   product,
-                  complements: complements
-                    .concat(extras)
+                  complements: [...complements, ...extras]
                     .filter(i => i.count > 0)
                     .map(i => ({
                       count: i.count,
                       name: i.name,
-                      price: i.price
-                    }))
+                      price: i.price,
+                    })),
                 },
-                initialPrice: product.price
+                initialPrice: product.price,
               })
               popMessage(`${product.name} adicionado ao carrinho`)
             }}

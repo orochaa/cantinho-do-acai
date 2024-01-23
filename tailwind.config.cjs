@@ -8,9 +8,9 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
         raleway: ['Raleway', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
-        quicksand: ['Quicksand', 'sans-serif']
-      }
-    }
+        quicksand: ['Quicksand', 'sans-serif'],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }

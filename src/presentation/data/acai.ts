@@ -1,4 +1,4 @@
-import { Product, Size } from '../types'
+import { type Product, type Size } from '../types'
 
 const products: Product[] = [
   {
@@ -9,7 +9,7 @@ const products: Product[] = [
     quantity: 1000,
     size: 'gg',
     complements: 7,
-    extras: 10
+    extras: 10,
   },
   {
     img: '/img/marmitex.jpeg',
@@ -19,7 +19,7 @@ const products: Product[] = [
     quantity: 900,
     size: 'g',
     complements: 5,
-    extras: 10
+    extras: 10,
   },
   {
     img: '/img/copo-grande.jpeg',
@@ -29,7 +29,7 @@ const products: Product[] = [
     quantity: 770,
     size: 'g',
     complements: 5,
-    extras: 10
+    extras: 10,
   },
   {
     img: '/img/copo-medio.jpeg',
@@ -39,7 +39,7 @@ const products: Product[] = [
     quantity: 440,
     size: 'm',
     complements: 3,
-    extras: 10
+    extras: 10,
   },
   {
     img: '/img/copo-pequeno.jpeg',
@@ -49,8 +49,8 @@ const products: Product[] = [
     quantity: 250,
     size: 'p',
     complements: 3,
-    extras: 5
-  }
+    extras: 5,
+  },
 ]
 
 const complements: string[] = [
@@ -61,7 +61,7 @@ const complements: string[] = [
   'Morango',
   'Ovomaltine',
   'Paçoca',
-  'Sucrilhos'
+  'Sucrilhos',
 ]
 
 const extras: Record<string, Record<Size, number>> = {
@@ -69,103 +69,103 @@ const extras: Record<string, Record<Size, number>> = {
     gg: 3.5,
     g: 3.5,
     m: 2.5,
-    p: 2
+    p: 2,
   },
   Bis: {
     gg: 3,
     g: 2.5,
     m: 2,
-    p: 1.5
+    p: 1.5,
   },
   'Amor Carioca': {
     gg: 3,
     g: 3,
     m: 2,
-    p: 2
+    p: 2,
   },
   Batom: {
     gg: 3,
     g: 3,
     m: 2,
-    p: 2
+    p: 2,
   },
   'Bala de Goma': {
     gg: 3,
     g: 2.5,
     m: 2,
-    p: 1
+    p: 1,
   },
   'Diamante Negro': {
     gg: 3,
     g: 3,
     m: 2,
-    p: 2
+    p: 2,
   },
   Laka: {
     gg: 3,
     g: 3,
     m: 2,
-    p: 1.5
+    p: 1.5,
   },
   Charge: {
     gg: 4,
     g: 3,
     m: 3,
-    p: 1.5
+    p: 1.5,
   },
   '5 Star': {
     gg: 4,
     g: 4,
     m: 3,
-    p: 3
+    p: 3,
   },
   Stikadinho: {
     gg: 3,
     g: 3,
     m: 2,
-    p: 2
+    p: 2,
   },
   'Creme de Ninho': {
     gg: 5.5,
     g: 5.5,
     m: 4.5,
-    p: 4.5
+    p: 4.5,
   },
   'Creme de Chocolate Branco': {
     gg: 5.5,
     g: 5.5,
     m: 4.5,
-    p: 4.5
+    p: 4.5,
   },
   'Calda de Chocolate': {
     gg: 3,
     g: 2.5,
     m: 2,
-    p: 1.5
+    p: 1.5,
   },
   'Calda de Morango': {
     gg: 3,
     g: 2.5,
     m: 2,
-    p: 1.5
+    p: 1.5,
   },
   "M&M's": {
     gg: 3,
     g: 3,
     m: 2,
-    p: 2
+    p: 2,
   },
   "Bib's": {
     gg: 4,
     g: 4,
     m: 3,
-    p: 3
-  }
+    p: 3,
+  },
 }
 
 export const acai = {
   to: 'acai',
   products,
   complements,
-  extras
+  extras,
 }

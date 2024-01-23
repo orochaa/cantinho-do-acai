@@ -1,4 +1,4 @@
-import { Product } from '../types'
+import { type Product } from '../types'
 
 const products: Product[] = [
   {
@@ -9,7 +9,7 @@ const products: Product[] = [
     quantity: 300,
     size: 'p',
     complements: 15,
-    extras: 0
+    extras: 0,
   },
   {
     img: '/img/salgados-medio.jpeg',
@@ -19,8 +19,8 @@ const products: Product[] = [
     quantity: 500,
     size: 'm',
     complements: 5,
-    extras: 0
-  }
+    extras: 0,
+  },
 ]
 
 const complements: string[] = [
@@ -31,7 +31,7 @@ const complements: string[] = [
   'Risoles de Carne',
   'Risoles de Frango',
   'Bolinha de Queijo',
-  'Enroladinho de Salsicha'
+  'Enroladinho de Salsicha',
 ]
 
 const sauces: string[] = ['Cheddar', 'Catupiri']
@@ -40,5 +40,5 @@ export const salgados = {
   to: 'salgados',
   products,
   complements,
-  sauces
+  sauces,
 }

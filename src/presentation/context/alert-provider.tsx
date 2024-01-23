@@ -1,12 +1,20 @@
 import clsx from 'clsx'
 import { exhaustive } from 'exhaustive'
-import { createContext, useCallback, useContext, useReducer } from 'react'
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+} from 'react'
 
 interface IAlertContext {
   popMessage: (message: string) => void
 }
 
-export const AlertContext = createContext<IAlertContext>({} as any)
+export const AlertContext = createContext<IAlertContext>({
+  popMessage(message) {},
+})
 
 type PartialExcept<T, K extends keyof T> = {
   [Key in Exclude<keyof T, K>]?: T[Key]
@@ -14,27 +22,24 @@ type PartialExcept<T, K extends keyof T> = {
   [Key in K]: T[Key]
 }
 
-const alertReducer: Alert.Reducer = (state, event) => {
-  const createAlert = (
-    data: PartialExcept<Alert.State, 'message'>
-  ): Alert.State => ({
-    id: data.message,
-    counter: 1,
-    isVisible: true,
-    ...data
+const createAlert = (
+  data: PartialExcept<Alert.State, 'message'>
+): Alert.State => ({
+  id: data.message,
+  counter: 1,
+  isVisible: true,
+  ...data,
+})
+
+const formatAlertCounter = (alert: Alert.State, count: number): Alert.State => {
+  return createAlert({
+    ...alert,
+    counter: alert.counter + count,
+    message: `${alert.id} #${alert.counter + count}`,
   })
+}
 
-  const formatAlertCounter = (
-    alert: Alert.State,
-    count: number
-  ): Alert.State => {
-    return createAlert({
-      ...alert,
-      counter: alert.counter + count,
-      message: `${alert.id} #${alert.counter + count}`
-    })
-  }
-
+const alertReducer: Alert.Reducer = (state, event) => {
   const addAlert = (addEvent: Alert.PickEvent<'ADD'>): Alert.State[] => {
     const exists = state.find(alert => alert.id === addEvent.message)
     const result: Alert.State[] = exists
@@ -44,6 +49,7 @@ const alertReducer: Alert.Reducer = (state, event) => {
             : alert
         })
       : [...state, createAlert({ message: addEvent.message })]
+
     return result.length > 5 ? result.slice(1) : result
   }
 
@@ -72,11 +78,15 @@ const alertReducer: Alert.Reducer = (state, event) => {
   return exhaustive(event, 'type', {
     ADD: addEvent => addAlert(addEvent),
     REMOVE: removeEvent => removeAlert(removeEvent),
-    HIDE: hideEvent => hideAlert(hideEvent)
+    HIDE: hideEvent => hideAlert(hideEvent),
   })
 }
 
-export function AlertProvider({ children }: any): JSX.Element {
+interface AlertProviderProps {
+  children: ReactNode
+}
+
+export function AlertProvider({ children }: AlertProviderProps): JSX.Element {
   const [alerts, addAlertEvent] = useReducer(alertReducer, [
     // { id: '1', counter: 1, isVisible: true, message: '123' } as Alert.State
   ])
@@ -85,12 +95,12 @@ export function AlertProvider({ children }: any): JSX.Element {
     if (message && typeof message === 'string') {
       addAlertEvent({
         type: 'ADD',
-        message
+        message,
       })
       setTimeout(() => {
         addAlertEvent({
           type: 'REMOVE',
-          id: message
+          id: message,
         })
       }, 4500)
     }
@@ -99,12 +109,12 @@ export function AlertProvider({ children }: any): JSX.Element {
   const clickAlert = useCallback((alert: Alert.State): void => {
     addAlertEvent({
       type: 'HIDE',
-      id: alert.id
+      id: alert.id,
     })
     setTimeout(() => {
       addAlertEvent({
         type: 'REMOVE',
-        id: alert.id
+        id: alert.id,
       })
     }, 400)
   }, [])
@@ -128,7 +138,7 @@ export function AlertProvider({ children }: any): JSX.Element {
               'transition duration-300 md:text-base lg:text-lg',
               alert.isVisible ? 'block' : 'hidden'
             )}
-            onClick={() => void clickAlert(alert)}
+            onClick={() => clickAlert(alert)}
           >
             {alert.message}
           </button>

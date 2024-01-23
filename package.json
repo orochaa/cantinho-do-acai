@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit && prettier --write ."
+    "lint": "run-s lint:tsc lint:eslint lint:prettier",
+    "lint:tsc": "tsc --noEmit",
+    "lint:prettier": "prettier --write .",
+    "lint:eslint": "eslint --fix \"src/**/*.ts{x,}\""
   },
   "dependencies": {
     "@brazilian-utils/brazilian-utils": "1.0.0-rc.12",
@@ -25,6 +28,9 @@
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
+    "eslint": "^8.56.0",
+    "eslint-plugin-mist3rbru": "^0.2.0",
+    "npm-run-all2": "^6.1.1",
     "postcss": "^8.4.21",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.7",

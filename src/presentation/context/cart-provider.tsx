@@ -1,8 +1,8 @@
 import { exhaustive } from 'exhaustive'
-import { ReactNode, createContext, useContext, useReducer } from 'react'
-import { Product } from '../types'
+import { type ReactNode, createContext, useContext, useReducer } from 'react'
+import { type Product } from '../types'
 
-type CartItem = {
+interface CartItem {
   id: number
   product: Product
   complements: {
@@ -24,28 +24,34 @@ type CartEvent =
       id: number
     }
 
-type ICartContext = {
+interface ICartContext {
   addCartEvent: (event: CartEvent) => void
   cart: CartItem[]
 }
 
-const CartContext = createContext<ICartContext>({} as ICartContext)
+const CartContext = createContext<ICartContext>({
+  cart: [],
+  addCartEvent(event) {},
+})
 
 function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   return exhaustive(event, 'type', {
     ADD: ({ initialPrice, item }) => {
       let total = initialPrice
-      item.complements.forEach(complement => {
+
+      for (const complement of item.complements) {
         total += (complement.price ?? 0) * complement.count
-      })
+      }
+
       return [...state, { ...item, id: state.length, total }]
     },
-    REMOVE: e => state.filter(item => item.id !== e.id)
+    REMOVE: e => state.filter(item => item.id !== e.id),
   })
 }
 
 export function CartProvider(props: { children: ReactNode }): JSX.Element {
   const [cart, addCartEvent] = useReducer(cartReducer, [])
+
   return (
     <CartContext.Provider value={{ cart, addCartEvent }}>
       {props.children}

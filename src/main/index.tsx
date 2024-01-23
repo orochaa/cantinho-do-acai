@@ -4,7 +4,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './global.css'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+ReactDOM.createRoot(document.querySelector('#root')!).render(
   <React.StrictMode>
     <CartProvider>
       <AlertProvider>

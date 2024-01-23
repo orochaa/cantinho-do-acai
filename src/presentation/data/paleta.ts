@@ -1,4 +1,4 @@
-import { Product } from '../types'
+import { type Product } from '../types'
 
 const products: Product[] = [
   {
@@ -9,8 +9,8 @@ const products: Product[] = [
     quantity: 105,
     size: 'm',
     complements: 0,
-    extras: 0
-  }
+    extras: 0,
+  },
 ]
 
 const flavors: string[] = [
@@ -18,11 +18,11 @@ const flavors: string[] = [
   'Açaí com Leite Condensado',
   'Chocolate com Leite Condensado',
   'Maracujá com Leite Condensado',
-  'Ninho com Nutella'
+  'Ninho com Nutella',
 ]
 
 export const paleta = {
   to: 'paleta',
   products,
-  flavors
+  flavors,
 }
