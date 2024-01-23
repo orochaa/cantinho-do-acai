@@ -3,7 +3,7 @@ import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context'
 
-export function HomePage(): JSX.Element {
+export function HomePage(): React.JSX.Element {
   const { cart } = useCart()
 
   return (

@@ -9,7 +9,7 @@ import {
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ScrollToTop } from './scrool-to-top'
 
-export function Router(): JSX.Element {
+export function Router(): React.JSX.Element {
   return (
     <BrowserRouter>
       <ScrollToTop>

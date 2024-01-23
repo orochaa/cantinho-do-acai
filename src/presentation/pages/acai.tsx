@@ -6,7 +6,7 @@ import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import { acai, complementReducer, slang } from '../data'
 
-export function AcaiPage(): JSX.Element {
+export function AcaiPage(): React.JSX.Element {
   const { item } = useParams()
 
   const { addCartEvent } = useCart()

@@ -7,10 +7,12 @@ export function slang(data: string): string {
 }
 
 export function parseSlang(slang: string): string {
-  return slang
-    .split('-')
-    .map(w => capitalize(w))
-    .join(' ')
+  return decodeURI(
+    slang
+      .split('-')
+      .map(w => capitalize(w))
+      .join(' ')
+  )
 }
 
 type ObjectEntries<T extends Record<string, any>> = UnionToTuple<

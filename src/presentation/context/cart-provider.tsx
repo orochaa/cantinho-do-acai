@@ -49,7 +49,9 @@ function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   })
 }
 
-export function CartProvider(props: { children: ReactNode }): JSX.Element {
+export function CartProvider(props: {
+  children: ReactNode
+}): React.JSX.Element {
   const [cart, addCartEvent] = useReducer(cartReducer, [])
 
   return (

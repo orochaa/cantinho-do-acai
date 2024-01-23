@@ -6,7 +6,7 @@ import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import { complementReducer, salgados, slang } from '../data'
 
-export function SalgadosPage(): JSX.Element {
+export function SalgadosPage(): React.JSX.Element {
   const { item } = useParams()
 
   const { addCartEvent } = useCart()

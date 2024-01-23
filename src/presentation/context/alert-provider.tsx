@@ -86,7 +86,9 @@ interface AlertProviderProps {
   children: ReactNode
 }
 
-export function AlertProvider({ children }: AlertProviderProps): JSX.Element {
+export function AlertProvider({
+  children,
+}: AlertProviderProps): React.JSX.Element {
   const [alerts, addAlertEvent] = useReducer(alertReducer, [
     // { id: '1', counter: 1, isVisible: true, message: '123' } as Alert.State
   ])

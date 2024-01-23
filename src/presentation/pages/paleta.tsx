@@ -6,7 +6,7 @@ import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
 import { complementReducer, paleta } from '../data'
 
-export function PaletaPage(): JSX.Element {
+export function PaletaPage(): React.JSX.Element {
   const product = paleta.products[0]
 
   const { addCartEvent } = useCart()

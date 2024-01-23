@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context'
 
-export function CartPage(): JSX.Element {
+export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
 
   const navigate = useNavigate()

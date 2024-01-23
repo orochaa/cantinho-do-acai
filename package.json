@@ -14,28 +14,28 @@
   },
   "dependencies": {
     "@brazilian-utils/brazilian-utils": "1.0.0-rc.12",
-    "clsx": "^1.2.1",
+    "clsx": "^2.1.0",
     "exhaustive": "^1.1.1",
-    "lucide-react": "^0.145.0",
+    "lucide-react": "^0.314.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.10.0"
+    "react-router-dom": "^6.21.3"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/node": "^18.15.11",
-    "@types/react": "^18.0.35",
-    "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^3.1.0",
-    "autoprefixer": "^10.4.14",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/node": "^20.11.5",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-plugin-mist3rbru": "^0.2.0",
     "npm-run-all2": "^6.1.1",
-    "postcss": "^8.4.21",
-    "prettier": "^2.8.7",
-    "prettier-plugin-tailwindcss": "^0.2.7",
-    "tailwindcss": "^3.3.1",
-    "typescript": "^5.0.4",
-    "vite": "^4.2.1"
+    "postcss": "^8.4.33",
+    "prettier": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
   }
 }

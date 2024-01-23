@@ -8,7 +8,7 @@ export interface ItemListProps {
   addComplementEvent: (event: ComplementEvent) => void
 }
 
-export function ItemList(props: ItemListProps): JSX.Element {
+export function ItemList(props: ItemListProps): React.JSX.Element {
   const { title, complements, addComplementEvent } = props
 
   return (
