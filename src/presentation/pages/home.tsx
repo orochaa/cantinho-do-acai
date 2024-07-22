@@ -1,4 +1,4 @@
-import { categories, objectEntries, slang } from '@/presentation/data'
+import { categories, slang } from '@/presentation/data'
 import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context'
@@ -22,8 +22,8 @@ export function HomePage(): React.JSX.Element {
         className="mx-auto mb-8 max-h-48 w-11/12 max-w-fit"
       />
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-10">
-        {objectEntries(categories).map(([name, { to, products }], i) => (
-          <div key={i}>
+        {Object.entries(categories).map(([name, { path, products }]) => (
+          <div key={name}>
             <h1 className="mb-4 border-b-2 border-amber-600 p-1 font-raleway text-2xl text-white/90">
               {name}
             </h1>
@@ -31,7 +31,7 @@ export function HomePage(): React.JSX.Element {
               {products.map(product => (
                 <Link
                   key={slang(product.name)}
-                  to={slang(`${to}/${product.name}`)}
+                  to={slang(`${path}/${product.name}`)}
                   className="rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
                 >
                   <div className="relative flex max-h-[350px] items-end justify-center overflow-hidden rounded-xl">

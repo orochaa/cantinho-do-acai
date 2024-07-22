@@ -4,7 +4,8 @@ import { useMemo, useReducer } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
-import { acai, complementReducer, slang } from '../data'
+import type { Acai } from '../data'
+import { acaiCategory, complementReducer, slang } from '../data'
 
 export function AcaiPage(): React.JSX.Element {
   const { item } = useParams()
@@ -12,14 +13,14 @@ export function AcaiPage(): React.JSX.Element {
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
 
-  const product = useMemo(() => {
-    const defaultValue = acai.products[0]
+  const acai = useMemo<Acai>(() => {
+    const defaultValue = acaiCategory.products[0]
 
     if (!item) {
       return defaultValue
     }
 
-    const desiredProduct = acai.products.find(
+    const desiredProduct = acaiCategory.products.find(
       product => slang(product.name) === slang(item)
     )
 
@@ -33,24 +34,24 @@ export function AcaiPage(): React.JSX.Element {
     acai.complements.map(complement => ({
       name: complement,
       count: 0,
-      max: product.complements,
+      max: acai.complementsLimit,
       total: 0,
     }))
   )
 
   const [extras, addExtraEvent] = useReducer<typeof complementReducer>(
     complementReducer,
-    Object.entries(acai.extras).map(([extra, sizes]) => ({
-      name: extra,
+    Object.entries(acai.extras).map(([name, price]) => ({
+      name,
       count: 0,
-      max: product.extras,
+      max: acai.extrasLimit,
       total: 0,
-      price: sizes[product.size],
+      price,
     }))
   )
 
-  const total = useMemo(() => {
-    let result = product.price
+  const total = useMemo<number>(() => {
+    let result = acai.price
 
     for (const extra of extras) {
       if (extra.price !== undefined) {
@@ -59,7 +60,7 @@ export function AcaiPage(): React.JSX.Element {
     }
 
     return result
-  }, [product, extras])
+  }, [acai, extras])
 
   return (
     <>
@@ -90,7 +91,7 @@ export function AcaiPage(): React.JSX.Element {
               addCartEvent({
                 type: 'ADD',
                 item: {
-                  product,
+                  product: acai,
                   complements: [...complements, ...extras]
                     .filter(i => i.count > 0)
                     .map(i => ({
@@ -99,9 +100,9 @@ export function AcaiPage(): React.JSX.Element {
                       price: i.price,
                     })),
                 },
-                initialPrice: product.price,
+                initialPrice: acai.price,
               })
-              popMessage(`${product.name} adicionado ao carrinho`)
+              popMessage(`${acai.name} adicionado ao carrinho`)
             }}
           >
             Adicionar R${formatCurrency(total)}

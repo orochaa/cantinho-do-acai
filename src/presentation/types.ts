@@ -1,19 +1,18 @@
-export type Size = 'p' | 'm' | 'g' | 'gg'
-
-export interface Category {
-  to: string
-  products: Product[]
-}
+export type Category<
+  TProduct extends Product = Product,
+  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-empty-object-type
+  TExtras extends Record<string, unknown> = {},
+> = {
+  path: string
+  products: TProduct[]
+} & TExtras
 
 export interface Product {
   img: string
   name: string
-  people: number
   quantity: number
-  size: Size
   price: number
-  complements: number
-  extras: number
+  people: number
 }
 
 export interface ComplementState {

@@ -4,7 +4,7 @@ import { useMemo, useReducer } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
-import { complementReducer, salgados, slang } from '../data'
+import { complementReducer, salgadosCategory, slang } from '../data'
 
 export function SalgadosPage(): React.JSX.Element {
   const { item } = useParams()
@@ -12,14 +12,14 @@ export function SalgadosPage(): React.JSX.Element {
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
 
-  const product = useMemo(() => {
-    const defaultValue = salgados.products[0]
+  const salgado = useMemo(() => {
+    const defaultValue = salgadosCategory.products[0]
 
     if (!item) {
       return defaultValue
     }
 
-    const desiredProduct = salgados.products.find(
+    const desiredProduct = salgadosCategory.products.find(
       product => slang(product.name) === slang(item)
     )
 
@@ -30,20 +30,20 @@ export function SalgadosPage(): React.JSX.Element {
     typeof complementReducer
   >(
     complementReducer,
-    salgados.complements.map(complement => ({
+    salgado.complements.map(complement => ({
       name: complement,
       count: 0,
-      max: product.complements,
+      max: salgado.complementsLimit,
       total: 0,
     }))
   )
 
   const [sauces, addSauceEvent] = useReducer<typeof complementReducer>(
     complementReducer,
-    salgados.sauces.map(sauce => ({
+    salgado.sauces.map(sauce => ({
       name: sauce,
       count: 0,
-      max: product.size === 'p' ? 1 : 2,
+      max: salgado.saucesLimit,
       total: 0,
     }))
   )
@@ -80,11 +80,11 @@ export function SalgadosPage(): React.JSX.Element {
                 totalItems += complement.count
               }
 
-              if (totalItems === product.complements) {
+              if (totalItems === salgado.complementsLimit) {
                 addCartEvent({
                   type: 'ADD',
                   item: {
-                    product,
+                    product: salgado,
                     complements: complements
                       .filter(i => i.count > 0)
                       .map(i => ({
@@ -92,15 +92,15 @@ export function SalgadosPage(): React.JSX.Element {
                         name: i.name,
                       })),
                   },
-                  initialPrice: product.price,
+                  initialPrice: salgado.price,
                 })
-                popMessage(`${product.name} adicionado ao carrinho`)
+                popMessage(`${salgado.name} adicionado ao carrinho`)
               } else {
                 popMessage('Favor escolher todos salgados')
               }
             }}
           >
-            Adicionar R${formatCurrency(product.price)}
+            Adicionar R${formatCurrency(salgado.price)}
           </button>
         </div>
         <Link

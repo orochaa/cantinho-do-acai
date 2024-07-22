@@ -1,28 +1,21 @@
-import type { Product } from '../types'
+import type { Category, Product } from '../types'
 
-const products: Product[] = [
-  {
-    img: '/img/paleta.jpg',
-    name: 'Paleta Italiana',
-    people: 1,
-    price: 10,
-    quantity: 105,
-    size: 'm',
-    complements: 0,
-    extras: 0,
-  },
-]
-
-const flavors: string[] = [
-  'Morango com Leite Condensado',
-  'Açaí com Leite Condensado',
-  'Chocolate com Leite Condensado',
-  'Maracujá com Leite Condensado',
-  'Ninho com Nutella',
-]
-
-export const paleta = {
-  to: 'paleta',
-  products,
-  flavors,
+export const paletaCategory: Category<Product, { flavors: string[] }> = {
+  path: 'paleta',
+  products: [
+    {
+      img: '/img/paleta.jpg',
+      name: 'Paleta Italiana',
+      price: 10,
+      people: 1,
+      quantity: 105,
+    },
+  ],
+  flavors: [
+    'Morango com Leite Condensado',
+    'Açaí com Leite Condensado',
+    'Chocolate com Leite Condensado',
+    'Maracujá com Leite Condensado',
+    'Ninho com Nutella',
+  ],
 }

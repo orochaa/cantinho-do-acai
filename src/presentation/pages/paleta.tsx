@@ -4,17 +4,17 @@ import { useMemo, useReducer } from 'react'
 import { Link } from 'react-router-dom'
 import { ItemList } from '../components/item-list'
 import { useAlert, useCart } from '../context'
-import { complementReducer, paleta } from '../data'
+import { complementReducer, paletaCategory } from '../data'
 
 export function PaletaPage(): React.JSX.Element {
-  const product = paleta.products[0]
+  const paleta = paletaCategory.products[0]
 
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
 
   const [flavors, addFlavorEvent] = useReducer<typeof complementReducer>(
     complementReducer,
-    paleta.flavors.map(complement => ({
+    paletaCategory.flavors.map(complement => ({
       name: complement,
       price: 10,
       count: 0,
@@ -68,12 +68,12 @@ export function PaletaPage(): React.JSX.Element {
                 addCartEvent({
                   type: 'ADD',
                   item: {
-                    product,
+                    product: paleta,
                     complements,
                   },
                   initialPrice: 0,
                 })
-                popMessage(`${product.name} adicionada ao carrinho`)
+                popMessage(`${paleta.name} adicionada ao carrinho`)
               } else {
                 popMessage('Favor escolher uma ou mais Paletas')
               }
