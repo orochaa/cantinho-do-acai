@@ -3,8 +3,13 @@ import { useReducer } from 'react'
 export interface Complement {
   name: string
   count: number
-  countLimit: number
   price?: number
+}
+
+export interface ComplementState {
+  countLimit: number
+  countTotal: number
+  complements: Complement[]
 }
 
 export interface ComplementEvent {
@@ -13,45 +18,54 @@ export interface ComplementEvent {
 }
 
 export function complementsReducer(
-  state: Complement[],
+  state: ComplementState,
   event: ComplementEvent
-): Complement[] {
+): ComplementState {
   if (event.type === 'ADD') {
-    let totalCount = 0
+    let countTotal = 0
     const result: Complement[] = []
 
-    for (const complement of state) {
+    for (const complement of state.complements) {
       if (complement.name === event.complement.name) {
-        totalCount += event.complement.count + 1
-        result.push({ ...complement, count: event.complement.count + 1 })
+        const newCount = event.complement.count + 1
+        countTotal += newCount
+        result.push({ ...complement, count: newCount })
       } else {
-        totalCount += complement.count
+        countTotal += complement.count
         result.push(complement)
       }
     }
 
-    if (totalCount > event.complement.countLimit) {
-      return state
+    if (countTotal <= state.countLimit) {
+      return {
+        countLimit: state.countLimit,
+        countTotal,
+        complements: result,
+      }
     }
-
-    return result
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (event.type === 'REMOVE' && event.complement.count > 0) {
-    return state.map(complement => {
-      return complement.name === event.complement.name
-        ? { ...complement, count: event.complement.count - 1 }
-        : complement
-    })
+    return {
+      countLimit: state.countLimit,
+      countTotal: state.countTotal - 1,
+      complements: state.complements.map(complement => {
+        return complement.name === event.complement.name
+          ? { ...complement, count: event.complement.count - 1 }
+          : complement
+      }),
+    }
   }
 
   return state
 }
 
 export function useComplements(
-  initialState: Omit<Complement, 'count'>[]
-): [Complement[], (event: ComplementEvent) => void] {
-  return useReducer<typeof complementsReducer>(
-    complementsReducer,
-    initialState.map(complement => ({ ...complement, count: 0 }))
-  )
+  complements: Omit<Complement, 'count'>[],
+  countLimit: number
+): [ComplementState, (event: ComplementEvent) => void] {
+  return useReducer<typeof complementsReducer>(complementsReducer, {
+    countTotal: 0,
+    countLimit,
+    complements: complements.map(c => ({ ...c, count: 0 })),
+  })
 }

@@ -13,18 +13,12 @@ export function PaletaPage(): React.JSX.Element {
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
 
-  const [flavors, addFlavorEvent] = useComplements(
-    paletaCategory.flavors.map(complement => ({
-      name: complement,
-      countLimit: 20,
-      price: 10,
-    }))
-  )
+  const [flavors, addFlavorEvent] = useComplements(paletaCategory.flavors, 20)
 
   const total = useMemo(() => {
     let result = 0
 
-    for (const flavor of flavors) {
+    for (const flavor of flavors.complements) {
       if (flavor.price !== undefined) {
         result += flavor.count * flavor.price
       }
@@ -38,7 +32,7 @@ export function PaletaPage(): React.JSX.Element {
       <div className="flex flex-col gap-8">
         <ComplementList
           addComplementEvent={addFlavorEvent}
-          complements={flavors}
+          ctx={flavors}
           title="Sabores"
         />
       </div>
@@ -54,7 +48,7 @@ export function PaletaPage(): React.JSX.Element {
             type="button"
             className="rounded border border-red-300 bg-red-500 p-2 text-white hover:border-red-400 hover:bg-red-500/90"
             onClick={() => {
-              const complements = flavors
+              const complements = flavors.complements
                 .filter(i => i.count > 0)
                 .map(i => ({
                   count: i.count,

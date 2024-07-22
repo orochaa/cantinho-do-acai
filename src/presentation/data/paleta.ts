@@ -1,6 +1,9 @@
 import type { Category, Product } from '../types'
 
-export const paletaCategory: Category<Product, { flavors: string[] }> = {
+export const paletaCategory: Category<
+  Product,
+  { flavors: { name: string; price: number }[] }
+> = {
   path: 'paleta',
   products: [
     {
@@ -12,10 +15,10 @@ export const paletaCategory: Category<Product, { flavors: string[] }> = {
     },
   ],
   flavors: [
-    'Morango com Leite Condensado',
-    'Açaí com Leite Condensado',
-    'Chocolate com Leite Condensado',
-    'Maracujá com Leite Condensado',
-    'Ninho com Nutella',
+    { name: 'Morango com Leite Condensado', price: 10 },
+    { name: 'Açaí com Leite Condensado', price: 10 },
+    { name: 'Chocolate com Leite Condensado', price: 10 },
+    { name: 'Maracujá com Leite Condensado', price: 10 },
+    { name: 'Ninho com Nutella', price: 10 },
   ],
 }

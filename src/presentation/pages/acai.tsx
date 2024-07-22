@@ -29,24 +29,19 @@ export function AcaiPage(): React.JSX.Element {
   }, [item])
 
   const [complements, addComplementEvent] = useComplements(
-    acai.complements.map(complement => ({
-      name: complement,
-      countLimit: acai.complementsLimit,
-    }))
+    acai.complements.map(name => ({ name })),
+    acai.complementsLimit
   )
 
   const [extras, addExtraEvent] = useComplements(
-    Object.entries(acai.extras).map(([name, price]) => ({
-      name,
-      countLimit: acai.extrasLimit,
-      price,
-    }))
+    Object.entries(acai.extras).map(([name, price]) => ({ name, price })),
+    acai.extrasLimit
   )
 
   const total = useMemo<number>(() => {
     let result = acai.price
 
-    for (const extra of extras) {
+    for (const extra of extras.complements) {
       if (extra.price !== undefined) {
         result += extra.count * extra.price
       }
@@ -60,12 +55,12 @@ export function AcaiPage(): React.JSX.Element {
       <div className="flex flex-col gap-8">
         <ComplementList
           addComplementEvent={addComplementEvent}
-          complements={complements}
+          ctx={complements}
           title="Acompanhamentos"
         />
         <ComplementList
           addComplementEvent={addExtraEvent}
-          complements={extras}
+          ctx={extras}
           title="Adicionais"
         />
       </div>
@@ -85,7 +80,10 @@ export function AcaiPage(): React.JSX.Element {
                 type: 'ADD',
                 item: {
                   product: acai,
-                  complements: [...complements, ...extras]
+                  complements: [
+                    ...complements.complements,
+                    ...extras.complements,
+                  ]
                     .filter(i => i.count > 0)
                     .map(i => ({
                       count: i.count,

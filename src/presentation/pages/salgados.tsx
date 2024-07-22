@@ -28,17 +28,13 @@ export function SalgadosPage(): React.JSX.Element {
   }, [item])
 
   const [complements, addComplementEvent] = useComplements(
-    salgado.complements.map(complement => ({
-      name: complement,
-      countLimit: salgado.complementsLimit,
-    }))
+    salgado.complements.map(name => ({ name })),
+    salgado.complementsLimit
   )
 
   const [sauces, addSauceEvent] = useComplements(
-    salgado.sauces.map(sauce => ({
-      name: sauce,
-      countLimit: salgado.saucesLimit,
-    }))
+    salgado.sauces.map(name => ({ name })),
+    salgado.saucesLimit
   )
 
   return (
@@ -46,12 +42,12 @@ export function SalgadosPage(): React.JSX.Element {
       <div className="flex flex-col gap-8">
         <ComplementList
           addComplementEvent={addComplementEvent}
-          complements={complements}
+          ctx={complements}
           title="Salgados"
         />
         <ComplementList
           addComplementEvent={addSauceEvent}
-          complements={sauces}
+          ctx={sauces}
           title="Molhos"
         />
       </div>
@@ -69,7 +65,7 @@ export function SalgadosPage(): React.JSX.Element {
             onClick={() => {
               let totalItems = 0
 
-              for (const complement of complements) {
+              for (const complement of complements.complements) {
                 totalItems += complement.count
               }
 
@@ -78,7 +74,7 @@ export function SalgadosPage(): React.JSX.Element {
                   type: 'ADD',
                   item: {
                     product: salgado,
-                    complements: complements
+                    complements: complements.complements
                       .filter(i => i.count > 0)
                       .map(i => ({
                         count: i.count,
