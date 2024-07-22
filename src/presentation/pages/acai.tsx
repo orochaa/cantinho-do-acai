@@ -1,11 +1,12 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { ShoppingCart } from 'lucide-react'
-import { useMemo, useReducer } from 'react'
+import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ItemList } from '../components/item-list'
+import { ComplementList } from '../components'
 import { useAlert, useCart } from '../context'
 import type { Acai } from '../data'
-import { acaiCategory, complementReducer, slang } from '../data'
+import { acaiCategory, slang } from '../data'
+import { useComplements } from '../hooks'
 
 export function AcaiPage(): React.JSX.Element {
   const { item } = useParams()
@@ -27,25 +28,17 @@ export function AcaiPage(): React.JSX.Element {
     return desiredProduct ?? defaultValue
   }, [item])
 
-  const [complements, addComplementEvent] = useReducer<
-    typeof complementReducer
-  >(
-    complementReducer,
+  const [complements, addComplementEvent] = useComplements(
     acai.complements.map(complement => ({
       name: complement,
-      count: 0,
-      max: acai.complementsLimit,
-      total: 0,
+      countLimit: acai.complementsLimit,
     }))
   )
 
-  const [extras, addExtraEvent] = useReducer<typeof complementReducer>(
-    complementReducer,
+  const [extras, addExtraEvent] = useComplements(
     Object.entries(acai.extras).map(([name, price]) => ({
       name,
-      count: 0,
-      max: acai.extrasLimit,
-      total: 0,
+      countLimit: acai.extrasLimit,
       price,
     }))
   )
@@ -65,12 +58,12 @@ export function AcaiPage(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col gap-8">
-        <ItemList
+        <ComplementList
           addComplementEvent={addComplementEvent}
           complements={complements}
           title="Acompanhamentos"
         />
-        <ItemList
+        <ComplementList
           addComplementEvent={addExtraEvent}
           complements={extras}
           title="Adicionais"

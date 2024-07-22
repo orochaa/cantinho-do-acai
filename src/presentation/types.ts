@@ -14,16 +14,3 @@ export interface Product {
   price: number
   people: number
 }
-
-export interface ComplementState {
-  name: string
-  count: number
-  total: number
-  max: number
-  price?: number
-}
-
-export interface ComplementEvent {
-  type: 'ADD' | 'REMOVE'
-  complement: string
-}

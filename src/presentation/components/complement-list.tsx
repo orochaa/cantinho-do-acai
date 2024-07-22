@@ -1,14 +1,14 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { Minus, Plus } from 'lucide-react'
-import type { ComplementEvent, ComplementState } from '../types'
+import type { Complement, ComplementEvent } from '../hooks'
 
-export interface ItemListProps {
+export interface ComplementListProps {
   title: string
-  complements: ComplementState[]
+  complements: Complement[]
   addComplementEvent: (event: ComplementEvent) => void
 }
 
-export function ItemList(props: ItemListProps): React.JSX.Element {
+export function ComplementList(props: ComplementListProps): React.JSX.Element {
   const { title, complements, addComplementEvent } = props
 
   return (
@@ -16,8 +16,8 @@ export function ItemList(props: ItemListProps): React.JSX.Element {
       <div className="m-1 text-white">
         <h2 className="text-xl font-bold">{title}:</h2>
         <p className="text-sm">
-          Escolha até {complements[0].max}{' '}
-          {complements[0].max > 1 ? 'opções' : 'opção'}
+          Escolha até {complements[0].countLimit}{' '}
+          {complements[0].countLimit > 1 ? 'opções' : 'opção'}
         </p>
       </div>
       {complements.map(complement => (
@@ -27,22 +27,22 @@ export function ItemList(props: ItemListProps): React.JSX.Element {
         >
           <p>{complement.name}</p>
           <div className="flex gap-1">
-            {complement.price ? (
+            {!!complement.price && (
               <div>
-                {complement.count > 0 && '+'}R$
+                {!!complement.count && '+'}R$
                 {formatCurrency(
-                  complement.count > 0
+                  complement.count
                     ? complement.price * complement.count
                     : complement.price
                 )}
               </div>
-            ) : null}
+            )}
             <button
               type="button"
               onClick={() =>
                 addComplementEvent({
                   type: 'REMOVE',
-                  complement: complement.name,
+                  complement,
                 })
               }
             >
@@ -54,7 +54,7 @@ export function ItemList(props: ItemListProps): React.JSX.Element {
               onClick={() =>
                 addComplementEvent({
                   type: 'ADD',
-                  complement: complement.name,
+                  complement,
                 })
               }
             >

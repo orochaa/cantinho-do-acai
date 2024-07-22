@@ -1,10 +1,11 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { ShoppingCart } from 'lucide-react'
-import { useMemo, useReducer } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ItemList } from '../components/item-list'
+import { ComplementList } from '../components'
 import { useAlert, useCart } from '../context'
-import { complementReducer, paletaCategory } from '../data'
+import { paletaCategory } from '../data'
+import { useComplements } from '../hooks'
 
 export function PaletaPage(): React.JSX.Element {
   const paleta = paletaCategory.products[0]
@@ -12,14 +13,11 @@ export function PaletaPage(): React.JSX.Element {
   const { addCartEvent } = useCart()
   const { popMessage } = useAlert()
 
-  const [flavors, addFlavorEvent] = useReducer<typeof complementReducer>(
-    complementReducer,
+  const [flavors, addFlavorEvent] = useComplements(
     paletaCategory.flavors.map(complement => ({
       name: complement,
+      countLimit: 20,
       price: 10,
-      count: 0,
-      total: 0,
-      max: 20,
     }))
   )
 
@@ -38,7 +36,7 @@ export function PaletaPage(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col gap-8">
-        <ItemList
+        <ComplementList
           addComplementEvent={addFlavorEvent}
           complements={flavors}
           title="Sabores"

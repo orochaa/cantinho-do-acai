@@ -1,10 +1,11 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { ShoppingCart } from 'lucide-react'
-import { useMemo, useReducer } from 'react'
+import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ItemList } from '../components/item-list'
+import { ComplementList } from '../components'
 import { useAlert, useCart } from '../context'
-import { complementReducer, salgadosCategory, slang } from '../data'
+import { salgadosCategory, slang } from '../data'
+import { useComplements } from '../hooks'
 
 export function SalgadosPage(): React.JSX.Element {
   const { item } = useParams()
@@ -26,37 +27,29 @@ export function SalgadosPage(): React.JSX.Element {
     return desiredProduct ?? defaultValue
   }, [item])
 
-  const [complements, addComplementEvent] = useReducer<
-    typeof complementReducer
-  >(
-    complementReducer,
+  const [complements, addComplementEvent] = useComplements(
     salgado.complements.map(complement => ({
       name: complement,
-      count: 0,
-      max: salgado.complementsLimit,
-      total: 0,
+      countLimit: salgado.complementsLimit,
     }))
   )
 
-  const [sauces, addSauceEvent] = useReducer<typeof complementReducer>(
-    complementReducer,
+  const [sauces, addSauceEvent] = useComplements(
     salgado.sauces.map(sauce => ({
       name: sauce,
-      count: 0,
-      max: salgado.saucesLimit,
-      total: 0,
+      countLimit: salgado.saucesLimit,
     }))
   )
 
   return (
     <>
       <div className="flex flex-col gap-8">
-        <ItemList
+        <ComplementList
           addComplementEvent={addComplementEvent}
           complements={complements}
           title="Salgados"
         />
-        <ItemList
+        <ComplementList
           addComplementEvent={addSauceEvent}
           complements={sauces}
           title="Molhos"

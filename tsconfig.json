@@ -22,7 +22,8 @@
     },
 
     "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vitest/globals"]
   },
   "references": [{ "path": "./tsconfig.node.json" }],
   "exclude": ["vite.config.ts"]

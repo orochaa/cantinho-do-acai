@@ -1,17 +1,4 @@
 {
-  "name": "cantinho-do-acai",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "run-s lint:tsc lint:eslint lint:prettier",
-    "lint:tsc": "tsc --noEmit",
-    "lint:prettier": "prettier --write .",
-    "lint:eslint": "eslint --fix \"src/**/*.ts{x,}\""
-  },
   "dependencies": {
     "@brazilian-utils/brazilian-utils": "1.0.0-rc.12",
     "clsx": "^2.1.1",
@@ -36,6 +23,22 @@
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.6",
     "typescript": "^5.5.3",
-    "vite": "^5.3.4"
-  }
+    "vite": "^5.3.4",
+    "vitest": "^2.0.3"
+  },
+  "name": "cantinho-do-acai",
+  "private": true,
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "vite",
+    "lint": "run-s lint:tsc lint:eslint lint:prettier",
+    "lint:eslint": "eslint --fix \"src/**/*.ts{x,}\"",
+    "lint:prettier": "prettier --write .",
+    "lint:tsc": "tsc --noEmit",
+    "preview": "vite preview",
+    "test": "vitest --run",
+    "test:ci": "vitest --run --coverage --silent"
+  },
+  "type": "module",
+  "version": "0.0.0"
 }
