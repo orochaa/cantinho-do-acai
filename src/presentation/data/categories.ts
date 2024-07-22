@@ -1,4 +1,4 @@
-import { type Category } from '../types'
+import type { Category } from '../types'
 import { acai } from './acai'
 import { paleta } from './paleta'
 import { salgados } from './salgados'

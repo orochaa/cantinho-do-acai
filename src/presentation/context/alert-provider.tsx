@@ -1,19 +1,20 @@
 import clsx from 'clsx'
 import { exhaustive } from 'exhaustive'
 import {
-  type ReactNode,
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useReducer,
 } from 'react'
+import type { ReactNode } from 'react'
 
 interface IAlertContext {
   popMessage: (message: string) => void
 }
 
 export const AlertContext = createContext<IAlertContext>({
-  popMessage(message) {},
+  popMessage() {},
 })
 
 type PartialExcept<T, K extends keyof T> = {
@@ -121,8 +122,10 @@ export function AlertProvider({
     }, 400)
   }, [])
 
+  const context = useMemo<IAlertContext>(() => ({ popMessage }), [popMessage])
+
   return (
-    <AlertContext.Provider value={{ popMessage }}>
+    <AlertContext.Provider value={context}>
       {children}
 
       <div
@@ -132,6 +135,7 @@ export function AlertProvider({
         {alerts.map(alert => (
           <button
             key={alert.id}
+            type="button"
             data-testid="alert"
             className={clsx(
               'flex items-center justify-center gap-2',

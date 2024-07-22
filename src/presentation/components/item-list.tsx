@@ -1,6 +1,6 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { Minus, Plus } from 'lucide-react'
-import { type ComplementEvent, type ComplementState } from '../types'
+import type { ComplementEvent, ComplementState } from '../types'
 
 export interface ItemListProps {
   title: string
@@ -27,7 +27,7 @@ export function ItemList(props: ItemListProps): React.JSX.Element {
         >
           <p>{complement.name}</p>
           <div className="flex gap-1">
-            {complement.price && (
+            {complement.price ? (
               <div>
                 {complement.count > 0 && '+'}R$
                 {formatCurrency(
@@ -36,8 +36,9 @@ export function ItemList(props: ItemListProps): React.JSX.Element {
                     : complement.price
                 )}
               </div>
-            )}
+            ) : null}
             <button
+              type="button"
               onClick={() =>
                 addComplementEvent({
                   type: 'REMOVE',
@@ -49,6 +50,7 @@ export function ItemList(props: ItemListProps): React.JSX.Element {
             </button>
             <span>{complement.count}</span>
             <button
+              type="button"
               onClick={() =>
                 addComplementEvent({
                   type: 'ADD',

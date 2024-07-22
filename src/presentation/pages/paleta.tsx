@@ -53,6 +53,7 @@ export function PaletaPage(): React.JSX.Element {
             Voltar
           </Link>
           <button
+            type="button"
             className="rounded border border-red-300 bg-red-500 p-2 text-white hover:border-red-400 hover:bg-red-500/90"
             onClick={() => {
               const complements = flavors

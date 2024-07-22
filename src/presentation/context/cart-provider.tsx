@@ -1,6 +1,7 @@
 import { exhaustive } from 'exhaustive'
-import { type ReactNode, createContext, useContext, useReducer } from 'react'
-import { type Product } from '../types'
+import { createContext, useContext, useMemo, useReducer } from 'react'
+import type { ReactNode } from 'react'
+import type { Product } from '../types'
 
 interface CartItem {
   id: number
@@ -31,7 +32,7 @@ interface ICartContext {
 
 const CartContext = createContext<ICartContext>({
   cart: [],
-  addCartEvent(event) {},
+  addCartEvent() {},
 })
 
 function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
@@ -54,8 +55,10 @@ export function CartProvider(props: {
 }): React.JSX.Element {
   const [cart, addCartEvent] = useReducer(cartReducer, [])
 
+  const context = useMemo<ICartContext>(() => ({ cart, addCartEvent }), [cart])
+
   return (
-    <CartContext.Provider value={{ cart, addCartEvent }}>
+    <CartContext.Provider value={context}>
       {props.children}
     </CartContext.Provider>
   )

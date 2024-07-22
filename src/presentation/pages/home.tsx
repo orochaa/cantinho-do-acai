@@ -11,7 +11,7 @@ export function HomePage(): React.JSX.Element {
       {cart.length > 0 && (
         <Link
           to="/cart"
-          className="absolute -top-8 right-4 rounded border border-red-300 bg-red-500/90 p-2 text-white/90 "
+          className="absolute -top-8 right-4 rounded border border-red-300 bg-red-500/90 p-2 text-white/90"
         >
           <ShoppingCart size={20} />
         </Link>

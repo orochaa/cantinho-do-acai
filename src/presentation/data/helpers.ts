@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { capitalize } from '@brazilian-utils/brazilian-utils'
-import { type ComplementEvent, type ComplementState } from '../types'
+import type { ComplementEvent, ComplementState } from '../types'
 
 export function slang(data: string): string {
   return encodeURI(data.toLowerCase().replaceAll(/\s/g, '-'))
@@ -49,6 +49,7 @@ export function mergeObjects<T extends Record<string, unknown>[]>(
   for (const [key, value] of data.flatMap(obj =>
     objectEntries<Record<string, any>>(obj)
   )) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     result[key as keyof T[0]] = value
   }
 
@@ -70,8 +71,8 @@ export const complementReducer = (
             : complement.max
           : 0
         : event.type === 'REMOVE'
-        ? result
-        : complement[field]
+          ? result
+          : complement[field]
     }
     const total = calc('total')
 
