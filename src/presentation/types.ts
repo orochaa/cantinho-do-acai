@@ -14,3 +14,9 @@ export interface Product {
   price: number
   people: number
 }
+
+export interface Complement {
+  name: string
+  count: number
+  price?: number
+}

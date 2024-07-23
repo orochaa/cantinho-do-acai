@@ -1,8 +1,5 @@
-import type {
-  Complement,
-  ComplementEvent,
-  ComplementState,
-} from './use-complements'
+import type { Complement } from '../types'
+import type { ComplementEvent, ComplementState } from './use-complements'
 import { complementsReducer } from './use-complements'
 
 describe('complementsReducer', () => {

@@ -53,15 +53,15 @@ export function CartPage(): React.JSX.Element {
       <h2 className="p-1 text-xl font-bold text-white">Pedido:</h2>
       <div className="rounded border border-violet-500/90 p-2">
         <div className="flex flex-col gap-2">
-          {cart.map(({ id, product, complements, total }) => (
+          {cart.map(({ product, complements, total }, i) => (
             <div
-              key={id}
+              key={i}
               className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
             >
               <button
                 type="button"
                 className="absolute right-1 top-1 text-red-600"
-                onClick={() => addCartEvent({ type: 'REMOVE', id })}
+                onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
               >
                 <XIcon size={22} />
               </button>

@@ -1,10 +1,5 @@
 import { useReducer } from 'react'
-
-export interface Complement {
-  name: string
-  count: number
-  price?: number
-}
+import type { Complement } from '../types'
 
 export interface ComplementState {
   countLimit: number

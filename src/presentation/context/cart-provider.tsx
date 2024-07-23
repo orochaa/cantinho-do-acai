@@ -1,28 +1,23 @@
 import { exhaustive } from 'exhaustive'
 import { createContext, useContext, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
-import type { Product } from '../types'
+import type { Complement, Product } from '../types'
 
 interface CartItem {
-  id: number
   product: Product
-  complements: {
-    name: string
-    count: number
-    price?: number
-  }[]
+  complements: Complement[]
+  quantity: number
   total: number
 }
 
 type CartEvent =
   | {
       type: 'ADD'
-      item: Omit<CartItem, 'id' | 'total'>
-      initialPrice: number
+      item: Omit<CartItem, 'total'>
     }
   | {
       type: 'REMOVE'
-      id: number
+      index: number
     }
 
 interface ICartContext {
@@ -37,16 +32,16 @@ const CartContext = createContext<ICartContext>({
 
 function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   return exhaustive(event, 'type', {
-    ADD: ({ initialPrice, item }) => {
-      let total = initialPrice
+    ADD: ({ item }) => {
+      let total = item.product.price
 
       for (const complement of item.complements) {
         total += (complement.price ?? 0) * complement.count
       }
 
-      return [...state, { ...item, id: state.length, total }]
+      return [...state, { ...item, total }]
     },
-    REMOVE: e => state.filter(item => item.id !== e.id),
+    REMOVE: e => state.filter((_, i) => i !== e.index),
   })
 }
 
