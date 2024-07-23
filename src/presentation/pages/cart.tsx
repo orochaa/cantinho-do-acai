@@ -93,6 +93,7 @@ export function CartPage(): React.JSX.Element {
                   <button
                     type="button"
                     className="rounded p-0.5 text-red-600 active:bg-zinc-200 active:text-red-500"
+                    title="Remover do carrinho"
                     onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
                   >
                     <Trash2 className="size-5" />
@@ -153,6 +154,7 @@ export function CartPage(): React.JSX.Element {
               <button
                 type="button"
                 className="rounded p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200"
+                title="Fechar modal"
                 onClick={closeModal}
               >
                 <X className="size-5" />

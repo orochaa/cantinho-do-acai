@@ -21,6 +21,7 @@ export function HomePage(): React.JSX.Element {
                   key={slang(product.name)}
                   to={slang(`${path}/${product.name}`)}
                   className="h-[350px] rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
+                  title={`Selecionar ${product.name}`}
                 >
                   <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
                     <img

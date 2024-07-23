@@ -38,6 +38,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           <button
             type="button"
             className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+            title="Remover"
             onClick={decrementCounter}
             disabled={counter === 1}
           >
@@ -47,6 +48,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           <button
             type="button"
             className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200"
+            title="Adicionar"
             onClick={incrementCounter}
           >
             <Plus className="size-5" />
@@ -59,7 +61,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
         disabled={totalPrice === 0}
         onClick={addOrder}
       >
-        Adicionar R${formatCurrency(totalPrice * counter)}
+        Adicionar ao Carrinho - R${formatCurrency(totalPrice * counter)}
       </Button>
     </div>
   )

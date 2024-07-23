@@ -17,6 +17,7 @@ export function Background(): React.JSX.Element {
             <Link
               to="/"
               className="flex gap-2 rounded bg-purple-500 p-2 text-zinc-100 shadow-md md:right-96"
+              title="Ir para página inicial"
             >
               <Home className="size-5" />
               Inicio
@@ -26,6 +27,7 @@ export function Background(): React.JSX.Element {
             <Link
               to="/cart"
               className="flex gap-2 rounded bg-red-500 p-2 text-white shadow-md md:right-96"
+              title="Ir para página do carrinho"
             >
               <ShoppingCart className="size-5" />
               Carrinho

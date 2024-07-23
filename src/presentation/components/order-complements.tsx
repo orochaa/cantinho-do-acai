@@ -103,6 +103,7 @@ function MultiComponentsContainer(
       <button
         type="button"
         className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200"
+        title="Remover"
         onClick={() => addComplementEvent({ type: 'REMOVE', complement })}
       >
         <Minus className="size-5" />
@@ -111,6 +112,7 @@ function MultiComponentsContainer(
       <button
         type="button"
         className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+        title="Adicionar"
         disabled={ctx.countTotal >= ctx.countLimit}
         onClick={() => addComplementEvent({ type: 'ADD', complement })}
       >
@@ -135,6 +137,7 @@ function AddComplementButton(
     <button
       type="button"
       className="block h-[2.4rem] rounded-sm p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+      title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
       onClick={() => addComplementEvent({ type: 'ADD', complement })}
     >
@@ -157,6 +160,7 @@ function ToggleComplementButton(
     <button
       type="button"
       className="block size-6 rounded-full bg-zinc-200 ring-2 ring-red-500 ring-offset-2 active:bg-red-300 disabled:bg-red-500"
+      title="Selecionar"
       disabled={complement.count === 1}
       onClick={() => addComplementEvent({ type: 'SELECT', complement })}
     />
