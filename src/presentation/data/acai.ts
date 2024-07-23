@@ -19,6 +19,7 @@ export type AcaiExtra =
   | "Bib's"
 
 export type Acai = Product & {
+  type: string[]
   complementsLimit: number
   complements: string[]
   extrasLimit: number
@@ -164,6 +165,7 @@ export const acaiCategory: Category<Acai> = {
       },
     },
   ].map(p => ({
+    type: ['Açaí Tradicional', 'Açaí com Sorvete de Ninho'],
     complements: [
       'Banana',
       'Granola',

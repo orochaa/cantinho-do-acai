@@ -25,6 +25,11 @@ export function AcaiPage(): React.JSX.Element {
     return desiredProduct ?? defaultValue
   }, [item])
 
+  const [type, addTypeEvent] = useComplements(
+    acai.type.map((name, i) => ({ name, count: i === 0 ? 1 : 0 })),
+    1
+  )
+
   const [complements, addComplementEvent] = useComplements(
     acai.complements.map(name => ({ name })),
     acai.complementsLimit
@@ -51,6 +56,11 @@ export function AcaiPage(): React.JSX.Element {
     <>
       <div className="flex flex-col gap-8">
         <OrderComplements
+          addComplementEvent={addTypeEvent}
+          ctx={type}
+          title="Tipo de Açaí:"
+        />
+        <OrderComplements
           addComplementEvent={addComplementEvent}
           ctx={complements}
           title="Acompanhamentos:"
@@ -70,7 +80,8 @@ export function AcaiPage(): React.JSX.Element {
             type: 'ADD',
             item: {
               product: acai,
-              complements: [...complements.complements, ...extras.complements]
+              complements: [type, complements, extras]
+                .flatMap(i => i.complements)
                 .filter(i => i.count > 0)
                 .map(i => ({
                   count: i.count,
