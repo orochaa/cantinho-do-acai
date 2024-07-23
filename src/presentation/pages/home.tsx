@@ -1,21 +1,9 @@
 import { categories, slang } from '@/presentation/data'
-import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useCart } from '../context'
 
 export function HomePage(): React.JSX.Element {
-  const { cart } = useCart()
-
   return (
     <>
-      {cart.length > 0 && (
-        <Link
-          to="/cart"
-          className="absolute -top-8 right-4 rounded border border-red-300 bg-red-500/90 p-2 text-white/90"
-        >
-          <ShoppingCart size={20} />
-        </Link>
-      )}
       <img
         src="/img/logo.png"
         alt="logo cantinho do açaí"
@@ -40,8 +28,8 @@ export function HomePage(): React.JSX.Element {
                       alt={`Imagem ${product.name}`}
                       className="h-full w-full object-cover"
                     />
-                    <div className="absolute inset-0 z-10 bg-black/30" />
-                    <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-between bg-zinc-50/80 p-6">
+                    <div className="absolute inset-0 bg-black/30" />
+                    <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-zinc-50/80 p-6">
                       <div>
                         <h2 className="text-xl font-bold text-black">
                           {product.name}

@@ -1,5 +1,5 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { PlusSquare, XIcon } from 'lucide-react'
+import { PlusSquare, Trash2 } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context'
@@ -13,7 +13,7 @@ export function CartPage(): React.JSX.Element {
     let total = 0
 
     for (const item of cart) {
-      total += item.total
+      total += item.total * item.quantity
     }
 
     return total
@@ -31,9 +31,9 @@ export function CartPage(): React.JSX.Element {
     let total = 0
 
     for (const item of cart) {
-      total += item.total
+      total += item.total * item.quantity
       text += [
-        `${item.product.name} - R$${formatCurrency(item.product.price)}`,
+        `${item.quantity} - ${item.product.name} - R$${formatCurrency(item.product.price)}`,
         ...item.complements.map(complement => {
           return `- ${complement.count} - ${complement.name}${
             complement.price ? ` - R$${formatCurrency(complement.price)}` : ''
@@ -53,22 +53,24 @@ export function CartPage(): React.JSX.Element {
       <h2 className="p-1 text-xl font-bold text-white">Pedido:</h2>
       <div className="rounded border border-violet-500/90 p-2">
         <div className="flex flex-col gap-2">
-          {cart.map(({ product, complements, total }, i) => (
+          {cart.map(({ product, complements, total, quantity }, i) => (
             <div
               key={i}
               className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
             >
-              <button
-                type="button"
-                className="absolute right-1 top-1 text-red-600"
-                onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
-              >
-                <XIcon size={22} />
-              </button>
-              <h3 className="text-center font-semibold">
-                {product.name} - R$
-                {formatCurrency(product.price)}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="grow text-center font-semibold">
+                  {quantity} - {product.name} - R$
+                  {formatCurrency(product.price)}
+                </h3>
+                <button
+                  type="button"
+                  className="rounded p-0.5 text-red-600 active:bg-zinc-200 active:text-red-500"
+                  onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
+                >
+                  <Trash2 className="size-5" />
+                </button>
+              </div>
               <ul className="flex flex-col gap-1">
                 {complements.map(complement => (
                   <li key={complement.name} className="flex items-center gap-1">
@@ -82,7 +84,7 @@ export function CartPage(): React.JSX.Element {
                 ))}
               </ul>
               <p className="text-center font-semibold">
-                Total: R${formatCurrency(total)}
+                Total: R${formatCurrency(total * quantity)}
               </p>
             </div>
           ))}

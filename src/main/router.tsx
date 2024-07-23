@@ -1,4 +1,5 @@
 import { Background } from '@/presentation/components'
+import { CartProvider } from '@/presentation/context'
 import {
   AcaiPage,
   CartPage,
@@ -14,7 +15,14 @@ export function Router(): React.JSX.Element {
     <BrowserRouter>
       <ScrollToTop>
         <Routes>
-          <Route path="" element={<Background />}>
+          <Route
+            path=""
+            element={
+              <CartProvider>
+                <Background />
+              </CartProvider>
+            }
+          >
             <Route path="" element={<HomePage />} />
             <Route path="acai/:item" element={<AcaiPage />} />
             <Route path="paleta/:item" element={<PaletaPage />} />

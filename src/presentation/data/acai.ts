@@ -1,7 +1,7 @@
 import type { Category, Product } from '../types'
 
 export type AcaiExtra =
-  | 'Kit Kat'
+  | 'KitKat'
   | 'Bis'
   | 'Amor Carioca'
   | 'Batom'
@@ -37,7 +37,7 @@ export const acaiCategory: Category<Acai> = {
       complementsLimit: 7,
       extrasLimit: 10,
       extras: {
-        'Kit Kat': 3.5,
+        KitKat: 3.5,
         Bis: 3,
         'Amor Carioca': 3,
         Batom: 3,
@@ -64,7 +64,7 @@ export const acaiCategory: Category<Acai> = {
       complementsLimit: 5,
       extrasLimit: 10,
       extras: {
-        'Kit Kat': 3.5,
+        KitKat: 3.5,
         Bis: 2.5,
         'Amor Carioca': 3,
         Batom: 3,
@@ -91,7 +91,7 @@ export const acaiCategory: Category<Acai> = {
       complementsLimit: 5,
       extrasLimit: 10,
       extras: {
-        'Kit Kat': 3.5,
+        KitKat: 3.5,
         Bis: 2.5,
         'Amor Carioca': 3,
         Batom: 3,
@@ -118,7 +118,7 @@ export const acaiCategory: Category<Acai> = {
       complementsLimit: 3,
       extrasLimit: 10,
       extras: {
-        'Kit Kat': 2.5,
+        KitKat: 2.5,
         Bis: 2,
         'Amor Carioca': 2,
         Batom: 2,
@@ -145,7 +145,7 @@ export const acaiCategory: Category<Acai> = {
       complementsLimit: 3,
       extrasLimit: 5,
       extras: {
-        'Kit Kat': 2,
+        KitKat: 2,
         Bis: 1.5,
         'Amor Carioca': 2,
         Batom: 2,
