@@ -1,10 +1,7 @@
 {
   "reactComponent": {
     "scope": "typescriptreact",
-    "prefix": [
-      "comp",
-      "component"
-    ],
+    "prefix": ["comp", "component"],
     "body": [
       "export interface ${1:Component}Props {",
       "  ",
@@ -22,9 +19,7 @@
   },
   "reactPage": {
     "scope": "typescriptreact",
-    "prefix": [
-      "page"
-    ],
+    "prefix": ["page"],
     "body": [
       "export function $1Page (): React.JSX.Element {",
       "  return (",
@@ -65,26 +60,12 @@
   },
   "reactState": {
     "scope": "typescript,typescriptreact",
-    "prefix": [
-      "stt",
-      "state"
-    ],
-    "body": [
-      "const [$1, set$2] = useState<$3>($4)",
-      "$0"
-    ],
+    "prefix": ["stt", "state"],
+    "body": ["const [$1, set$2] = useState<$3>($4)", "$0"],
   },
   "reactHook": {
     "scope": "typescript,typescriptreact",
-    "prefix": [
-      "hook",
-      "use"
-    ],
-    "body": [
-      "export function use$1($2) {",
-      "  $0",
-      "}",
-      ""
-    ],
+    "prefix": ["hook", "use"],
+    "body": ["export function use$1($2) {", "  $0", "}", ""],
   },
 }

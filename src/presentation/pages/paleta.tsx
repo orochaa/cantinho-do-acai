@@ -35,7 +35,12 @@ export function PaletaPage(): React.JSX.Element {
       <OrderButton
         product={paleta}
         totalPrice={total}
-        onOrder={quantity =>
+        validate={() => {
+          if (flavors.countTotal === 0) {
+            return 'Favor escolher sabores'
+          }
+        }}
+        order={quantity =>
           addCartEvent({
             type: 'ADD',
             item: {

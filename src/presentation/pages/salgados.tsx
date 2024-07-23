@@ -52,7 +52,16 @@ export function SalgadosPage(): React.JSX.Element {
         product={salgado}
         totalPrice={salgado.price}
         multiple
-        onOrder={quantity =>
+        validate={() => {
+          if (complements.countTotal === 0) {
+            return 'Favor escolher salgados'
+          }
+
+          if (sauces.countTotal === 0) {
+            return 'Favor escolher molho'
+          }
+        }}
+        order={quantity =>
           addCartEvent({
             type: 'ADD',
             item: {

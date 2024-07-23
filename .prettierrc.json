@@ -12,9 +12,7 @@
     "@trivago/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss"
   ],
-  "tailwindFunctions": [
-    "tv"
-  ],
+  "tailwindFunctions": ["tv"],
   "importOrder": [
     "^@/presentation",
     "^@/main",

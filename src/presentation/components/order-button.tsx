@@ -9,11 +9,13 @@ export interface OrderButtonProps {
   product: Product
   multiple?: boolean
   totalPrice: number
-  onOrder: (quantity: number) => void
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  validate?: () => string | void
+  order: (quantity: number) => void
 }
 
 export function OrderButton(props: OrderButtonProps): React.JSX.Element {
-  const { product, totalPrice, onOrder, multiple } = props
+  const { product, totalPrice, validate, order, multiple } = props
 
   const [counter, setCounter] = useState<number>(1)
   const { popMessage } = useAlert()
@@ -27,9 +29,15 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
   }, [setCounter])
 
   const addOrder = useCallback(() => {
-    onOrder(counter)
-    popMessage(`${product.name} adicionado ao carrinho`)
-  }, [counter, onOrder, popMessage, product.name])
+    const error = validate?.()
+
+    if (typeof error === 'string' && !!error.trim()) {
+      popMessage(error)
+    } else {
+      order(counter)
+      popMessage(`${product.name} adicionado ao carrinho`)
+    }
+  }, [counter, order, popMessage, product.name, validate])
 
   return (
     <div className="mt-8 flex gap-2">
@@ -55,12 +63,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           </button>
         </div>
       )}
-      <Button
-        variant="confirm"
-        className="grow"
-        disabled={totalPrice === 0}
-        onClick={addOrder}
-      >
+      <Button variant="confirm" className="grow" onClick={addOrder}>
         Adicionar ao Carrinho - R${formatCurrency(totalPrice * counter)}
       </Button>
     </div>

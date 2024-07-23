@@ -46,7 +46,7 @@ export function FelicidadePage(): React.JSX.Element {
           copo.price + (size.complements.find(c => c.count > 0)?.price ?? 0)
         }
         multiple
-        onOrder={quantity =>
+        order={quantity =>
           addCartEvent({
             type: 'ADD',
             item: {

@@ -39,7 +39,7 @@ export const salgadosCategory: Category<Salgado> = {
       'Bolinha de Queijo',
       'Enroladinho de Salsicha',
     ],
-    sauces: ['Cheddar', 'Catupiri'],
+    sauces: ['Molho Cheddar', 'Molho de Catupiri'],
     ...p,
   })),
 }

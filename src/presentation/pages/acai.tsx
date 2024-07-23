@@ -75,7 +75,7 @@ export function AcaiPage(): React.JSX.Element {
         product={acai}
         totalPrice={total}
         multiple
-        onOrder={quantity =>
+        order={quantity =>
           addCartEvent({
             type: 'ADD',
             item: {
