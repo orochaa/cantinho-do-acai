@@ -19,16 +19,16 @@ export function Background(): React.JSX.Element {
               className="flex gap-2 rounded bg-purple-500 p-2 text-zinc-100 shadow-md md:right-96"
             >
               <Home className="size-5" />
-              <span>Inicio</span>
+              Inicio
             </Link>
           )}
           {cart.length > 0 && location.pathname !== '/cart' && (
             <Link
               to="/cart"
-              className="flex gap-2 rounded bg-red-500 p-2 text-zinc-100 shadow-md md:right-96"
+              className="flex gap-2 rounded bg-red-500 p-2 text-white shadow-md md:right-96"
             >
               <ShoppingCart className="size-5" />
-              <span>Carrinho</span>
+              Carrinho
             </Link>
           )}
         </header>

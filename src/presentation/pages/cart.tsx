@@ -1,17 +1,20 @@
 import { formatCurrency } from '@brazilian-utils/brazilian-utils'
-import { PlusSquare, Trash2 } from 'lucide-react'
-import { useEffect, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Container, OrderComplements } from '../components'
+import { ExternalLink, PlusSquare, Trash2, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button, Container, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { useComplements } from '../hooks'
 
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
+
   const [spoons, addSpoonEvent] = useComplements(
     [{ name: 'Sim, por favor' }, { name: 'Não, obrigado', count: 1 }],
     1
   )
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
@@ -25,20 +28,13 @@ export function CartPage(): React.JSX.Element {
     return total
   }, [cart])
 
-  useEffect(() => {
-    if (cart.length === 0) {
-      navigate('/')
-    }
-  }, [cart, navigate])
-
   const goToWhatsappLink = useMemo((): string => {
-    const base = 'https://wa.me/5554984312998?text='
-    let text = 'Olá, Cantinho do Açaí!\nGostaria de fazer um pedido:\n\n'
+    let msg = 'Olá, Cantinho do Açaí!\nGostaria de fazer um pedido:\n\n'
     let total = 0
 
     for (const item of cart) {
       total += item.total * item.quantity
-      text += [
+      msg += [
         `${item.quantity} - ${item.product.name} - R$${formatCurrency(item.product.price)}`,
         ...item.complements.map(complement => {
           return `- ${complement.count} - ${complement.name}${
@@ -49,23 +45,43 @@ export function CartPage(): React.JSX.Element {
       ].join('\n')
     }
 
-    text += `Total: R$${formatCurrency(total)}`
+    msg += `Total: R$${formatCurrency(total)}`
 
     if (spoons.complements[0].count === 1) {
-      text += '\n\nIncluir talheres, por favor.'
+      msg += '\n\nIncluir talheres, por favor.'
     }
 
-    return base + encodeURIComponent(text)
+    const phone = '5554984312998'
+    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`
+
+    return url
   }, [cart, spoons.complements])
+
+  const openModal = useCallback(() => {
+    setModalOpen(true)
+  }, [])
+
+  const closeModal = useCallback(() => {
+    setModalOpen(false)
+  }, [])
+
+  useEffect(() => {
+    if (cart.length === 0) {
+      navigate('/')
+    }
+  }, [cart, navigate])
 
   return (
     <>
       <div className="flex flex-col gap-8">
         <Container>
-          <h2 className="text-xl font-bold text-white">Pedido:</h2>
+          <h2 className="text-xl font-bold text-white">
+            Pedido: R${formatCurrency(totalOrder)}
+          </h2>
           <div className="flex flex-col gap-2">
             {cart.map(({ product, complements, total, quantity }, i) => (
               <div
+                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
               >
@@ -116,22 +132,58 @@ export function CartPage(): React.JSX.Element {
         />
       </div>
 
-      <div className="mx-auto mt-4 grid grid-cols-2 gap-2 text-center">
-        <Link
-          to="/"
-          className="rounded border border-white bg-zinc-100 p-2 hover:bg-zinc-100/90"
-        >
-          Voltar
-        </Link>
-        <a
-          href={goToWhatsappLink}
-          target="_blank"
-          rel="noreferrer"
-          className="rounded border border-red-300 bg-red-500 p-2 text-white hover:border-red-400 hover:bg-red-500/90"
-        >
-          Confirmar R${formatCurrency(totalOrder)}
-        </a>
+      <div className="mt-6 grid grid-cols-2 gap-2">
+        <Button variant="cancel" onClick={() => navigate('/')}>
+          Continuar Escolhendo
+        </Button>
+        <Button variant="confirm" onClick={openModal}>
+          Confirmar Pedido
+        </Button>
       </div>
+
+      {!!modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+          <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
+          <div className="z-10 w-11/12 max-w-2xl rounded-lg bg-white p-6 shadow-lg">
+            <div className="flex items-start">
+              <h2 className="grow text-center text-2xl font-semibold">
+                ATENÇÃO
+              </h2>
+              <button
+                type="button"
+                className="rounded p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200"
+                onClick={closeModal}
+              >
+                <X className="size-5" />
+              </button>
+            </div>
+            <p className="my-4">
+              Ao clicar no botão <b>&quot;Continuar&quot;</b>, você será
+              redirecionado para o WhatsApp do Cantinho do Açaí, com uma
+              mensagem pré-escrita contendo todos os detalhes do seu pedido.
+              Basta enviá-la para finalizar seu pedido.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="cancel"
+                className="border-zinc-300 transition hover:border-zinc-500"
+                onClick={closeModal}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="confirm"
+                className="items-start border-zinc-300 bg-green-500 hover:border-zinc-500"
+                onClick={() => window.open(goToWhatsappLink, '_blank')}
+              >
+                <ExternalLink className="size-5" />
+                Continuar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

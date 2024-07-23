@@ -3,6 +3,7 @@ import { Minus, Plus } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useAlert } from '../context'
 import type { Product } from '../types'
+import { Button } from './button'
 
 export interface OrderButtonProps {
   product: Product
@@ -52,14 +53,14 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           </button>
         </div>
       )}
-      <button
-        type="button"
-        className="grow rounded border border-red-300 bg-red-500 p-2 text-white hover:border-red-400 hover:bg-red-500/90 disabled:bg-red-500/80"
+      <Button
+        variant="confirm"
+        className="grow"
         disabled={totalPrice === 0}
         onClick={addOrder}
       >
         Adicionar R${formatCurrency(totalPrice * counter)}
-      </button>
+      </Button>
     </div>
   )
 }
