@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ComplementList, OrderButton } from '../components'
+import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { paletaCategory } from '../data'
 import { useComplements } from '../hooks'
@@ -26,10 +26,10 @@ export function PaletaPage(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col gap-8">
-        <ComplementList
+        <OrderComplements
           addComplementEvent={addFlavorEvent}
           ctx={flavors}
-          title="Sabores"
+          title="Sabores:"
         />
       </div>
       <OrderButton

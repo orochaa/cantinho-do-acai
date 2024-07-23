@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { ComplementList, OrderButton } from '../components'
+import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import type { Acai } from '../data'
 import { acaiCategory, slang } from '../data'
@@ -50,15 +50,15 @@ export function AcaiPage(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col gap-8">
-        <ComplementList
+        <OrderComplements
           addComplementEvent={addComplementEvent}
           ctx={complements}
-          title="Acompanhamentos"
+          title="Acompanhamentos:"
         />
-        <ComplementList
+        <OrderComplements
           addComplementEvent={addExtraEvent}
           ctx={extras}
-          title="Adicionais"
+          title="Adicionais:"
         />
       </div>
       <OrderButton

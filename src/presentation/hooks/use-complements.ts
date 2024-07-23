@@ -8,7 +8,7 @@ export interface ComplementState {
 }
 
 export interface ComplementEvent {
-  type: 'ADD' | 'REMOVE'
+  type: 'ADD' | 'REMOVE' | 'SELECT'
   complement: Complement
 }
 
@@ -49,18 +49,29 @@ export function complementsReducer(
           : complement
       }),
     }
+  } else if (event.type === 'SELECT' && state.countLimit === 1) {
+    return {
+      countLimit: state.countLimit,
+      countTotal: 1,
+      complements: state.complements.map(complement => {
+        return {
+          ...complement,
+          count: complement.name === event.complement.name ? 1 : 0,
+        }
+      }),
+    }
   }
 
   return state
 }
 
 export function useComplements(
-  complements: Omit<Complement, 'count'>[],
+  complements: Optional<Complement, 'count'>[],
   countLimit: number
 ): [ComplementState, (event: ComplementEvent) => void] {
   return useReducer<typeof complementsReducer>(complementsReducer, {
     countTotal: 0,
     countLimit,
-    complements: complements.map(c => ({ ...c, count: 0 })),
+    complements: complements.map(c => ({ count: 0, ...c })),
   })
 }

@@ -2,10 +2,16 @@ import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { PlusSquare, Trash2 } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Container, OrderComplements } from '../components'
 import { useCart } from '../context'
+import { useComplements } from '../hooks'
 
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
+  const [spoons, addSpoonEvent] = useComplements(
+    [{ name: 'Sim, por favor' }, { name: 'Não, obrigado', count: 1 }],
+    1
+  )
 
   const navigate = useNavigate()
 
@@ -45,51 +51,68 @@ export function CartPage(): React.JSX.Element {
 
     text += `Total: R$${formatCurrency(total)}`
 
+    if (spoons.complements[0].count === 1) {
+      text += '\n\nIncluir talheres, por favor'
+    }
+
     return base + encodeURIComponent(text)
-  }, [cart])
+  }, [cart, spoons.complements])
 
   return (
     <>
-      <h2 className="p-1 text-xl font-bold text-white">Pedido:</h2>
-      <div className="rounded border border-violet-500/90 p-2">
-        <div className="flex flex-col gap-2">
-          {cart.map(({ product, complements, total, quantity }, i) => (
-            <div
-              key={i}
-              className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
-            >
-              <div className="flex items-center gap-2">
-                <h3 className="grow text-center font-semibold">
-                  {quantity} - {product.name} - R$
-                  {formatCurrency(product.price)}
-                </h3>
-                <button
-                  type="button"
-                  className="rounded p-0.5 text-red-600 active:bg-zinc-200 active:text-red-500"
-                  onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
-                >
-                  <Trash2 className="size-5" />
-                </button>
+      <div className="flex flex-col gap-8">
+        <Container>
+          <h2 className="text-xl font-bold text-white">Pedido:</h2>
+          <div className="flex flex-col gap-2">
+            {cart.map(({ product, complements, total, quantity }, i) => (
+              <div
+                key={i}
+                className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
+              >
+                <div className="flex items-center justify-between gap-2 px-2 font-semibold">
+                  <span>{quantity}</span>
+                  <h3>
+                    {product.name} - R${formatCurrency(product.price)}
+                  </h3>
+                  <button
+                    type="button"
+                    className="rounded p-0.5 text-red-600 active:bg-zinc-200 active:text-red-500"
+                    onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
+                  >
+                    <Trash2 className="size-5" />
+                  </button>
+                </div>
+                <ul className="flex flex-col gap-1">
+                  {complements.map(complement => (
+                    <li
+                      key={complement.name}
+                      className="flex items-center gap-1"
+                    >
+                      <PlusSquare size={20} className="text-pink-600" />
+                      {complement.count} - {complement.name}
+                      {!!complement.price &&
+                        ` - R$${formatCurrency(
+                          complement.count * complement.price
+                        )}`}
+                    </li>
+                  ))}
+                </ul>
+                {complements.length > 0 && (
+                  <p className="text-center font-semibold">
+                    Total: R${formatCurrency(total * quantity)}
+                  </p>
+                )}
               </div>
-              <ul className="flex flex-col gap-1">
-                {complements.map(complement => (
-                  <li key={complement.name} className="flex items-center gap-1">
-                    <PlusSquare size={20} className="text-pink-600" />
-                    {complement.count} - {complement.name}
-                    {!!complement.price &&
-                      ` - R$${formatCurrency(
-                        complement.count * complement.price
-                      )}`}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-center font-semibold">
-                Total: R${formatCurrency(total * quantity)}
-              </p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Container>
+        <OrderComplements
+          title="Precisa de talheres?"
+          ctx={spoons}
+          addComplementEvent={addSpoonEvent}
+        />
       </div>
+
       <div className="mx-auto mt-4 grid grid-cols-2 gap-2 text-center">
         <Link
           to="/"

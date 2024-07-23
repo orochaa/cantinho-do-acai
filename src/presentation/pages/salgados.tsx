@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { ComplementList, OrderButton } from '../components'
+import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { salgadosCategory, slang } from '../data'
 import { useComplements } from '../hooks'
@@ -37,15 +37,15 @@ export function SalgadosPage(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col gap-8">
-        <ComplementList
+        <OrderComplements
           addComplementEvent={addComplementEvent}
           ctx={complements}
-          title="Salgados"
+          title="Salgados:"
         />
-        <ComplementList
+        <OrderComplements
           addComplementEvent={addSauceEvent}
           ctx={sauces}
-          title="Molhos"
+          title="Molhos:"
         />
       </div>
       <OrderButton
