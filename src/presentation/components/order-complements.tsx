@@ -37,7 +37,7 @@ export function OrderComplements(
           <div
             key={complement.name}
             className={clsx(
-              'flex items-center gap-2 rounded bg-zinc-100 p-2',
+              'flex items-center gap-3.5 rounded bg-zinc-100 p-2',
               activeButton ? 'bg-zinc-200' : 'bg-zinc-100'
             )}
           >

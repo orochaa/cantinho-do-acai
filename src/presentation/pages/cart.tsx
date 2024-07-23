@@ -33,7 +33,7 @@ export function CartPage(): React.JSX.Element {
 
   const goToWhatsappLink = useMemo((): string => {
     const base = 'https://wa.me/5554984312998?text='
-    let text = 'Olá Cantinho do Açaí gostaria de pedir:\n\n'
+    let text = 'Olá, Cantinho do Açaí!\nGostaria de fazer um pedido:\n\n'
     let total = 0
 
     for (const item of cart) {
@@ -52,7 +52,7 @@ export function CartPage(): React.JSX.Element {
     text += `Total: R$${formatCurrency(total)}`
 
     if (spoons.complements[0].count === 1) {
-      text += '\n\nIncluir talheres, por favor'
+      text += '\n\nIncluir talheres, por favor.'
     }
 
     return base + encodeURIComponent(text)
@@ -89,11 +89,14 @@ export function CartPage(): React.JSX.Element {
                       className="flex items-center gap-1"
                     >
                       <PlusSquare size={20} className="text-pink-600" />
-                      {complement.count} - {complement.name}
-                      {!!complement.price &&
-                        ` - R$${formatCurrency(
-                          complement.count * complement.price
-                        )}`}
+                      {[
+                        complement.count,
+                        complement.name,
+                        complement.price &&
+                          `R$${formatCurrency(complement.price)}`,
+                      ]
+                        .filter(Boolean)
+                        .join(' - ')}
                     </li>
                   ))}
                 </ul>

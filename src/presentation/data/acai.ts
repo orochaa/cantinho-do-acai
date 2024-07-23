@@ -83,7 +83,7 @@ export const acaiCategory: Category<Acai> = {
       },
     },
     {
-      img: '/img/copo-grande.jpeg',
+      img: '/img/copo-grande.avif',
       name: 'Copo de Açaí Grande',
       people: 1,
       price: 26,

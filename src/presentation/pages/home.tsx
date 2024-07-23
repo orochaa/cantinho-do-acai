@@ -20,9 +20,9 @@ export function HomePage(): React.JSX.Element {
                 <Link
                   key={slang(product.name)}
                   to={slang(`${path}/${product.name}`)}
-                  className="rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
+                  className="h-[350px] rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
                 >
-                  <div className="relative flex max-h-[350px] items-end justify-center overflow-hidden rounded-xl">
+                  <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
                     <img
                       src={product.img}
                       alt={`Imagem ${product.name}`}
@@ -35,10 +35,11 @@ export function HomePage(): React.JSX.Element {
                           {product.name}
                         </h2>
                         <p className="text md:text-base">
-                          Serve até {product.people} pessoa
-                          {product.people !== 1 && 's'}. (aprox.
-                          {product.quantity}
-                          g)
+                          {product.people === 1
+                            ? 'Serve uma pessoa'
+                            : `Serve até ${product.people} pessoas`}
+                          .{' '}
+                          {!!product.quantity && `(aprox.${product.quantity}g)`}
                         </p>
                       </div>
                       <span className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter">

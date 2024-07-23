@@ -10,7 +10,7 @@ export type Category<
 export interface Product {
   img: string
   name: string
-  quantity: number
+  quantity?: number
   price: number
   people: number
 }

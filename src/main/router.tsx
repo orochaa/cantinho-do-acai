@@ -3,6 +3,7 @@ import { CartProvider } from '@/presentation/context'
 import {
   AcaiPage,
   CartPage,
+  FelicidadePage,
   HomePage,
   PaletaPage,
   SalgadosPage,
@@ -27,6 +28,7 @@ export function Router(): React.JSX.Element {
             <Route path="acai/:item" element={<AcaiPage />} />
             <Route path="paleta/:item" element={<PaletaPage />} />
             <Route path="salgados/:item" element={<SalgadosPage />} />
+            <Route path="felicidade/:item" element={<FelicidadePage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>

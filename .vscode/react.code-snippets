@@ -26,7 +26,7 @@
       "page"
     ],
     "body": [
-      "export function $1Page (): JSX.Element {",
+      "export function $1Page (): React.JSX.Element {",
       "  return (",
       "    <${2:Main}>",
       "      $0",
