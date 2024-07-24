@@ -34,12 +34,16 @@ function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   return exhaustive(event, 'type', {
     ADD: ({ item }) => {
       let total = item.product.price
+      const complements: Complement[] = []
 
       for (const complement of item.complements) {
-        total += (complement.price ?? 0) * complement.count
+        if (complement.count > 0) {
+          complements.push(complement)
+          total += (complement.price ?? 0) * complement.count
+        }
       }
 
-      return [...state, { ...item, total }]
+      return [...state, { ...item, complements, total }]
     },
     REMOVE: e => state.filter((_, i) => i !== e.index),
   })

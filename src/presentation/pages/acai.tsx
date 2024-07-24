@@ -53,14 +53,9 @@ export function AcaiPage(): React.JSX.Element {
             type: 'ADD',
             item: {
               product: acai,
-              complements: [type, complements, extras]
-                .flatMap(i => i.complements)
-                .filter(i => i.count > 0)
-                .map(i => ({
-                  count: i.count,
-                  name: i.name,
-                  price: i.price,
-                })),
+              complements: [type, complements, extras].flatMap(
+                i => i.complements
+              ),
               quantity,
             },
           })

@@ -35,7 +35,7 @@ export function FelicidadePage(): React.JSX.Element {
             type: 'ADD',
             item: {
               product: copo,
-              complements: size.complements.filter(item => item.count > 0),
+              complements: size.complements,
               quantity,
             },
           })

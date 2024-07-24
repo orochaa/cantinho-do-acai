@@ -50,10 +50,7 @@ export function SalgadosPage(): React.JSX.Element {
             type: 'ADD',
             item: {
               product: salgado,
-              complements: [
-                ...complements.complements.filter(item => item.count > 0),
-                ...sauces.complements.filter(sauce => sauce.count > 0),
-              ],
+              complements: [complements, sauces].flatMap(i => i.complements),
               quantity,
             },
           })
