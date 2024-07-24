@@ -3,7 +3,7 @@ import { tv } from 'tailwind-variants'
 import type { VariantProps } from 'tailwind-variants'
 
 const buttonStyles = tv({
-  base: 'flex justify-center gap-2 rounded border p-2',
+  base: 'flex items-center justify-center gap-2 rounded border p-2',
   variants: {
     variant: {
       confirm: 'border-red-300 bg-red-500 text-white disabled:bg-red-500/80',

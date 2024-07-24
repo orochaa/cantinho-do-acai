@@ -134,7 +134,7 @@ export function CartPage(): React.JSX.Element {
         />
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-2">
+      <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
         <Button variant="cancel" onClick={() => navigate('/')}>
           Continuar Escolhendo
         </Button>
