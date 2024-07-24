@@ -9,11 +9,9 @@ export function Background(): React.JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-purple-700">
-      <div className="relative mx-auto w-11/12 max-w-5xl">
-        <header className="sticky top-2 z-10 flex items-center justify-between gap-2 py-4">
-          {location.pathname === '/' ? (
-            <span />
-          ) : (
+      <div className="relative mx-auto w-11/12 max-w-4xl">
+        <header className="fixed top-4 z-10 flex w-full max-w-4xl items-center">
+          {location.pathname !== '/' && (
             <Link
               to="/"
               className="flex gap-2 rounded bg-purple-500 p-2 text-zinc-100 shadow-md md:right-96"
@@ -26,7 +24,7 @@ export function Background(): React.JSX.Element {
           {cart.length > 0 && location.pathname !== '/cart' && (
             <Link
               to="/cart"
-              className="flex gap-2 rounded bg-red-500 p-2 text-white shadow-md md:right-96"
+              className="ml-auto flex gap-2 rounded bg-red-500 p-2 text-white shadow-md"
               title="Ir para página do carrinho"
             >
               <ShoppingCart className="size-5" />
@@ -34,7 +32,7 @@ export function Background(): React.JSX.Element {
             </Link>
           )}
         </header>
-        <main className="relative py-16">
+        <main className="relative py-20">
           <Outlet />
         </main>
       </div>

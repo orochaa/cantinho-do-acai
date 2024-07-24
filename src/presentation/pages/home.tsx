@@ -7,9 +7,9 @@ export function HomePage(): React.JSX.Element {
       <img
         src="/img/logo.png"
         alt="logo cantinho do açaí"
-        className="mx-auto mb-8 max-h-48 w-11/12 max-w-fit"
+        className="mx-auto mb-8 h-48 sm:h-56"
       />
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-10">
+      <div className="mx-auto flex w-full flex-col gap-10">
         {Object.entries(categories).map(([name, { path, products }]) => (
           <div key={name}>
             <h1 className="mb-4 border-b-2 border-amber-600 p-1 font-raleway text-2xl text-white/90">
