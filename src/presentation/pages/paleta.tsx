@@ -1,8 +1,7 @@
-import { useMemo } from 'react'
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { paletaCategory } from '../data'
-import { useComplements, useProduct } from '../hooks'
+import { useComplements, useProduct, useTotal } from '../hooks'
 
 export function PaletaPage(): React.JSX.Element {
   const paleta = useProduct(paletaCategory)
@@ -11,17 +10,7 @@ export function PaletaPage(): React.JSX.Element {
 
   const [flavors, addFlavorEvent] = useComplements(paletaCategory.flavors, 20)
 
-  const total = useMemo(() => {
-    let result = 0
-
-    for (const flavor of flavors.complements) {
-      if (flavor.price !== undefined) {
-        result += flavor.count * flavor.price
-      }
-    }
-
-    return result
-  }, [flavors])
+  const total = useTotal(0, ...flavors.complements)
 
   return (
     <>

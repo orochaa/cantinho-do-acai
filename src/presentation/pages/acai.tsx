@@ -1,8 +1,7 @@
-import { useMemo } from 'react'
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { acaiCategory } from '../data'
-import { useComplements, useProduct } from '../hooks'
+import { useComplements, useProduct, useTotal } from '../hooks'
 
 export function AcaiPage(): React.JSX.Element {
   const acai = useProduct(acaiCategory)
@@ -24,17 +23,7 @@ export function AcaiPage(): React.JSX.Element {
     acai.extrasLimit
   )
 
-  const total = useMemo<number>(() => {
-    let result = acai.price
-
-    for (const extra of extras.complements) {
-      if (extra.price !== undefined) {
-        result += extra.count * extra.price
-      }
-    }
-
-    return result
-  }, [acai, extras])
+  const total = useTotal(acai.price, ...extras.complements)
 
   return (
     <>

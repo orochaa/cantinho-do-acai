@@ -1,7 +1,7 @@
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { felicidadeCategory } from '../data'
-import { useComplements, useProduct } from '../hooks'
+import { useComplements, useProduct, useTotal } from '../hooks'
 
 export function FelicidadePage(): React.JSX.Element {
   const copo = useProduct(felicidadeCategory)
@@ -15,6 +15,8 @@ export function FelicidadePage(): React.JSX.Element {
     1
   )
 
+  const total = useTotal(copo.price, ...size.complements)
+
   return (
     <>
       <div className="flex flex-col gap-8">
@@ -26,9 +28,7 @@ export function FelicidadePage(): React.JSX.Element {
       </div>
       <OrderButton
         product={copo}
-        totalPrice={
-          copo.price + (size.complements.find(c => c.count > 0)?.price ?? 0)
-        }
+        totalPrice={total}
         multiple
         order={quantity =>
           addCartEvent({
