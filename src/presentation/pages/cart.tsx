@@ -35,7 +35,7 @@ export function CartPage(): React.JSX.Element {
     for (const item of cart) {
       total += item.total * item.quantity
       msg += [
-        `${item.quantity} - ${item.product.name} - R$${formatCurrency(item.product.price)}`,
+        `*${item.quantity} - ${item.product.name}* ${item.product.price ? `- R$${formatCurrency(item.product.price)}` : ''}`,
         ...item.complements.map(complement => {
           return `- ${complement.count} - ${complement.name}${
             complement.price ? ` - R$${formatCurrency(complement.price)}` : ''
@@ -88,7 +88,8 @@ export function CartPage(): React.JSX.Element {
                 <div className="flex items-center justify-between gap-2 px-2 font-semibold">
                   <span>{quantity}</span>
                   <h3>
-                    {product.name} - R${formatCurrency(product.price)}
+                    {product.name}{' '}
+                    {!!product.price && `- R${formatCurrency(product.price)}`}
                   </h3>
                   <button
                     type="button"
