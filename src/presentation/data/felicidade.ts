@@ -1,4 +1,5 @@
 import type { Category, Product } from '../types'
+import { slang } from './helpers'
 
 export const felicidadeCategory: Category<
   Product,
@@ -30,7 +31,7 @@ export const felicidadeCategory: Category<
       people: 1,
       price: 25,
     },
-  ],
+  ].map(p => ({ slang: slang(p.name), ...p })),
   size: [
     {
       name: 'Copo Pequeno',

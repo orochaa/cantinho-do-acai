@@ -1,4 +1,5 @@
 import type { Category, Product } from '../types'
+import { slang } from './helpers'
 
 export type Salgado = Product & {
   complementsLimit: number
@@ -29,6 +30,7 @@ export const salgadosCategory: Category<Salgado> = {
       saucesLimit: 2,
     },
   ].map(p => ({
+    slang: slang(p.name),
     complements: [
       'Churros de Doce de Leite',
       'Croquete',

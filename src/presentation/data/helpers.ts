@@ -5,7 +5,13 @@ import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 export function slang(data: string): string {
-  return encodeURI(data.toLowerCase().replaceAll(/\s/g, '-'))
+  return encodeURI(
+    data
+      .normalize('NFD')
+      .replaceAll(/[\u0300-\u036F]/g, '')
+      .toLowerCase()
+      .replaceAll(/\s+/g, '-')
+  )
 }
 
 export function parseSlang(slang: string): string {

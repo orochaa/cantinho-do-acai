@@ -25,10 +25,10 @@ export function Router(): React.JSX.Element {
             }
           >
             <Route path="" element={<HomePage />} />
-            <Route path="acai/:item" element={<AcaiPage />} />
-            <Route path="paleta/:item" element={<PaletaPage />} />
-            <Route path="salgados/:item" element={<SalgadosPage />} />
-            <Route path="felicidade/:item" element={<FelicidadePage />} />
+            <Route path="acai/:slang" element={<AcaiPage />} />
+            <Route path="paleta/:slang" element={<PaletaPage />} />
+            <Route path="salgados/:slang" element={<SalgadosPage />} />
+            <Route path="felicidade/:slang" element={<FelicidadePage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>

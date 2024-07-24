@@ -2,10 +2,10 @@ import { useMemo } from 'react'
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { paletaCategory } from '../data'
-import { useComplements } from '../hooks'
+import { useComplements, useProduct } from '../hooks'
 
 export function PaletaPage(): React.JSX.Element {
-  const paleta = paletaCategory.products[0]
+  const paleta = useProduct(paletaCategory)
 
   const { addCartEvent } = useCart()
 

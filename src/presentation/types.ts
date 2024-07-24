@@ -10,6 +10,7 @@ export type Category<
 export interface Product {
   img: string
   name: string
+  slang: string
   quantity?: number
   price: number
   people: number

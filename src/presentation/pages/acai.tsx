@@ -1,29 +1,13 @@
 import { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
-import type { Acai } from '../data'
-import { acaiCategory, slang } from '../data'
-import { useComplements } from '../hooks'
+import { acaiCategory } from '../data'
+import { useComplements, useProduct } from '../hooks'
 
 export function AcaiPage(): React.JSX.Element {
-  const { item } = useParams()
+  const acai = useProduct(acaiCategory)
 
   const { addCartEvent } = useCart()
-
-  const acai = useMemo<Acai>(() => {
-    const defaultValue = acaiCategory.products[0]
-
-    if (!item) {
-      return defaultValue
-    }
-
-    const desiredProduct = acaiCategory.products.find(
-      product => slang(product.name) === slang(item)
-    )
-
-    return desiredProduct ?? defaultValue
-  }, [item])
 
   const [type, addTypeEvent] = useComplements(
     acai.type.map((name, i) => ({ name, count: i === 0 ? 1 : 0 })),

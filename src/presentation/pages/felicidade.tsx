@@ -1,28 +1,12 @@
-import { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
-import { felicidadeCategory, slang } from '../data'
-import { useComplements } from '../hooks'
+import { felicidadeCategory } from '../data'
+import { useComplements, useProduct } from '../hooks'
 
 export function FelicidadePage(): React.JSX.Element {
-  const { item } = useParams()
+  const copo = useProduct(felicidadeCategory)
 
   const { addCartEvent } = useCart()
-
-  const copo = useMemo(() => {
-    const defaultValue = felicidadeCategory.products[0]
-
-    if (!item) {
-      return defaultValue
-    }
-
-    const desiredProduct = felicidadeCategory.products.find(
-      product => slang(product.name) === slang(item)
-    )
-
-    return desiredProduct ?? defaultValue
-  }, [item])
 
   const [size, addSizeEvent] = useComplements(
     felicidadeCategory.size.map(item =>

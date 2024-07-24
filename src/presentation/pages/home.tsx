@@ -19,7 +19,7 @@ export function HomePage(): React.JSX.Element {
               {products.map(product => (
                 <Link
                   key={slang(product.name)}
-                  to={slang(`${path}/${product.name}`)}
+                  to={`${path}/${product.slang}`}
                   className="h-[350px] rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
                   title={`Selecionar ${product.name}`}
                 >

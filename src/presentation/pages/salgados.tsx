@@ -1,28 +1,12 @@
-import { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
 import { OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
-import { salgadosCategory, slang } from '../data'
-import { useComplements } from '../hooks'
+import { salgadosCategory } from '../data'
+import { useComplements, useProduct } from '../hooks'
 
 export function SalgadosPage(): React.JSX.Element {
-  const { item } = useParams()
+  const salgado = useProduct(salgadosCategory)
 
   const { addCartEvent } = useCart()
-
-  const salgado = useMemo(() => {
-    const defaultValue = salgadosCategory.products[0]
-
-    if (!item) {
-      return defaultValue
-    }
-
-    const desiredProduct = salgadosCategory.products.find(
-      product => slang(product.name) === slang(item)
-    )
-
-    return desiredProduct ?? defaultValue
-  }, [item])
 
   const [complements, addComplementEvent] = useComplements(
     salgado.complements.map(name => ({ name })),

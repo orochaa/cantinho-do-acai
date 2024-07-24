@@ -1,4 +1,5 @@
 import type { Category, Product } from '../types'
+import { slang } from './helpers'
 
 export type AcaiExtra =
   | 'KitKat'
@@ -165,6 +166,7 @@ export const acaiCategory: Category<Acai> = {
       },
     },
   ].map(p => ({
+    slang: slang(p.name),
     type: ['Açaí Tradicional', 'Açaí com Sorvete de Ninho'],
     complements: [
       'Banana',

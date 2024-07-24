@@ -52,7 +52,7 @@ export function CartPage(): React.JSX.Element {
     }
 
     const phone = '5554984312998'
-    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`
+    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(msg)}`
 
     return url
   }, [cart, spoons.complements])
