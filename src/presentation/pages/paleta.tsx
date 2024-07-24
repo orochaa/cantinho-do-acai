@@ -33,8 +33,8 @@ export function PaletaPage(): React.JSX.Element {
           addCartEvent({
             type: 'ADD',
             item: {
-              product: paleta,
-              complements: flavors.complements.filter(f => f.count > 0),
+              product: { ...paleta, price: 0 },
+              complements: flavors.complements,
               quantity,
             },
           })
