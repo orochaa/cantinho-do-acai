@@ -5,9 +5,9 @@ export function HomePage(): React.JSX.Element {
   return (
     <>
       <img
-        src="/img/logo.png"
+        src="/img/novo-logo.png"
         alt="logo cantinho do açaí"
-        className="mx-auto mb-8 h-48 sm:h-56"
+        className="mx-auto mb-8 h-64 sm:h-72"
       />
       <div className="mx-auto flex w-full flex-col gap-10">
         {Object.entries(categories).map(([name, { path, products }]) => (
