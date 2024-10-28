@@ -24,7 +24,7 @@ export const salgadosCategory: Category<Salgado> = {
       img: '/img/salgados-medio.jpeg',
       name: 'Kit Salgados Médio',
       people: 2,
-      price: 35,
+      price: 28,
       quantity: 500,
       complementsLimit: 5,
       saucesLimit: 2,
