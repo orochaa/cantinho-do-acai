@@ -165,7 +165,7 @@ export function CartPage(): React.JSX.Element {
               Ao clicar no botão <b>&quot;Continuar&quot;</b>, você será
               redirecionado para o WhatsApp do Cantinho do Açaí, com uma
               mensagem pré-escrita contendo todos os detalhes do seu pedido.
-              Basta enviá-la para finalizar seu pedido.
+              Basta enviá-la para finalizar seu pedido! 😁
             </p>
             <div className="grid grid-cols-2 gap-2">
               <Button
