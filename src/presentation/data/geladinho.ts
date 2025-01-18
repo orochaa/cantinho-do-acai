@@ -7,7 +7,8 @@ export const geladinhoCategory: Category<
     {
       img: '/img/Geladinho de Morango com Nutella.jpg',
       name: 'Geladinho Gourmet',
-      price: 7,
+      fullPrice: 7,
+      price: 5,
       people: 1,
       quantity: 70,
       slang: 'geladinho-gourmet',
@@ -16,9 +17,9 @@ export const geladinhoCategory: Category<
     },
   ],
   flavors: [
-    { name: 'Morango com Nutella', price: 7 },
-    { name: 'Ninho com Nutella', price: 7 },
-    { name: 'Paçoca', price: 7 },
-    { name: 'Oreo', price: 7 },
+    { name: 'Morango com Nutella', price: 5 },
+    { name: 'Ninho com Nutella', price: 5 },
+    { name: 'Paçoca', price: 5 },
+    { name: 'Oreo', price: 5 },
   ],
 }

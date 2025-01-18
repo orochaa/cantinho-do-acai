@@ -43,9 +43,17 @@ export function HomePage(): React.JSX.Element {
                           {!!product.quantity && `(aprox.${product.quantity}g)`}
                         </p>
                       </div>
-                      <span className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter">
-                        {formatCurrency(product.price)}
-                      </span>
+                      <div>
+                        <span
+                          className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter text-zinc-500 line-through"
+                          style={{ textDecoration: '' }}
+                        >
+                          {formatCurrency(product.fullPrice)}
+                        </span>
+                        <span className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter">
+                          {formatCurrency(product.price)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </Link>

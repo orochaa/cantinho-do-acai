@@ -12,6 +12,7 @@ interface Product {
   description: string
   slang: string
   quantity?: number
+  fullPrice: number
   price: number
   people: number
 }

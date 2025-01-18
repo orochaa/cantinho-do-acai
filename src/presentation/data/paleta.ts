@@ -9,6 +9,7 @@ export const paletaCategory: Category<
     {
       img: '/img/paleta.jpg',
       name: 'Paleta Italiana',
+      fullPrice: 12,
       price: 10,
       people: 1,
       quantity: 105,

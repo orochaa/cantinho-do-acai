@@ -16,6 +16,7 @@ export const salgadosCategory: Category<Salgado> = {
       description:
         'Um kit de salgados com 15 unidades, com molho e uma mini Coca (caçulinha)',
       people: 1,
+      fullPrice: 25,
       price: 20,
       quantity: 300,
       complementsLimit: 15,
@@ -27,6 +28,7 @@ export const salgadosCategory: Category<Salgado> = {
       description:
         'Um kit de salgados com 25 unidades, mais um ou dois molhos complementares.',
       people: 2,
+      fullPrice: 35,
       price: 28,
       quantity: 500,
       complementsLimit: 5,
