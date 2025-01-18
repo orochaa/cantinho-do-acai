@@ -2,7 +2,6 @@ import { exhaustive } from 'exhaustive'
 import { createContext, useContext, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
 
-
 interface CartItem {
   product: Product
   complements: Complement[]
