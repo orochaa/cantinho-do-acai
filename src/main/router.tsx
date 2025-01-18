@@ -4,6 +4,7 @@ import {
   AcaiPage,
   CartPage,
   FelicidadePage,
+  GeladinhoPage,
   HomePage,
   PaletaPage,
   PremiumPage,
@@ -31,6 +32,7 @@ export function Router(): React.JSX.Element {
             <Route path="salgados/:slang" element={<SalgadosPage />} />
             <Route path="felicidade/:slang" element={<FelicidadePage />} />
             <Route path="premium/:slang" element={<PremiumPage />} />
+            <Route path="geladinho/:slang" element={<GeladinhoPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>

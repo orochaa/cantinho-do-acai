@@ -1,6 +1,6 @@
 import { slang } from './helpers'
 
-export interface Premium extends Product {
+export type Premium = Product & {
   complements?: string[]
 }
 
