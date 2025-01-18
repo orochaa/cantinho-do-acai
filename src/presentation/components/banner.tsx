@@ -8,7 +8,7 @@ export interface BannerProps {
 
 export function Banner(props: BannerProps): React.JSX.Element {
   return (
-    <div className="relative mx-auto max-w-4xl">
+    <div className="relative">
       <img
         src={props.img}
         alt={props.name}

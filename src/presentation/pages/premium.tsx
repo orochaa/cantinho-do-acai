@@ -16,7 +16,7 @@ export function PremiumPage(): React.JSX.Element {
   return (
     <div>
       <Banner img={copo.img} name={copo.name} imgClassName="object-top" />
-      <div className="mx-auto w-11/12 max-w-4xl">
+      <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{copo.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">

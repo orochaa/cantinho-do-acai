@@ -10,7 +10,7 @@ export function Background(): React.JSX.Element {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-black to-purple-700">
       <nav className="fixed left-0 top-4 z-10 w-full">
-        <div className="mx-auto flex w-11/12 max-w-4xl items-center justify-between md:px-2">
+        <div className="mx-auto flex w-11/12 max-w-3xl items-center justify-between md:px-2">
           {location.pathname === '/' ? (
             <span />
           ) : (
@@ -35,8 +35,9 @@ export function Background(): React.JSX.Element {
           )}
         </div>
       </nav>
-
-      <Outlet />
+      <div className="mx-auto max-w-3xl">
+        <Outlet />
+      </div>
     </div>
   )
 }

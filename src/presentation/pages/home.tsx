@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export function HomePage(): React.JSX.Element {
   return (
-    <div className="mx-auto w-11/12 max-w-4xl py-20">
+    <div className="mx-auto w-11/12 py-20">
       <img
         src="/img/novo-logo.png"
         alt="logo cantinho do açaí"

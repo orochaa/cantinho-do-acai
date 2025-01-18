@@ -77,7 +77,7 @@ export function CartPage(): React.JSX.Element {
   }, [cart, navigate])
 
   return (
-    <div className="mx-auto w-11/12 max-w-4xl py-20">
+    <div className="mx-auto w-11/12 py-20">
       <div className="flex flex-col gap-8">
         <Container>
           <h2 className="text-xl font-bold text-white">

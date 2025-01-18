@@ -21,7 +21,7 @@ export function SalgadosPage(): React.JSX.Element {
   return (
     <div>
       <Banner img={salgado.img} name={salgado.name} />
-      <div className="mx-auto w-11/12 max-w-4xl">
+      <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{salgado.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
