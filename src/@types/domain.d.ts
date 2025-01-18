@@ -1,4 +1,4 @@
-export type Category<
+type Category<
   TProduct extends Product = Product,
   TExtras extends Record<string, unknown> = {},
 > = {
@@ -6,16 +6,17 @@ export type Category<
   products: TProduct[]
 } & TExtras
 
-export interface Product {
+interface Product {
   img: string
   name: string
+  description: string
   slang: string
   quantity?: number
   price: number
   people: number
 }
 
-export interface Complement {
+interface Complement {
   name: string
   count: number
   price?: number

@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import type { Complement } from '../types'
 
 export function useTotal(
   initialPrice: number,

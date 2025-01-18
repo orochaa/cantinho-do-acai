@@ -1,7 +1,7 @@
 import { exhaustive } from 'exhaustive'
 import { createContext, useContext, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
-import type { Complement, Product } from '../types'
+
 
 interface CartItem {
   product: Product

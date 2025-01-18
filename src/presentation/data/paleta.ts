@@ -1,4 +1,3 @@
-import type { Category, Product } from '../types'
 import { slang } from './helpers'
 
 export const paletaCategory: Category<
@@ -14,7 +13,7 @@ export const paletaCategory: Category<
       people: 1,
       quantity: 105,
     },
-  ].map(p => ({ slang: slang(p.name), ...p })),
+  ].map(p => ({ ...p, slang: slang(p.name), description: '' })),
   flavors: [
     { name: 'Morango com Leite Condensado', price: 10 },
     { name: 'Açaí com Leite Condensado', price: 10 },

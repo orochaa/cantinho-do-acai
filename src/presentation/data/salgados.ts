@@ -1,4 +1,3 @@
-import type { Category, Product } from '../types'
 import { slang } from './helpers'
 
 export type Salgado = Product & {
@@ -14,6 +13,8 @@ export const salgadosCategory: Category<Salgado> = {
     {
       img: '/img/salgados-pequeno.jpeg',
       name: 'Kit Salgados Pequeno + Mini Coca',
+      description:
+        'Um kit de salgados com 15 unidades, com molho e uma mini Coca (caçulinha)',
       people: 1,
       price: 20,
       quantity: 300,
@@ -23,6 +24,8 @@ export const salgadosCategory: Category<Salgado> = {
     {
       img: '/img/salgados-medio.jpeg',
       name: 'Kit Salgados Médio',
+      description:
+        'Um kit de salgados com 25 unidades, mais um ou dois molhos complementares.',
       people: 2,
       price: 28,
       quantity: 500,

@@ -1,9 +1,9 @@
-import { categories, slang } from '@/presentation/data'
+import { categories, formatCurrency, slang } from '@/presentation/data'
 import { Link } from 'react-router-dom'
 
 export function HomePage(): React.JSX.Element {
   return (
-    <>
+    <div className="mx-auto w-11/12 max-w-4xl py-20">
       <img
         src="/img/novo-logo.png"
         alt="logo cantinho do açaí"
@@ -44,7 +44,7 @@ export function HomePage(): React.JSX.Element {
                         </p>
                       </div>
                       <span className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter">
-                        R$ {product.price},00
+                        {formatCurrency(product.price)}
                       </span>
                     </div>
                   </div>
@@ -54,6 +54,6 @@ export function HomePage(): React.JSX.Element {
           </div>
         ))}
       </div>
-    </>
+    </div>
   )
 }

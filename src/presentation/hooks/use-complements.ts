@@ -1,5 +1,4 @@
 import { useReducer } from 'react'
-import type { Complement } from '../types'
 
 export interface ComplementState {
   countLimit: number

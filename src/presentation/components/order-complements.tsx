@@ -1,10 +1,9 @@
 /* eslint-disable react/no-multi-comp */
-import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { clsx } from 'clsx'
 import { Minus, Plus } from 'lucide-react'
 import { useState } from 'react'
+import { formatCurrency } from '../data'
 import type { ComplementEvent, ComplementState } from '../hooks'
-import type { Complement } from '../types'
 import { Container } from './container'
 
 export interface OrderComplementsProps {
@@ -57,7 +56,7 @@ export function OrderComplements(
               <p className="text-base md:text-lg">{complement.name}</p>
               {!!complement.price && (
                 <span className="text-[0.8rem] tracking-tight md:text-base">
-                  + R$ {formatCurrency(complement.price)}
+                  + {formatCurrency(complement.price)}
                 </span>
               )}
             </button>

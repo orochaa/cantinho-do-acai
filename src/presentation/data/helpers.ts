@@ -25,3 +25,10 @@ export function parseSlang(slang: string): string {
 export function cn(...className: ClassValue[]): string {
   return twMerge(clsx(...className))
 }
+
+export function formatCurrency(value: string | number): string {
+  return Number(value).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+}

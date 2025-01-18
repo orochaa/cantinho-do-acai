@@ -1,8 +1,7 @@
-import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { Minus, Plus } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useAlert } from '../context'
-import type { Product } from '../types'
+import { formatCurrency } from '../data'
 import { Button } from './button'
 
 export interface OrderButtonProps {
@@ -64,7 +63,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
         </div>
       )}
       <Button variant="confirm" className="grow" onClick={addOrder}>
-        Adicionar ao Carrinho - R${formatCurrency(totalPrice * counter)}
+        Adicionar ao Carrinho - {formatCurrency(totalPrice * counter)}
       </Button>
     </div>
   )

@@ -1,9 +1,9 @@
-import { formatCurrency } from '@brazilian-utils/brazilian-utils'
 import { ExternalLink, PlusSquare, Trash2, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Container, OrderComplements } from '../components'
 import { useCart } from '../context'
+import { formatCurrency } from '../data'
 import { useComplements } from '../hooks'
 
 export function CartPage(): React.JSX.Element {
@@ -35,17 +35,17 @@ export function CartPage(): React.JSX.Element {
     for (const item of cart) {
       total += item.total * item.quantity
       msg += [
-        `*${item.quantity} - ${item.product.name}* ${item.product.price ? `- R$${formatCurrency(item.product.price)}` : ''}`,
+        `*${item.quantity} - ${item.product.name}* ${item.product.price ? `- ${formatCurrency(item.product.price)}` : ''}`,
         ...item.complements.map(complement => {
           return `- ${complement.count} - ${complement.name}${
-            complement.price ? ` - R$${formatCurrency(complement.price)}` : ''
+            complement.price ? ` - ${formatCurrency(complement.price)}` : ''
           }`
         }),
         '\n',
       ].join('\n')
     }
 
-    msg += `Total: R$${formatCurrency(total)}`
+    msg += `Total: ${formatCurrency(total)}`
 
     if (spoons.complements[0].count === 1) {
       msg += '\n\nIncluir talheres, por favor.'
@@ -76,7 +76,7 @@ export function CartPage(): React.JSX.Element {
       <div className="flex flex-col gap-8">
         <Container>
           <h2 className="text-xl font-bold text-white">
-            Pedido: R${formatCurrency(totalOrder)}
+            Pedido: {formatCurrency(totalOrder)}
           </h2>
           <div className="flex flex-col gap-2">
             {cart.map(({ product, complements, total, quantity }, i) => (
@@ -89,7 +89,7 @@ export function CartPage(): React.JSX.Element {
                   <span>{quantity}</span>
                   <h3>
                     {product.name}{' '}
-                    {!!product.price && `- R${formatCurrency(product.price)}`}
+                    {!!product.price && `- ${formatCurrency(product.price)}`}
                   </h3>
                   <button
                     type="button"
@@ -110,8 +110,7 @@ export function CartPage(): React.JSX.Element {
                       {[
                         complement.count,
                         complement.name,
-                        complement.price &&
-                          `R$${formatCurrency(complement.price)}`,
+                        complement.price && formatCurrency(complement.price),
                       ]
                         .filter(Boolean)
                         .join(' - ')}
@@ -120,7 +119,7 @@ export function CartPage(): React.JSX.Element {
                 </ul>
                 {complements.length > 0 && (
                   <p className="text-center font-semibold">
-                    Total: R${formatCurrency(total * quantity)}
+                    Total: {formatCurrency(total * quantity)}
                   </p>
                 )}
               </div>

@@ -1,6 +1,6 @@
-import { OrderButton, OrderComplements } from '../components'
+import { Banner, OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
-import { acaiCategory } from '../data'
+import { acaiCategory, formatCurrency } from '../data'
 import { useComplements, useProduct, useTotal } from '../hooks'
 
 export function AcaiPage(): React.JSX.Element {
@@ -26,41 +26,62 @@ export function AcaiPage(): React.JSX.Element {
   const total = useTotal(acai.price, ...extras.complements)
 
   return (
-    <>
-      <div className="flex flex-col gap-8">
-        <OrderComplements
-          addComplementEvent={addTypeEvent}
-          ctx={type}
-          title="Tipo de Açaí:"
-        />
-        <OrderComplements
-          addComplementEvent={addComplementEvent}
-          ctx={complements}
-          title="Acompanhamentos:"
-        />
-        <OrderComplements
-          addComplementEvent={addExtraEvent}
-          ctx={extras}
-          title="Adicionais:"
+    <div>
+      <Banner img={acai.img} name={acai.name} />
+      <div className="mx-auto w-11/12 max-w-4xl">
+        <div className="py-6 text-white">
+          <h2 className="text-2xl font-bold">{acai.name}</h2>
+          <div className="mt-2 flex flex-col gap-1 text-base">
+            <p className="whitespace-pre-line text-pretty">
+              {acai.description}
+            </p>
+            {!!acai.quantity && <p>Contém aproximadamente {acai.quantity}g</p>}
+            <span>
+              {acai.people === 1
+                ? 'Serve uma pessoa'
+                : `Serve até ${acai.people} pessoas`}
+            </span>
+            <span className="font-poppins text-xl font-medium">
+              {formatCurrency(acai.price)}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-8">
+          <OrderComplements
+            addComplementEvent={addTypeEvent}
+            ctx={type}
+            title="Tipo de Açaí:"
+          />
+          <OrderComplements
+            addComplementEvent={addComplementEvent}
+            ctx={complements}
+            title="Acompanhamentos:"
+          />
+          <OrderComplements
+            addComplementEvent={addExtraEvent}
+            ctx={extras}
+            title="Adicionais:"
+          />
+        </div>
+        <OrderButton
+          product={acai}
+          totalPrice={total}
+          multiple
+          order={quantity =>
+            addCartEvent({
+              type: 'ADD',
+              item: {
+                product: acai,
+                complements: [type, complements, extras].flatMap(
+                  i => i.complements
+                ),
+                quantity,
+              },
+            })
+          }
         />
       </div>
-      <OrderButton
-        product={acai}
-        totalPrice={total}
-        multiple
-        order={quantity =>
-          addCartEvent({
-            type: 'ADD',
-            item: {
-              product: acai,
-              complements: [type, complements, extras].flatMap(
-                i => i.complements
-              ),
-              quantity,
-            },
-          })
-        }
-      />
-    </>
+      <span className="block h-20" />
+    </div>
   )
 }

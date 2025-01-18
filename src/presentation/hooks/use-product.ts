@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import type { Category, Product } from '../types'
 
 export function useProduct<TProduct extends Product>(
   category: Category<TProduct>
