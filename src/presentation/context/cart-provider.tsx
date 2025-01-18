@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 interface CartItem {
   product: Product
   complements: Complement[]
-  quantity: number
+  count: number
   total: number
 }
 
@@ -17,6 +17,11 @@ type CartEvent =
   | {
       type: 'REMOVE'
       index: number
+    }
+  | {
+      type: 'UPDATE-QUANTITY'
+      index: number
+      count: number
     }
 
 interface ICartContext {
@@ -42,9 +47,22 @@ function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
         }
       }
 
-      return [...state, { ...item, complements, total }]
+      return [...state, { ...item, complements, total: total * item.count }]
     },
-    REMOVE: e => state.filter((_, i) => i !== e.index),
+    REMOVE: ({ index }) => state.filter((_, i) => i !== index),
+    'UPDATE-QUANTITY': ({ index, count }) => {
+      const updatedCart = [...state]
+      const item = updatedCart[index]
+      let total = item.product.price
+
+      for (const complement of item.complements) {
+        total += (complement.price ?? 0) * complement.count
+      }
+
+      updatedCart[index] = { ...item, count, total: total * count }
+
+      return updatedCart
+    },
   })
 }
 

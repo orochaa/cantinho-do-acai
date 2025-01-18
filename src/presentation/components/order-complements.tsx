@@ -1,8 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import { clsx } from 'clsx'
-import { Minus, Plus } from 'lucide-react'
+import { Minus, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { formatCurrency } from '../data'
+import { cn, formatCurrency } from '../data'
 import type { ComplementEvent, ComplementState } from '../hooks'
 import { Container } from './container'
 
@@ -90,22 +90,32 @@ interface MultiComponentsContainerProps {
   complement: Complement
   ctx: ComplementState
   addComplementEvent: (event: ComplementEvent) => void
+  containerClassName?: string
 }
 
-function MultiComponentsContainer(
+export function MultiComponentsContainer(
   props: MultiComponentsContainerProps
 ): React.JSX.Element {
-  const { addComplementEvent, complement, ctx } = props
+  const { addComplementEvent, complement, ctx, containerClassName } = props
 
   return (
-    <div className="flex items-center gap-3 rounded-sm border border-zinc-300 bg-zinc-100 p-1.5 shadow">
+    <div
+      className={cn(
+        'flex items-center gap-3 rounded-sm border border-zinc-300 bg-zinc-100 p-1.5 shadow',
+        containerClassName
+      )}
+    >
       <button
         type="button"
         className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200"
         title="Remover"
         onClick={() => addComplementEvent({ type: 'REMOVE', complement })}
       >
-        <Minus className="size-5" />
+        {complement.count === 1 ? (
+          <Trash2 className="size-5 shrink-0" />
+        ) : (
+          <Minus className="size-5 shrink-0" />
+        )}
       </button>
       <span>{complement.count}</span>
       <button
@@ -115,7 +125,7 @@ function MultiComponentsContainer(
         disabled={ctx.countTotal >= ctx.countLimit}
         onClick={() => addComplementEvent({ type: 'ADD', complement })}
       >
-        <Plus className="size-5" />
+        <Plus className="size-5 shrink-0" />
       </button>
     </div>
   )

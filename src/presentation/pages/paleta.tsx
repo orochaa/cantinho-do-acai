@@ -29,13 +29,13 @@ export function PaletaPage(): React.JSX.Element {
             return 'Favor escolher sabores'
           }
         }}
-        order={quantity =>
+        order={count =>
           addCartEvent({
             type: 'ADD',
             item: {
               product: { ...paleta, price: 0 },
               complements: flavors.complements,
-              quantity,
+              count,
             },
           })
         }

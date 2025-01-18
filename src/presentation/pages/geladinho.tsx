@@ -54,13 +54,13 @@ export function GeladinhoPage(): React.JSX.Element {
               return 'Favor escolher sabores'
             }
           }}
-          order={quantity =>
+          order={count =>
             addCartEvent({
               type: 'ADD',
               item: {
                 product: { ...geladinho, price: 0 },
                 complements: flavors.complements,
-                quantity,
+                count,
               },
             })
           }

@@ -66,13 +66,13 @@ export function SalgadosPage(): React.JSX.Element {
               return 'Favor escolher molho'
             }
           }}
-          order={quantity =>
+          order={count =>
             addCartEvent({
               type: 'ADD',
               item: {
                 product: salgado,
                 complements: [complements, sauces].flatMap(i => i.complements),
-                quantity,
+                count,
               },
             })
           }

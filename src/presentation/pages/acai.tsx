@@ -67,7 +67,7 @@ export function AcaiPage(): React.JSX.Element {
           product={acai}
           totalPrice={total}
           multiple
-          order={quantity =>
+          order={count =>
             addCartEvent({
               type: 'ADD',
               item: {
@@ -75,7 +75,7 @@ export function AcaiPage(): React.JSX.Element {
                 complements: [type, complements, extras].flatMap(
                   i => i.complements
                 ),
-                quantity,
+                count,
               },
             })
           }

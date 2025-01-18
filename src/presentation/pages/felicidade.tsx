@@ -51,13 +51,13 @@ export function FelicidadePage(): React.JSX.Element {
           product={copo}
           totalPrice={total}
           multiple
-          order={quantity =>
+          order={count =>
             addCartEvent({
               type: 'ADD',
               item: {
                 product: copo,
                 complements: size.complements,
-                quantity,
+                count,
               },
             })
           }

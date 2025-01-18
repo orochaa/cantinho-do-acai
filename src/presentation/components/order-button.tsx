@@ -10,7 +10,7 @@ export interface OrderButtonProps {
   totalPrice: number
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   validate?: () => string | void
-  order: (quantity: number) => void
+  order: (count: number) => void
 }
 
 export function OrderButton(props: OrderButtonProps): React.JSX.Element {

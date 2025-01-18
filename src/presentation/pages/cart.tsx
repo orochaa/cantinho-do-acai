@@ -1,7 +1,12 @@
-import { ExternalLink, PlusSquare, Trash2, X } from 'lucide-react'
+import { ExternalLink, PlusSquare, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Container, OrderComplements } from '../components'
+import {
+  Button,
+  Container,
+  MultiComponentsContainer,
+  OrderComplements,
+} from '../components'
 import { useCart } from '../context'
 import { formatCurrency } from '../data'
 import { useComplements } from '../hooks'
@@ -22,7 +27,7 @@ export function CartPage(): React.JSX.Element {
     let total = 0
 
     for (const item of cart) {
-      total += item.total * item.quantity
+      total += item.total
     }
 
     return total
@@ -33,9 +38,9 @@ export function CartPage(): React.JSX.Element {
     let total = 0
 
     for (const item of cart) {
-      total += item.total * item.quantity
+      total += item.total * item.count
       msg += [
-        `*${item.quantity} - ${item.product.name}* ${item.product.price ? `- ${formatCurrency(item.product.price)}` : ''}`,
+        `*${item.count} - ${item.product.name}* ${item.product.price ? `- ${formatCurrency(item.product.price)}` : ''}`,
         ...item.complements.map(complement => {
           return `- ${complement.count} - ${complement.name}${
             complement.price ? ` - ${formatCurrency(complement.price)}` : ''
@@ -72,33 +77,64 @@ export function CartPage(): React.JSX.Element {
   }, [cart, navigate])
 
   return (
-    <>
+    <div className="mx-auto w-11/12 max-w-4xl py-20">
       <div className="flex flex-col gap-8">
         <Container>
           <h2 className="text-xl font-bold text-white">
             Pedido: {formatCurrency(totalOrder)}
           </h2>
           <div className="flex flex-col gap-2">
-            {cart.map(({ product, complements, total, quantity }, i) => (
+            {cart.map(({ product, complements, count, total }, i) => (
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
               >
-                <div className="flex items-center justify-between gap-2 px-2 font-semibold">
-                  <span>{quantity}</span>
-                  <h3>
-                    {product.name}{' '}
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">
+                    {count} - {product.name}{' '}
                     {!!product.price && `- ${formatCurrency(product.price)}`}
                   </h3>
-                  <button
-                    type="button"
-                    className="rounded p-0.5 text-red-600 active:bg-zinc-200 active:text-red-500"
-                    title="Remover do carrinho"
-                    onClick={() => addCartEvent({ type: 'REMOVE', index: i })}
-                  >
-                    <Trash2 className="size-5" />
-                  </button>
+                  <MultiComponentsContainer
+                    addComplementEvent={e => {
+                      switch (e.type) {
+                        case 'ADD':
+                          addCartEvent({
+                            type: 'UPDATE-QUANTITY',
+                            index: i,
+                            count: count + 1,
+                          })
+                          break
+                        case 'REMOVE':
+                          if (count > 1) {
+                            addCartEvent({
+                              type: 'UPDATE-QUANTITY',
+                              index: i,
+                              count: count - 1,
+                            })
+                          } else {
+                            addCartEvent({
+                              type: 'REMOVE',
+                              index: i,
+                            })
+                          }
+                          break
+                        case 'SELECT':
+                      }
+                    }}
+                    complement={{ name: product.name, count }}
+                    ctx={{
+                      countLimit: 15,
+                      complements: cart.map(item => ({
+                        name: item.product.name,
+                        count: item.count,
+                      })),
+                      countTotal: cart.reduce(
+                        (acc, item) => acc + item.count,
+                        0
+                      ),
+                    }}
+                  />
                 </div>
                 <ul className="flex flex-col gap-1">
                   {complements.map(complement => (
@@ -118,8 +154,8 @@ export function CartPage(): React.JSX.Element {
                   ))}
                 </ul>
                 {complements.length > 0 && (
-                  <p className="text-center font-semibold">
-                    Total: {formatCurrency(total * quantity)}
+                  <p className="font-semibold">
+                    Total: {formatCurrency(total)}
                   </p>
                 )}
               </div>
@@ -186,6 +222,6 @@ export function CartPage(): React.JSX.Element {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }

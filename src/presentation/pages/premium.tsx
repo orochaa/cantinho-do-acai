@@ -52,13 +52,13 @@ export function PremiumPage(): React.JSX.Element {
               return 'Escolha seu Fini'
             }
           }}
-          order={quantity =>
+          order={count =>
             addCartEvent({
               type: 'ADD',
               item: {
                 product: copo,
                 complements: complement.complements,
-                quantity,
+                count,
               },
             })
           }
