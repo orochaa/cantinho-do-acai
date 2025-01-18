@@ -6,6 +6,7 @@ interface CartItem {
   product: Product
   complements: Complement[]
   count: number
+  observation?: string
   total: number
 }
 

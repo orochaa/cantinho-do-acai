@@ -38,7 +38,7 @@ export function CartPage(): React.JSX.Element {
     let total = 0
 
     for (const item of cart) {
-      total += item.total * item.count
+      total += item.total
       msg += [
         `*${item.count} - ${item.product.name}* ${item.product.price ? `- ${formatCurrency(item.product.price)}` : ''}`,
         ...item.complements.map(complement => {
@@ -46,8 +46,11 @@ export function CartPage(): React.JSX.Element {
             complement.price ? ` - ${formatCurrency(complement.price)}` : ''
           }`
         }),
+        item.observation ? `*Observação:*\n${item.observation}` : '',
         '\n',
-      ].join('\n')
+      ]
+        .filter(Boolean)
+        .join('\n')
     }
 
     msg += `Total: ${formatCurrency(total)}`
@@ -77,89 +80,99 @@ export function CartPage(): React.JSX.Element {
   }, [cart, navigate])
 
   return (
-    <div className="mx-auto w-11/12 py-20">
+    <div className="py-20">
       <div className="flex flex-col gap-8">
         <Container>
           <h2 className="text-xl font-bold text-white">
             Pedido: {formatCurrency(totalOrder)}
           </h2>
           <div className="flex flex-col gap-2">
-            {cart.map(({ product, complements, count, total }, i) => (
-              <div
-                // eslint-disable-next-line react/no-array-index-key
-                key={i}
-                className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">
-                    {count} - {product.name}{' '}
-                    {!!product.price && `- ${formatCurrency(product.price)}`}
-                  </h3>
-                  <MultiComponentsContainer
-                    addComplementEvent={e => {
-                      switch (e.type) {
-                        case 'ADD':
-                          addCartEvent({
-                            type: 'UPDATE-QUANTITY',
-                            index: i,
-                            count: count + 1,
-                          })
-                          break
-                        case 'REMOVE':
-                          if (count > 1) {
+            {cart.map(
+              ({ product, complements, observation, count, total }, i) => (
+                <div
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={i}
+                  className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold">
+                      {count} - {product.name}{' '}
+                      {!!product.price && `- ${formatCurrency(product.price)}`}
+                    </h3>
+                    <MultiComponentsContainer
+                      addComplementEvent={e => {
+                        switch (e.type) {
+                          case 'ADD':
                             addCartEvent({
                               type: 'UPDATE-QUANTITY',
                               index: i,
-                              count: count - 1,
+                              count: count + 1,
                             })
-                          } else {
-                            addCartEvent({
-                              type: 'REMOVE',
-                              index: i,
-                            })
-                          }
-                          break
-                        case 'SELECT':
-                      }
-                    }}
-                    complement={{ name: product.name, count }}
-                    ctx={{
-                      countLimit: 15,
-                      complements: cart.map(item => ({
-                        name: item.product.name,
-                        count: item.count,
-                      })),
-                      countTotal: cart.reduce(
-                        (acc, item) => acc + item.count,
-                        0
-                      ),
-                    }}
-                  />
+                            break
+                          case 'REMOVE':
+                            if (count > 1) {
+                              addCartEvent({
+                                type: 'UPDATE-QUANTITY',
+                                index: i,
+                                count: count - 1,
+                              })
+                            } else {
+                              addCartEvent({
+                                type: 'REMOVE',
+                                index: i,
+                              })
+                            }
+                            break
+                          case 'SELECT':
+                        }
+                      }}
+                      complement={{ name: product.name, count }}
+                      ctx={{
+                        countLimit: 15,
+                        complements: cart.map(item => ({
+                          name: item.product.name,
+                          count: item.count,
+                        })),
+                        countTotal: cart.reduce(
+                          (acc, item) => acc + item.count,
+                          0
+                        ),
+                      }}
+                    />
+                  </div>
+                  <ul className="flex flex-col gap-1">
+                    {complements.map(complement => (
+                      <li
+                        key={complement.name}
+                        className="flex items-center gap-1"
+                      >
+                        <PlusSquare size={20} className="text-pink-600" />
+                        {[
+                          complement.count,
+                          complement.name,
+                          complement.price && formatCurrency(complement.price),
+                        ]
+                          .filter(Boolean)
+                          .join(' - ')}
+                      </li>
+                    ))}
+                  </ul>
+                  {!!observation && (
+                    <div>
+                      <h3 className="font-semibold">Observação:</h3>
+                      <p className="whitespace-pre-line text-pretty">
+                        {observation}
+                      </p>
+                    </div>
+                  )}
+                  {complements.length > 0 && (
+                    <p className="font-semibold">
+                      Total: {formatCurrency(total)}
+                    </p>
+                  )}
                 </div>
-                <ul className="flex flex-col gap-1">
-                  {complements.map(complement => (
-                    <li
-                      key={complement.name}
-                      className="flex items-center gap-1"
-                    >
-                      <PlusSquare size={20} className="text-pink-600" />
-                      {[
-                        complement.count,
-                        complement.name,
-                        complement.price && formatCurrency(complement.price),
-                      ]
-                        .filter(Boolean)
-                        .join(' - ')}
-                    </li>
-                  ))}
-                </ul>
-                {complements.length > 0 && (
-                  <p className="font-semibold">
-                    Total: {formatCurrency(total)}
-                  </p>
-                )}
-              </div>
-            ))}
+              )
+            )}
           </div>
         </Container>
         <OrderComplements

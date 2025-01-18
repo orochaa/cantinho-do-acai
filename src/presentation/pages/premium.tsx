@@ -1,10 +1,13 @@
-import { Banner, OrderButton, OrderComplements } from '../components'
+import { useState } from 'react'
+import { Banner, Container, OrderButton, OrderComplements } from '../components'
 import { useCart } from '../context'
 import { formatCurrency, premiumCategory } from '../data'
 import { useComplements, useProduct } from '../hooks'
 
 export function PremiumPage(): React.JSX.Element {
   const copo = useProduct(premiumCategory)
+
+  const [observation, setObservation] = useState<string>('')
 
   const { addCartEvent } = useCart()
 
@@ -35,13 +38,32 @@ export function PremiumPage(): React.JSX.Element {
           </div>
         </div>
 
-        {!!copo.complements && (
-          <OrderComplements
-            title="Fini"
-            ctx={complement}
-            addComplementEvent={addComplementEvent}
-          />
-        )}
+        <div className="flex flex-col gap-8">
+          {!!copo.complements && (
+            <OrderComplements
+              title="Fini"
+              ctx={complement}
+              addComplementEvent={addComplementEvent}
+            />
+          )}
+
+          <Container>
+            <label
+              htmlFor="observation"
+              className="m-1 text-xl font-bold text-white"
+            >
+              Observação
+            </label>
+            <textarea
+              id="observation"
+              rows={4}
+              className="rounded p-2 font-lato outline-none"
+              value={observation}
+              onChange={e => setObservation(e.target.value)}
+              placeholder="Favor retirar..."
+            />
+          </Container>
+        </div>
 
         <OrderButton
           product={copo}
@@ -59,6 +81,7 @@ export function PremiumPage(): React.JSX.Element {
                 product: copo,
                 complements: complement.complements,
                 count,
+                observation,
               },
             })
           }
