@@ -1,6 +1,5 @@
 export type Category<
   TProduct extends Product = Product,
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-empty-object-type
   TExtras extends Record<string, unknown> = {},
 > = {
   path: string

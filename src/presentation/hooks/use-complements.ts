@@ -38,7 +38,6 @@ export function complementsReducer(
         complements: result,
       }
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (event.type === 'REMOVE' && event.complement.count > 0) {
     return {
       countLimit: state.countLimit,

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { capitalize } from '@brazilian-utils/brazilian-utils'
 import type { ClassValue } from 'clsx'
 import { clsx } from 'clsx'
