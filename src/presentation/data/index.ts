@@ -1,3 +1,4 @@
+export * from './premium'
 export * from './acai'
 export * from './categories'
 export * from './paleta'

@@ -6,6 +6,7 @@ import {
   FelicidadePage,
   HomePage,
   PaletaPage,
+  PremiumPage,
   SalgadosPage,
 } from '@/presentation/pages'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -29,6 +30,7 @@ export function Router(): React.JSX.Element {
             <Route path="paleta/:slang" element={<PaletaPage />} />
             <Route path="salgados/:slang" element={<SalgadosPage />} />
             <Route path="felicidade/:slang" element={<FelicidadePage />} />
+            <Route path="premium/:slang" element={<PremiumPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>
