@@ -1,5 +1,5 @@
 import { categories, formatCurrency, slang } from '@/presentation/data'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 export function HomePage(): React.JSX.Element {
   return (
@@ -12,7 +12,7 @@ export function HomePage(): React.JSX.Element {
       <div className="mx-auto flex w-full flex-col gap-10">
         {Object.entries(categories).map(([name, { path, products }]) => (
           <div key={name}>
-            <h1 className="mb-4 border-b-2 border-amber-600 p-1 font-raleway text-2xl text-white/90">
+            <h1 className="font-raleway mb-4 border-b-2 border-amber-600 p-1 text-2xl text-white/90">
               {name}
             </h1>
             <div className="gap grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -45,12 +45,12 @@ export function HomePage(): React.JSX.Element {
                       </div>
                       <div>
                         <span
-                          className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter text-zinc-500 line-through"
+                          className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap text-zinc-500 line-through"
                           style={{ textDecoration: '' }}
                         >
                           {formatCurrency(product.fullPrice)}
                         </span>
-                        <span className="block whitespace-nowrap font-poppins text-xl font-semibold tracking-tighter">
+                        <span className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap">
                           {formatCurrency(product.price)}
                         </span>
                       </div>

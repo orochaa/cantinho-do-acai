@@ -26,7 +26,7 @@ export function GeladinhoPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{geladinho.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="whitespace-pre-line text-pretty">
+            <p className="text-pretty whitespace-pre-line">
               {geladinho.description}
             </p>
             {!!geladinho.quantity && (

@@ -67,7 +67,7 @@ export function useComplements(
   complements: Optional<Complement, 'count'>[],
   countLimit: number
 ): [ComplementState, (event: ComplementEvent) => void] {
-  return useReducer<typeof complementsReducer>(complementsReducer, {
+  return useReducer<ComplementState, [ComplementEvent]>(complementsReducer, {
     countTotal: 0,
     countLimit,
     complements: complements.map(c => ({ count: 0, ...c })),

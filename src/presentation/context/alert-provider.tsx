@@ -130,7 +130,7 @@ export function AlertProvider({
 
       <div
         data-testid="alert-container"
-        className="fixed left-1/2 top-20 z-50 -translate-x-1/2"
+        className="fixed top-20 left-1/2 z-50 -translate-x-1/2"
       >
         {alerts.map(alert => (
           <button
@@ -140,7 +140,7 @@ export function AlertProvider({
             className={clsx(
               'flex items-center justify-center gap-2',
               'rounded-md border-2 border-red-500 bg-zinc-100',
-              'min-w-[10rem] max-w-sm p-6 text-sm font-semibold text-black shadow-lg',
+              'max-w-sm min-w-[10rem] p-6 text-sm font-semibold text-black shadow-lg',
               'transition duration-300 md:text-base lg:text-lg',
               alert.isVisible ? 'block' : 'hidden'
             )}

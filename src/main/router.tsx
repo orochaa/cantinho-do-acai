@@ -10,7 +10,7 @@ import {
   PremiumPage,
   SalgadosPage,
 } from '@/presentation/pages'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router'
 import { ScrollToTop } from './scrool-to-top'
 
 export function Router(): React.JSX.Element {

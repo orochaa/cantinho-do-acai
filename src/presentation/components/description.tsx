@@ -15,7 +15,7 @@ export function Description(props: DescriptionProps): React.JSX.Element {
   return (
     <button type="button" onClick={handleToggle}>
       <p
-        className={`${isExpanded ? 'line-clamp-none' : 'line-clamp-5'} whitespace-pre-line text-pretty text-left`}
+        className={`${isExpanded ? 'line-clamp-none' : 'line-clamp-5'} text-left text-pretty whitespace-pre-line`}
       >
         {props.children}
       </p>

@@ -41,10 +41,10 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
   return (
     <div className="mt-8 flex gap-2">
       {!!multiple && (
-        <div className="flex items-center gap-3 rounded-sm border border-zinc-300 bg-zinc-100 p-1.5 shadow">
+        <div className="flex items-center gap-3 rounded-xs border border-zinc-300 bg-zinc-100 p-1.5 shadow-sm">
           <button
             type="button"
-            className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+            className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
             title="Remover"
             onClick={decrementCounter}
             disabled={counter === 1}
@@ -54,7 +54,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           <span>{counter}</span>
           <button
             type="button"
-            className="rounded-sm p-0.5 text-red-500 active:bg-zinc-200"
+            className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200"
             title="Adicionar"
             onClick={incrementCounter}
           >

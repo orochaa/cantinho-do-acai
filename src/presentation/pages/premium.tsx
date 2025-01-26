@@ -23,7 +23,7 @@ export function PremiumPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{copo.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="whitespace-pre-line text-pretty">
+            <p className="text-pretty whitespace-pre-line">
               {copo.description}
             </p>
             {!!copo.quantity && <p>Contém aproximadamente {copo.quantity}g</p>}
@@ -57,10 +57,10 @@ export function PremiumPage(): React.JSX.Element {
             <textarea
               id="observation"
               rows={4}
-              className="rounded p-2 font-lato outline-none"
+              className="font-lato rounded-sm bg-white p-2 outline-hidden"
               value={observation}
               onChange={e => setObservation(e.target.value)}
-              placeholder="Favor retirar..."
+              placeholder="Ex: Favor retirar..."
             />
           </Container>
         </div>

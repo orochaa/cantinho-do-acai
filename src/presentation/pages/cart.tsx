@@ -1,6 +1,6 @@
 import { ExternalLink, PlusSquare, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import {
   Button,
   Container,
@@ -92,7 +92,7 @@ export function CartPage(): React.JSX.Element {
                 <div
                   // eslint-disable-next-line react/no-array-index-key
                   key={i}
-                  className="relative flex flex-col gap-2 rounded bg-zinc-50 p-2 shadow"
+                  className="relative flex flex-col gap-2 rounded-sm bg-zinc-50 p-2 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold">
@@ -160,7 +160,7 @@ export function CartPage(): React.JSX.Element {
                   {!!observation && (
                     <div>
                       <h3 className="font-semibold">Observação:</h3>
-                      <p className="whitespace-pre-line text-pretty">
+                      <p className="text-pretty whitespace-pre-line">
                         {observation}
                       </p>
                     </div>
@@ -183,7 +183,7 @@ export function CartPage(): React.JSX.Element {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <Button variant="cancel" onClick={() => navigate('/')}>
+        <Button variant="cancel" onClick={async () => navigate('/')}>
           Continuar Escolhendo
         </Button>
         <Button variant="confirm" onClick={openModal}>
@@ -202,7 +202,7 @@ export function CartPage(): React.JSX.Element {
               </h2>
               <button
                 type="button"
-                className="rounded p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200"
+                className="rounded-sm p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200"
                 title="Fechar modal"
                 onClick={closeModal}
               >
