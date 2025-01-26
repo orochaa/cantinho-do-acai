@@ -12,6 +12,7 @@ export const premiumCategory: Category<Premium> = {
       name: 'Fini fest',
       description: `Para quem ama o sabor das balas Fini, preparamos uma versão incrível em copo! Cada copo acompanha:
 
+Açaí
 Bala Fini (escolha o seu sabor favorito)
 Creme e cobertura de acordo com o sabor escolhido
 Leite em pó
@@ -28,6 +29,7 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       name: 'Galagresco',
       description: `Uma combinação perfeita para quem ama o sabor único do Negresco com o toque suave do chocolate branco! No nosso copo, você vai encontrar:
 
+Açaí
 Negresco crocante
 Leite condensado
 Leite em pó
@@ -43,6 +45,8 @@ Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremo
       img: '/img/tentacao.avif',
       name: 'Tentação',
       description: `Descubra o sabor único do nosso copo Sensação, uma experiência irresistível para os amantes de açaí! Combinação perfeita de:
+
+Açaí
 Creme de morango
 Leite condensado
 Leite em pó
@@ -61,6 +65,7 @@ Camadas deliciosas que tornam cada colherada uma verdadeira explosão de sabor. 
       name: 'Kinder Ninho',
       description: `Delicie-se com o nosso copo exclusivo recheado de sabores irresistíveis. Feito especialmente para os apaixonados por chocolate, ele traz:
 
+Açaí
 Pedaços generosos de Kinder Bueno
 Creme de Ninho
 Leite condensado
@@ -78,6 +83,7 @@ Uma combinação perfeita que derrete na boca e transforma cada colherada em um 
       name: 'Maramor',
       description: `Experimente a combinação perfeita de cremosidade e frescor com o nosso copo de maracujá! Ele traz:
 
+Açaí
 Creme de maracujá
 Leite condensado
 Leite em pó
