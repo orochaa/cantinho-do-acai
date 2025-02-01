@@ -19,8 +19,8 @@ Leite em pó
 Leite condensado
 Uma combinação doce e divertida que traz o sabor das balas para uma experiência ainda mais gostosa. Escolha seu sabor Fini e aproveite!`,
       people: 1,
-      fullPrice: 23.5,
-      price: 20,
+      fullPrice: 25,
+      price: 23.5,
       quantity: 440,
       complements: ['Fini banana', 'Fini dentadura', 'Fini beijinho'],
     },
@@ -37,8 +37,8 @@ Creme de Oreo
 Chocolate Galak
 Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremosidade e o sabor delicioso dessa combinação única!`,
       people: 1,
-      fullPrice: 23.5,
-      price: 20,
+      fullPrice: 25,
+      price: 23.5,
       quantity: 440,
     },
     {
@@ -56,8 +56,8 @@ Chantilly de morango
 Morangos frescos
 Camadas deliciosas que tornam cada colherada uma verdadeira explosão de sabor. Ideal para quem busca algo além do comum!`,
       people: 1,
-      fullPrice: 23.5,
-      price: 20,
+      fullPrice: 25,
+      price: 23.5,
       quantity: 440,
     },
     {
@@ -74,8 +74,8 @@ Creme de avelã
 Chantilly de chocolate
 Uma combinação perfeita que derrete na boca e transforma cada colherada em um momento único. Experimente e surpreenda-se!`,
       people: 1,
-      fullPrice: 23.5,
-      price: 20,
+      fullPrice: 25,
+      price: 23.5,
       quantity: 440,
     },
     {
@@ -92,8 +92,8 @@ Chantilly de maracujá
 Bombom Amor Carioca
 Cada ingrediente foi escolhido para criar uma explosão de sabores tropicais que vão te conquistar. Uma verdadeira experiência refrescante e deliciosa!`,
       people: 1,
-      fullPrice: 23.5,
-      price: 20,
+      fullPrice: 25,
+      price: 23.5,
       quantity: 440,
     },
   ].map(item => ({ ...item, slang: slang(item.name) })),
