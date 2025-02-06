@@ -95,7 +95,7 @@ export const acaiCategory: Category<Acai> = {
       fullPrice: 42,
       price: 35,
       quantity: 800,
-      complementsLimit: 7,
+      complementsLimit: 5,
       extrasLimit: 15,
       extras: {
         KitKat: 7,
