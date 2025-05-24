@@ -1,5 +1,5 @@
-import { AlertProvider } from '@/presentation/context'
-import { Router } from '@/main/router'
+import { AlertProvider } from '@/context/alert-provider'
+import { Router } from '@/router'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './global.css'

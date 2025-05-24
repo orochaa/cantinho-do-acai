@@ -1,4 +1,4 @@
-import { slang } from './helpers'
+import { slang } from '../format'
 
 export const felicidadeCategory: Category<
   Product,

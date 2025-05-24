@@ -1,7 +1,11 @@
-import { Banner, OrderButton, OrderComplements } from '../components'
-import { useCart } from '../context'
-import { formatCurrency, salgadosCategory } from '../data'
-import { useComplements, useProduct } from '../hooks'
+import { Banner } from '@/components/banner'
+import { OrderButton } from '@/components/order-button'
+import { OrderComplements } from '@/components/order-complements'
+import { useCart } from '@/context/cart-provider'
+import { useComplements } from '@/hooks/use-complements'
+import { useProduct } from '@/hooks/use-product'
+import { salgadosCategory } from '@/lib/data/salgados'
+import { formatCurrency } from '@/lib/format'
 
 export function SalgadosPage(): React.JSX.Element {
   const salgado = useProduct(salgadosCategory)

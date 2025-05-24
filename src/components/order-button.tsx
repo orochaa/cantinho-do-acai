@@ -1,7 +1,7 @@
+import { useAlert } from '@/context/alert-provider'
+import { formatCurrency } from '@/lib/format'
 import { Minus, Plus } from 'lucide-react'
 import { useCallback, useState } from 'react'
-import { useAlert } from '../context'
-import { formatCurrency } from '../data'
 import { Button } from './button'
 
 export interface OrderButtonProps {

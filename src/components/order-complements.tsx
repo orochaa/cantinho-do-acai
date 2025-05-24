@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
+import type { ComplementEvent, ComplementState } from '@/hooks/use-complements'
+import { cn, formatCurrency } from '@/lib/format'
 import { Minus, Plus, Trash2 } from 'lucide-react'
-import { cn, formatCurrency } from '../data'
-import type { ComplementEvent, ComplementState } from '../hooks'
 import { Container } from './container'
 
 export interface OrderComplementsProps {

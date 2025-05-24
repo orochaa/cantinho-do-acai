@@ -1,4 +1,4 @@
-import { cn } from '../data'
+import { cn } from '@/lib/format'
 
 export interface BannerProps {
   img: string

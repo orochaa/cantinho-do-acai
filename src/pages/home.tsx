@@ -1,4 +1,5 @@
-import { categories, formatCurrency, slang } from '@/presentation/data'
+import { categories } from '@/lib/data/categories'
+import { formatCurrency, slang } from '@/lib/format'
 import { Link } from 'react-router'
 
 export function HomePage(): React.JSX.Element {

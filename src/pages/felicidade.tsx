@@ -1,12 +1,13 @@
-import {
-  Banner,
-  Description,
-  OrderButton,
-  OrderComplements,
-} from '../components'
-import { useCart } from '../context'
-import { felicidadeCategory, formatCurrency } from '../data'
-import { useComplements, useProduct, useTotal } from '../hooks'
+import { Banner } from '@/components/banner'
+import { Description } from '@/components/description'
+import { OrderButton } from '@/components/order-button'
+import { OrderComplements } from '@/components/order-complements'
+import { useCart } from '@/context/cart-provider'
+import { useComplements } from '@/hooks/use-complements'
+import { useProduct } from '@/hooks/use-product'
+import { useTotal } from '@/hooks/use-total'
+import { felicidadeCategory } from '@/lib/data/felicidade'
+import { formatCurrency } from '@/lib/format'
 
 export function FelicidadePage(): React.JSX.Element {
   const copo = useProduct(felicidadeCategory)

@@ -31,33 +31,6 @@
       "",
     ],
   },
-  "styledComponent": {
-    "scope": "javascriptreact,typescriptreact",
-    "prefix": "styled",
-    "body": [
-      "import styled from 'styled-components';",
-      "",
-      "export const ${1:Container} = styled.${2:View}`",
-      "  ${3}",
-      "`;",
-      "",
-    ],
-  },
-  "componentFunctionalTypescript": {
-    "scope": "typescriptreact",
-    "prefix": "rnfc",
-    "body": [
-      "import React from 'react';",
-      "",
-      "// import { Container } from './styles';",
-      "",
-      "const ${1:${TM_DIRECTORY/^.*(\\/|\\\\)([^(\\/|\\\\)]+)$/$2/}}: React.FC = () => {",
-      "  return <View />;",
-      "}",
-      "",
-      "export default ${1:${TM_DIRECTORY/^.*(\\/|\\\\)([^(\\/|\\\\)]+)$/$2/}};",
-    ],
-  },
   "reactState": {
     "scope": "typescript,typescriptreact",
     "prefix": ["stt", "state"],

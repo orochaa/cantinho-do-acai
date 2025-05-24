@@ -1,6 +1,6 @@
+import { useCart } from '@/context/cart-provider'
 import { Home, ShoppingCart } from 'lucide-react'
 import { Link, Outlet, useLocation } from 'react-router'
-import { useCart } from '../context'
 
 export function Background(): React.JSX.Element {
   const location = useLocation()

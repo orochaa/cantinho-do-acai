@@ -1,15 +1,14 @@
-import { ExternalLink, PlusSquare, X } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Button } from '@/components/button'
 import {
-  Button,
-  Container,
   MultiComponentsContainer,
   OrderComplements,
-} from '../components'
-import { useCart } from '../context'
-import { formatCurrency } from '../data'
-import { useComplements } from '../hooks'
+} from '@/components/order-complements'
+import { useCart } from '@/context/cart-provider'
+import { useComplements } from '@/hooks/use-complements'
+import { formatCurrency } from '@/lib/format'
+import { Container, ExternalLink, PlusSquare, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()

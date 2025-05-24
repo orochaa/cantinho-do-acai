@@ -1,15 +1,13 @@
-import { Background } from '@/presentation/components'
-import { CartProvider } from '@/presentation/context'
-import {
-  AcaiPage,
-  CartPage,
-  FelicidadePage,
-  GeladinhoPage,
-  HomePage,
-  PaletaPage,
-  PremiumPage,
-  SalgadosPage,
-} from '@/presentation/pages'
+import { Background } from '@/components/background'
+import { CartProvider } from '@/context/cart-provider'
+import { AcaiPage } from '@/pages/acai'
+import { CartPage } from '@/pages/cart'
+import { FelicidadePage } from '@/pages/felicidade'
+import { GeladinhoPage } from '@/pages/geladinho'
+import { HomePage } from '@/pages/home'
+import { PaletaPage } from '@/pages/paleta'
+import { PremiumPage } from '@/pages/premium'
+import { SalgadosPage } from '@/pages/salgados'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { ScrollToTop } from './scrool-to-top'
 

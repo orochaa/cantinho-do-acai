@@ -1,8 +1,13 @@
+import { Banner } from '@/components/banner'
+import { Container } from '@/components/container'
+import { OrderButton } from '@/components/order-button'
+import { OrderComplements } from '@/components/order-complements'
+import { useCart } from '@/context/cart-provider'
+import { useComplements } from '@/hooks/use-complements'
+import { useProduct } from '@/hooks/use-product'
+import { premiumCategory } from '@/lib/data/premium'
+import { formatCurrency } from '@/lib/format'
 import { useState } from 'react'
-import { Banner, Container, OrderButton, OrderComplements } from '../components'
-import { useCart } from '../context'
-import { formatCurrency, premiumCategory } from '../data'
-import { useComplements, useProduct } from '../hooks'
 
 export function PremiumPage(): React.JSX.Element {
   const copo = useProduct(premiumCategory)
