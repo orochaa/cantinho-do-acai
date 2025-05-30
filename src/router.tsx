@@ -1,5 +1,6 @@
 import { Background } from '@/components/background'
 import { CartProvider } from '@/context/cart-provider'
+import { useDailyAppPing } from '@/hooks/use-daily-app-ping'
 import { AcaiPage } from '@/pages/acai'
 import { CartPage } from '@/pages/cart'
 import { FelicidadePage } from '@/pages/felicidade'
@@ -12,6 +13,8 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import { ScrollToTop } from './scrool-to-top'
 
 export function Router(): React.JSX.Element {
+  useDailyAppPing()
+
   return (
     <BrowserRouter>
       <ScrollToTop>
