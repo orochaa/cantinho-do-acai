@@ -85,7 +85,7 @@ export function CartPage(): React.JSX.Element {
       <Seo
         title="Carrinho - Cantinho do Açaí"
         description="Confira o seu pedido e finalize a sua compra no Cantinho do Açaí."
-        imgUrl="https://cantinho-do-acai.vercel.app/img/novo-logo.png"
+        imgUrl="https://cantinhodoacai.vercel.app/img/novo-logo.png"
       />
       <div className="mx-auto w-11/12 py-20">
         <div className="flex flex-col gap-8">

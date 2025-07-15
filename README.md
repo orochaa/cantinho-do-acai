@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/31998816-909f-4c5d-92db-78c90defe73f)
 
-🔗 Acesse o Projeto Online: [cantinho-do-acai.vercel.app](https://cantinho-do-acai.vercel.app/)
+🔗 Acesse o Projeto Online: [cantinhodoacai.vercel.app](https://cantinhodoacai.vercel.app/)
 
 # 🍧 Cantinho do Açaí
 

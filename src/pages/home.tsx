@@ -9,7 +9,7 @@ export function HomePage(): React.JSX.Element {
       <Seo
         title="Cantinho do Açaí - O melhor açaí da região"
         description="Peça já o seu açaí, salgados, paletas e muito mais no Cantinho do Açaí! O melhor açaí da região, com ingredientes frescos e de qualidade. Monte o seu açaí do seu jeito, com diversos acompanhamentos e cremes. Temos também salgados deliciosos, paletas refrescantes e copos da felicidade para adoçar o seu dia. Faça o seu pedido online."
-        imgUrl="https://cantinho-do-acai.vercel.app/img/novo-logo.png"
+        imgUrl="https://cantinhodoacai.vercel.app/img/novo-logo.png"
       />
       <div className="mx-auto w-11/12 py-20">
         <img

@@ -25,7 +25,7 @@ export function GeladinhoPage(): React.JSX.Element {
       <Seo
         title={`Geladinho - ${geladinho.name} - Cantinho do Açaí`}
         description={geladinho.description}
-        imgUrl={`https://cantinho-do-acai.vercel.app${geladinho.img}`}
+        imgUrl={`https://cantinhodoacai.vercel.app${geladinho.img}`}
       />
       <Banner
         img={geladinho.img}

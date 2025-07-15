@@ -36,7 +36,7 @@ export function AcaiPage(): React.JSX.Element {
       <Seo
         title={`Açaí ${acai.name} - Cantinho do Açaí`}
         description={acai.description}
-        imgUrl={`https://cantinho-do-acai.vercel.app${acai.img}`}
+        imgUrl={`https://cantinhodoacai.vercel.app${acai.img}`}
       />
       <Banner img={acai.img} name={acai.name} />
       <div className="mx-auto w-11/12">

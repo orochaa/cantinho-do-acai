@@ -27,7 +27,7 @@ export function PremiumPage(): React.JSX.Element {
       <Seo
         title={`Açaí Premium ${copo.name} - Cantinho do Açaí`}
         description={copo.description}
-        imgUrl={`https://cantinho-do-acai.vercel.app${copo.img}`}
+        imgUrl={`https://cantinhodoacai.vercel.app${copo.img}`}
       />
       <Banner img={copo.img} name={copo.name} imgClassName="object-top" />
       <div className="mx-auto w-11/12">

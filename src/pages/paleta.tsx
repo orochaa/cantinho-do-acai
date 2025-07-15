@@ -21,7 +21,7 @@ export function PaletaPage(): React.JSX.Element {
       <Seo
         title={`Paletas - ${paleta.name} - Cantinho do Açaí`}
         description={paleta.description}
-        imgUrl={`https://cantinho-do-acai.vercel.app${paleta.img}`}
+        imgUrl={`https://cantinhodoacai.vercel.app${paleta.img}`}
       />
       <div className="flex flex-col gap-8">
         <OrderComplements
