@@ -1,6 +1,7 @@
 import { Banner } from '@/components/banner'
 import { OrderButton } from '@/components/order-button'
 import { OrderComplements } from '@/components/order-complements'
+import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
@@ -24,6 +25,11 @@ export function SalgadosPage(): React.JSX.Element {
 
   return (
     <div>
+      <Seo
+        title={`Salgados - ${salgado.name} - Cantinho do Açaí`}
+        description={salgado.description}
+        imgUrl={`https://cantinho-do-acai.vercel.app${salgado.img}`}
+      />
       <Banner img={salgado.img} name={salgado.name} />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">

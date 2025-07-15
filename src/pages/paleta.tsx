@@ -1,5 +1,6 @@
 import { OrderButton } from '@/components/order-button'
 import { OrderComplements } from '@/components/order-complements'
+import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
@@ -17,6 +18,11 @@ export function PaletaPage(): React.JSX.Element {
 
   return (
     <>
+      <Seo
+        title={`Paletas - ${paleta.name} - Cantinho do Açaí`}
+        description={paleta.description}
+        imgUrl={`https://cantinho-do-acai.vercel.app${paleta.img}`}
+      />
       <div className="flex flex-col gap-8">
         <OrderComplements
           addComplementEvent={addFlavorEvent}

@@ -2,6 +2,7 @@ import { Banner } from '@/components/banner'
 import { Container } from '@/components/container'
 import { OrderButton } from '@/components/order-button'
 import { OrderComplements } from '@/components/order-complements'
+import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
@@ -23,6 +24,11 @@ export function PremiumPage(): React.JSX.Element {
 
   return (
     <div>
+      <Seo
+        title={`Açaí Premium ${copo.name} - Cantinho do Açaí`}
+        description={copo.description}
+        imgUrl={`https://cantinho-do-acai.vercel.app${copo.img}`}
+      />
       <Banner img={copo.img} name={copo.name} imgClassName="object-top" />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">

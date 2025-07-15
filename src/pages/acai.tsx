@@ -1,6 +1,7 @@
 import { Banner } from '@/components/banner'
 import { OrderButton } from '@/components/order-button'
 import { OrderComplements } from '@/components/order-complements'
+import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
@@ -32,6 +33,11 @@ export function AcaiPage(): React.JSX.Element {
 
   return (
     <div>
+      <Seo
+        title={`Açaí ${acai.name} - Cantinho do Açaí`}
+        description={acai.description}
+        imgUrl={`https://cantinho-do-acai.vercel.app${acai.img}`}
+      />
       <Banner img={acai.img} name={acai.name} />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">

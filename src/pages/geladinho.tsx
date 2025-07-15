@@ -1,6 +1,7 @@
 import { Banner } from '@/components/banner'
 import { OrderButton } from '@/components/order-button'
 import { OrderComplements } from '@/components/order-complements'
+import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
@@ -21,6 +22,11 @@ export function GeladinhoPage(): React.JSX.Element {
 
   return (
     <div>
+      <Seo
+        title={`Geladinho - ${geladinho.name} - Cantinho do Açaí`}
+        description={geladinho.description}
+        imgUrl={`https://cantinho-do-acai.vercel.app${geladinho.img}`}
+      />
       <Banner
         img={geladinho.img}
         name={geladinho.name}
