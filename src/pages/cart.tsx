@@ -191,6 +191,17 @@ export function CartPage(): React.JSX.Element {
           />
         </div>
 
+        <div className="mt-6 rounded-sm bg-yellow-100 p-4 text-pretty text-yellow-800">
+          <p className="font-semibold">Atenção:</p>
+          <p>
+            Não fazemos entregas. Todos os pedidos devem ser retirados no local.
+          </p>
+          <p>
+            Endereço: Rua Olinda de Almeida Lima, 249 - Charqueadas, Caxias do
+            Sul - RS
+          </p>
+        </div>
+
         <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Button variant="cancel" onClick={async () => navigate('/')}>
             Continuar Escolhendo
