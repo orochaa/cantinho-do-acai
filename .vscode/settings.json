@@ -8,5 +8,6 @@
     ["\\w*[cC]lassName\\s*:\\s*[\"'`]([^\"'`]*)[\"'`]"],
     ["\\w*[cC]lassName\\s*[:=]\\s*[\"'`]([^\"'`]*)[\"'`]"],
     ["\\w*[cC]lassName\\s*[:=]\\s*{([^}]*)}"]
-  ]
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
