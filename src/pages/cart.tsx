@@ -142,7 +142,7 @@ export function CartPage(): React.JSX.Element {
 
     msg += `\n\n*Total:* ${formatCurrency(total)}`
 
-    if (spoons.complements[0].count === 1) {
+    if (spoons.complements[1].count === 1) {
       msg += '\n\nIncluir talheres, por favor.'
     }
 
