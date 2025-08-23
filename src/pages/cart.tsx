@@ -76,6 +76,8 @@ export function CartPage(): React.JSX.Element {
   }, [cart, deliveryFare, isDelivery])
 
   const handleCepChange = useCallback(async (cep: string) => {
+    cep = cep.replaceAll(/\D/g, '')
+
     setCep(cep)
 
     if (cep.length === 8) {
@@ -318,9 +320,19 @@ export function CartPage(): React.JSX.Element {
                 Endereço de entrega
               </h2>
               <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
-                <label htmlFor="cep" className="ml-1 leading-3 font-bold">
-                  CEP:
-                </label>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="cep" className="ml-1 leading-3 font-bold">
+                    CEP:
+                  </label>
+                  <a
+                    href="https://buscacepinter.correios.com.br/app/endereco/index.php"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-blue-500 hover:underline"
+                  >
+                    Não sabe seu CEP?
+                  </a>
+                </div>
                 <input
                   id="cep"
                   type="text"
@@ -329,7 +341,7 @@ export function CartPage(): React.JSX.Element {
                   className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
                   value={cep}
                   onChange={async e => handleCepChange(e.target.value)}
-                  maxLength={8}
+                  maxLength={9}
                 />
                 {cepLoading ? (
                   <p>Buscando CEP...</p>
