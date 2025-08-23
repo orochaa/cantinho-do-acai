@@ -373,7 +373,6 @@ export function CartPage(): React.JSX.Element {
                   )
                 )}
               </div>
-              ) )
             </Container>
           )}
         </div>
