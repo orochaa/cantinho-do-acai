@@ -2,6 +2,7 @@ import { Background } from '@/components/background'
 import { CartProvider } from '@/context/cart-provider'
 import { useDailyAppPing } from '@/hooks/use-daily-app-ping'
 import { AcaiPage } from '@/pages/acai'
+import { BebidaPage } from '@/pages/bebida'
 import { CartPage } from '@/pages/cart'
 import { FelicidadePage } from '@/pages/felicidade'
 import { GeladinhoPage } from '@/pages/geladinho'
@@ -34,6 +35,7 @@ export function Router(): React.JSX.Element {
             <Route path="felicidade/:slang" element={<FelicidadePage />} />
             <Route path="premium/:slang" element={<PremiumPage />} />
             <Route path="geladinho/:slang" element={<GeladinhoPage />} />
+            <Route path="bebidas/:slang" element={<BebidaPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>

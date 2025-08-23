@@ -53,12 +53,14 @@ export function HomePage(): React.JSX.Element {
                           </p>
                         </div>
                         <div>
-                          <span
-                            className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap text-zinc-500 line-through"
-                            style={{ textDecoration: '' }}
-                          >
-                            {formatCurrency(product.fullPrice)}
-                          </span>
+                          {product.fullPrice !== product.price && (
+                            <span
+                              className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap text-zinc-500 line-through"
+                              style={{ textDecoration: '' }}
+                            >
+                              {formatCurrency(product.fullPrice)}
+                            </span>
+                          )}
                           <span className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap">
                             {formatCurrency(product.price)}
                           </span>

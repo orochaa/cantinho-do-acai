@@ -1,3 +1,4 @@
+import { bebidaCategory } from '@/lib/data/bebida'
 import { acaiCategory } from './acai'
 import { felicidadeCategory } from './felicidade'
 import { geladinhoCategory } from './geladinho'
@@ -12,4 +13,5 @@ export const categories = {
   'Copos da Felicidade': felicidadeCategory,
   'Geladinho Gourmet': geladinhoCategory,
   Salgados: salgadosCategory,
+  Bebidas: bebidaCategory,
 } satisfies Record<string, Category>
