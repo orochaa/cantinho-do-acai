@@ -41,9 +41,9 @@ export function OrderComplements(
               })
             }
           >
-            <p className="text-base md:text-lg">{complement.name}</p>
+            <p className="text-left text-base md:text-lg">{complement.name}</p>
             {!!complement.price && (
-              <span className="text-[0.8rem] tracking-tight md:text-base">
+              <span className="text-left text-[0.8rem] tracking-tight md:text-base">
                 + {formatCurrency(complement.price)}
               </span>
             )}
