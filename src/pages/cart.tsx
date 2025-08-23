@@ -9,7 +9,12 @@ import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { getCepAddress } from '@/lib/brasil-api'
 import { formatCurrency } from '@/lib/format'
-import { calculateDistance, calculateFare, getCoordinates } from '@/lib/geo'
+import {
+  COMPANY_COORDINATES,
+  calculateDistance,
+  calculateFare,
+  getCoordinates,
+} from '@/lib/geo'
 import { ExternalLink, PlusSquare, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -21,11 +26,6 @@ interface CepAddress {
   neighborhood: string
   street: string
   service: string
-}
-
-interface Coordinates {
-  lat: number
-  lon: number
 }
 
 export function CartPage(): React.JSX.Element {
@@ -53,17 +53,9 @@ export function CartPage(): React.JSX.Element {
   const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
   const [distance, setDistance] = useState<number | null>(null)
   const [fareLoading, setFareLoading] = useState(false)
-  const [companyCoords, setCompanyCoords] = useState<Coordinates | null>(null)
+  const [fareError, setFareError] = useState<string | null>(null)
 
   const navigate = useNavigate()
-
-  useEffect(() => {
-    getCoordinates(
-      'Rua Olinda de Almeida Lima, 249, Caxias do Sul, Rio Grande do Sul, Brasil'
-    )
-      .then(setCompanyCoords)
-      .catch(console.error)
-  }, [])
 
   const totalOrder = useMemo(() => {
     let total = 0
@@ -79,38 +71,46 @@ export function CartPage(): React.JSX.Element {
     return total
   }, [cart, deliveryFare, isDelivery])
 
-  const handleCepChange = useCallback(
-    async (cep: string) => {
-      setCep(cep)
+  const handleCepChange = useCallback(async (cep: string) => {
+    setCep(cep)
 
-      if (cep.length === 8) {
-        try {
-          setCepLoading(true)
-          const cepAddress = await getCepAddress(cep)
-          setAddress(cepAddress)
-          setAddressError(null)
+    if (cep.length === 8) {
+      let cepAddress: CepAddress | undefined
 
-          if (companyCoords) {
-            setFareLoading(true)
-            const userCoords = await getCoordinates(
-              `${cepAddress.street}, ${cepAddress.city}, ${cepAddress.state}`
-            )
-            const dist = calculateDistance(companyCoords, userCoords)
-            setDistance(dist)
-            setDeliveryFare(calculateFare(dist))
-            setFareLoading(false)
-          }
-        } catch (error) {
-          setAddress(null)
-          setAddressError('CEP não encontrado.')
-          console.error(error)
-        } finally {
-          setCepLoading(false)
-        }
+      try {
+        setCepLoading(true)
+        cepAddress = await getCepAddress(cep)
+        setAddress(cepAddress)
+        setAddressError(null)
+      } catch (error) {
+        setAddress(null)
+        setAddressError('CEP não encontrado.')
+        console.error(error)
+      } finally {
+        setCepLoading(false)
       }
-    },
-    [companyCoords]
-  )
+
+      if (!cepAddress) {
+        return
+      }
+
+      try {
+        setFareLoading(true)
+        const userCoords = await getCoordinates(cepAddress)
+        const dist = calculateDistance(COMPANY_COORDINATES, userCoords)
+        setDistance(dist)
+        setDeliveryFare(calculateFare(dist))
+        setFareError(null)
+      } catch (error) {
+        setDistance(null)
+        setDeliveryFare(null)
+        setFareError('Não foi possível calcular a taxa de entrega.')
+        console.error(error)
+      } finally {
+        setFareLoading(false)
+      }
+    }
+  }, [])
 
   const goToWhatsappLink = useMemo((): string => {
     let msg = 'Olá, Cantinho do Açaí!\nGostaria de fazer um pedido:\n\n'
@@ -276,14 +276,16 @@ export function CartPage(): React.JSX.Element {
             addComplementEvent={addSpoonEvent}
           />
           <OrderComplements
-            title="Opções de Entrega"
+            title="Opções de entrega"
             ctx={checkoutOption}
             addComplementEvent={addCheckoutOptionEvent}
           />
 
           {!!isDelivery && (
             <Container>
-              <h2 className="text-xl font-bold text-white">Endereço</h2>
+              <h2 className="text-xl font-bold text-white">
+                Endereço de entrega
+              </h2>
               <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
                 <label htmlFor="cep" className="ml-1 leading-3 font-bold">
                   CEP:
@@ -297,11 +299,10 @@ export function CartPage(): React.JSX.Element {
                   onChange={async e => handleCepChange(e.target.value)}
                   maxLength={8}
                 />
-                {!!addressError && (
-                  <p className="text-red-500">{addressError}</p>
-                )}
                 {cepLoading ? (
                   <p>Buscando CEP...</p>
+                ) : addressError ? (
+                  <p className="text-red-500">{addressError}</p>
                 ) : (
                   !!address && (
                     <div className="flex flex-col gap-1">
@@ -322,6 +323,8 @@ export function CartPage(): React.JSX.Element {
                 )}
                 {fareLoading ? (
                   <p>Calculando taxa de entrega...</p>
+                ) : fareError ? (
+                  <p className="text-red-500">{fareError}</p>
                 ) : (
                   !!(deliveryFare && distance !== null) && (
                     <div className="mt-2 flex flex-col gap-1 border-t border-zinc-300 pt-2">
@@ -336,10 +339,14 @@ export function CartPage(): React.JSX.Element {
                         <span className="font-semibold">Observação:</span> Não
                         cobramos retorno
                       </p>
+                      <p className="mt-1.5 text-xs text-zinc-600">
+                        Dados de endereço © OpenStreetMap contributors
+                      </p>
                     </div>
                   )
                 )}
               </div>
+              ) )
             </Container>
           )}
         </div>
