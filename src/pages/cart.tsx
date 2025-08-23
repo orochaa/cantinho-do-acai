@@ -137,15 +137,23 @@ export function CartPage(): React.JSX.Element {
         .join('\n')
     }
 
-    if (isDelivery && address) {
-      msg += `\n\n*Endereço para entrega:*\n${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+    msg += `\n\n*Opção de Entrega*`
+
+    if (isDelivery) {
+      msg += `\nEntrega (com taxa de entrega)`
+      msg +=
+        address && addressNumber
+          ? `\nEndereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+          : `\nEndereço: A informar`
 
       if (deliveryFare) {
         msg += `\nTaxa de entrega: ${formatCurrency(deliveryFare)}`
         total += deliveryFare
       } else {
-        msg += `\nTaxa de entrega: Não calculada`
+        msg += `\nTaxa de entrega: A calcular`
       }
+    } else {
+      msg += '\nRetirada no local'
     }
 
     msg += `\n\n*Total:* ${formatCurrency(total)}`
