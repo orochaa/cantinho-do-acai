@@ -5,6 +5,7 @@ import {
   OrderComplements,
 } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
+import { useAlert } from '@/context/alert-provider'
 import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { getCepAddress } from '@/lib/brasil-api'
@@ -45,6 +46,8 @@ export function CartPage(): React.JSX.Element {
   const isDelivery = checkoutOption.complements[1].count === 1
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
+
+  const alert = useAlert()
 
   const [cep, setCep] = useState('')
   const [address, setAddress] = useState<CepAddress | null>(null)
@@ -165,6 +168,24 @@ export function CartPage(): React.JSX.Element {
   const openModal = useCallback(() => {
     setModalOpen(true)
   }, [])
+
+  const handleConfirmOrder = useCallback(() => {
+    if (isDelivery) {
+      if (!address) {
+        alert.popMessage('Por favor, informe o seu CEP.')
+
+        return
+      }
+
+      if (!addressNumber) {
+        alert.popMessage('Por favor, informe o número do seu endereço.')
+
+        return
+      }
+    }
+
+    openModal()
+  }, [isDelivery, address, addressNumber, alert, openModal])
 
   const closeModal = useCallback(() => {
     setModalOpen(false)
@@ -392,11 +413,7 @@ export function CartPage(): React.JSX.Element {
           <Button variant="cancel" onClick={async () => navigate('/')}>
             Continuar Escolhendo
           </Button>
-          <Button
-            variant="confirm"
-            onClick={openModal}
-            disabled={!!isDelivery && (!address || !addressNumber)}
-          >
+          <Button variant="confirm" onClick={handleConfirmOrder}>
             Confirmar Pedido {formatCurrency(totalOrder)}
           </Button>
         </div>
