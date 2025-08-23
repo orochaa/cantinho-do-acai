@@ -284,36 +284,60 @@ export function CartPage(): React.JSX.Element {
           {!!isDelivery && (
             <Container>
               <h2 className="text-xl font-bold text-white">Endereço</h2>
-              <div className="gap-2s flex flex-col">
+              <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
+                <label htmlFor="cep" className="ml-1 leading-3 font-bold">
+                  CEP:
+                </label>
                 <input
+                  id="cep"
                   type="text"
-                  placeholder="CEP (apenas números)"
-                  className="rounded-sm p-2"
+                  placeholder="Digite o CEP"
+                  className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
                   value={cep}
                   onChange={async e => handleCepChange(e.target.value)}
                   maxLength={8}
                 />
-                {!!cepLoading && <p className="text-white">Buscando CEP...</p>}
                 {!!addressError && (
                   <p className="text-red-500">{addressError}</p>
                 )}
-                {!!address && (
-                  <div className="flex flex-col gap-1 text-white">
-                    <p>Rua: {address.street}</p>
-                    <p>Bairro: {address.neighborhood}</p>
-                    <p>Cidade: {address.city}</p>
-                    <p>Estado: {address.state}</p>
-                  </div>
+                {cepLoading ? (
+                  <p>Buscando CEP...</p>
+                ) : (
+                  !!address && (
+                    <div className="flex flex-col gap-1">
+                      <p>
+                        <strong>Rua:</strong> {address.street}
+                      </p>
+                      <p>
+                        <strong>Bairro:</strong> {address.neighborhood}
+                      </p>
+                      <p>
+                        <strong>Cidade:</strong> {address.city}
+                      </p>
+                      <p>
+                        <strong>Estado:</strong> {address.state}
+                      </p>
+                    </div>
+                  )
                 )}
-                {!!fareLoading && (
-                  <p className="text-white">Calculando taxa de entrega...</p>
-                )}
-                {!!(deliveryFare && distance !== null) && (
-                  <div className="flex flex-col gap-1 text-white">
-                    <p>Distância: {distance.toFixed(2)} km</p>
-                    <p>Taxa de entrega: {formatCurrency(deliveryFare)}</p>
-                    <p className="text-sm">Não cobramos retorno</p>
-                  </div>
+                {fareLoading ? (
+                  <p>Calculando taxa de entrega...</p>
+                ) : (
+                  !!(deliveryFare && distance !== null) && (
+                    <div className="mt-2 flex flex-col gap-1 border-t border-zinc-300 pt-2">
+                      <p>
+                        <strong>Distância:</strong> {distance.toFixed(2)} km
+                      </p>
+                      <p>
+                        <strong>Taxa de entrega:</strong>{' '}
+                        {formatCurrency(deliveryFare)}
+                      </p>
+                      <p className="mt-1.5 text-zinc-600">
+                        <span className="font-semibold">Observação:</span> Não
+                        cobramos retorno
+                      </p>
+                    </div>
+                  )
                 )}
               </div>
             </Container>
