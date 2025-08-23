@@ -364,7 +364,7 @@ export function CartPage(): React.JSX.Element {
             onClick={openModal}
             disabled={!!isDelivery && !address}
           >
-            Confirmar Pedido
+            Confirmar Pedido {formatCurrency(totalOrder)}
           </Button>
         </div>
 
