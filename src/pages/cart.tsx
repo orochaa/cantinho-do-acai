@@ -54,6 +54,7 @@ export function CartPage(): React.JSX.Element {
   const [distance, setDistance] = useState<number | null>(null)
   const [fareLoading, setFareLoading] = useState(false)
   const [fareError, setFareError] = useState<string | null>(null)
+  const [addressNumber, setAddressNumber] = useState('')
 
   const navigate = useNavigate()
 
@@ -132,11 +133,13 @@ export function CartPage(): React.JSX.Element {
     }
 
     if (isDelivery && address) {
-      msg += `\n\n*Endereço para entrega:*\n${address.street}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+      msg += `\n\n*Endereço para entrega:*\n${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
 
       if (deliveryFare) {
         msg += `\nTaxa de entrega: ${formatCurrency(deliveryFare)}`
         total += deliveryFare
+      } else {
+        msg += `\nTaxa de entrega: Não calculada`
       }
     }
 
@@ -150,7 +153,14 @@ export function CartPage(): React.JSX.Element {
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(msg)}`
 
     return url
-  }, [isDelivery, address, spoons.complements, cart, deliveryFare])
+  }, [
+    isDelivery,
+    address,
+    spoons.complements,
+    cart,
+    deliveryFare,
+    addressNumber,
+  ])
 
   const openModal = useCallback(() => {
     setModalOpen(true)
@@ -293,7 +303,8 @@ export function CartPage(): React.JSX.Element {
                 <input
                   id="cep"
                   type="text"
-                  placeholder="Digite o CEP"
+                  inputMode="numeric"
+                  placeholder="Digite o CEP do seu endereço"
                   className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
                   value={cep}
                   onChange={async e => handleCepChange(e.target.value)}
@@ -318,6 +329,22 @@ export function CartPage(): React.JSX.Element {
                       <p>
                         <strong>Estado:</strong> {address.state}
                       </p>
+
+                      <label
+                        htmlFor="address-number"
+                        className="mt-2 ml-1 leading-3 font-bold"
+                      >
+                        Número:
+                      </label>
+                      <input
+                        id="address-number"
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="Digite o número do seu endereço"
+                        className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
+                        value={addressNumber}
+                        onChange={e => setAddressNumber(e.target.value)}
+                      />
                     </div>
                   )
                 )}
@@ -369,7 +396,7 @@ export function CartPage(): React.JSX.Element {
           <Button
             variant="confirm"
             onClick={openModal}
-            disabled={!!isDelivery && !address}
+            disabled={!!isDelivery && (!address || !addressNumber)}
           >
             Confirmar Pedido {formatCurrency(totalOrder)}
           </Button>
