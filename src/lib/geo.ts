@@ -3,11 +3,25 @@ export interface Coordinates {
   lon: number
 }
 
-export async function getCoordinates(address: string): Promise<Coordinates> {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`
+export const COMPANY_COORDINATES: Coordinates = {
+  lat: -29.190_012_3,
+  lon: -51.213_029_1,
+}
+
+export async function getCoordinates(address: {
+  street: string
+  city: string
+  state: string
+}): Promise<Coordinates> {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search.php?street=${encodeURIComponent(address.street)}&city=${encodeURIComponent(address.city)}&state=${encodeURIComponent(address.state)}&countrycodes=BR&format=json&limit=1`,
+    {
+      headers: {
+        'User-Agent': 'Cantinho do Acai App',
+      },
+    }
   )
-  const data = (await response.json()) as { lat: string; lon: string }[]
+  const data = (await res.json()) as { lat: string; lon: string }[]
 
   if (data.length > 0) {
     const { lat, lon } = data[0]
