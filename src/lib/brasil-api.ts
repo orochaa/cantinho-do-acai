@@ -8,14 +8,15 @@ interface CepAddress {
 }
 
 export async function getCepAddress(cep: string): Promise<CepAddress> {
-  return fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`)
-    .then(async res => res.json())
-    .then(data => {
-      if (data && typeof data === 'object' && 'errors' in data) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
-        throw data
-      }
+  return fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`).then(res => {
+    if (!res.ok) {
+      console.error(
+        `Error fetching CEP ${cep}: ${res.status} ${res.statusText}`
+      )
 
-      return data as CepAddress
-    })
+      throw new Error('CEP not found')
+    }
+
+    return res.json() as unknown as CepAddress
+  })
 }
