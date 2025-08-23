@@ -7,17 +7,17 @@ export const bebidaCategory: Category<
     {
       img: '/img/bebidas.png',
       name: 'Refrigerantes',
-      fullPrice: 7,
-      price: 7,
+      fullPrice: 10,
+      price: 10,
       people: 1,
       slang: 'refrigerantes',
       description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa',
     },
   ],
   flavors: [
-    { name: 'Coca-Cola 600ml', price: 7 },
-    { name: 'Coca-Cola Zero 600ml', price: 7 },
-    { name: 'Guaraná 600ml', price: 7 },
-    { name: 'Sprite 600ml', price: 7 },
+    { name: 'Coca-Cola 600ml', price: 10 },
+    { name: 'Coca-Cola Zero 600ml', price: 10 },
+    { name: 'Guaraná 600ml', price: 10 },
+    { name: 'Sprite 600ml', price: 10 },
   ],
 }
