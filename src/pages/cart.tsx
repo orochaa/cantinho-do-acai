@@ -9,6 +9,7 @@ import { useCart } from '@/context/cart-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { getCepAddress } from '@/lib/brasil-api'
 import { formatCurrency } from '@/lib/format'
+import { calculateDistance, calculateFare, getCoordinates } from '@/lib/geo'
 import { ExternalLink, PlusSquare, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -20,6 +21,11 @@ interface CepAddress {
   neighborhood: string
   street: string
   service: string
+}
+
+interface Coordinates {
+  lat: number
+  lon: number
 }
 
 export function CartPage(): React.JSX.Element {
@@ -38,8 +44,20 @@ export function CartPage(): React.JSX.Element {
   const [address, setAddress] = useState<CepAddress | null>(null)
   const [addressError, setAddressError] = useState<string | null>(null)
   const [cepLoading, setCepLoading] = useState(false)
+  const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
+  const [distance, setDistance] = useState<number | null>(null)
+  const [fareLoading, setFareLoading] = useState(false)
+  const [companyCoords, setCompanyCoords] = useState<Coordinates | null>(null)
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    getCoordinates(
+      'Rua Olinda de Almeida Lima, 249, Caxias do Sul, Rio Grande do Sul, Brasil'
+    )
+      .then(setCompanyCoords)
+      .catch(console.error)
+  }, [])
 
   const totalOrder = useMemo(() => {
     let total = 0
@@ -48,25 +66,45 @@ export function CartPage(): React.JSX.Element {
       total += item.total
     }
 
-    return total
-  }, [cart])
-
-  const handleCepChange = useCallback(async (cep: string) => {
-    setCep(cep)
-    if (cep.length === 8) {
-      try {
-        setCepLoading(true)
-        const cepAddress = await getCepAddress(cep)
-        setAddress(cepAddress)
-        setAddressError(null)
-      } catch (error) {
-        setAddress(null)
-        setAddressError('CEP não encontrado.')
-      } finally {
-        setCepLoading(false)
-      }
+    if (checkoutOption === 'delivery' && deliveryFare) {
+      total += deliveryFare
     }
-  }, [])
+
+    return total
+  }, [cart, checkoutOption, deliveryFare])
+
+  const handleCepChange = useCallback(
+    async (cep: string) => {
+      setCep(cep)
+
+      if (cep.length === 8) {
+        try {
+          setCepLoading(true)
+          const cepAddress = await getCepAddress(cep)
+          setAddress(cepAddress)
+          setAddressError(null)
+
+          if (companyCoords) {
+            setFareLoading(true)
+            const userCoords = await getCoordinates(
+              `${cepAddress.street}, ${cepAddress.city}, ${cepAddress.state}`
+            )
+            const dist = calculateDistance(companyCoords, userCoords)
+            setDistance(dist)
+            setDeliveryFare(calculateFare(dist))
+            setFareLoading(false)
+          }
+        } catch (error) {
+          setAddress(null)
+          setAddressError('CEP não encontrado.')
+          console.error(error)
+        } finally {
+          setCepLoading(false)
+        }
+      }
+    },
+    [companyCoords]
+  )
 
   const goToWhatsappLink = useMemo((): string => {
     let msg = 'Olá, Cantinho do Açaí!\nGostaria de fazer um pedido:\n\n'
@@ -77,34 +115,39 @@ export function CartPage(): React.JSX.Element {
       msg += [
         `*${item.count} - ${item.product.name}* ${item.product.price ? `- ${formatCurrency(item.product.price)}` : ''}`,
         ...item.complements.map(complement => {
-          return `- ${complement.count} - ${complement.name}${ 
+          return `- ${complement.count} - ${complement.name}${
             complement.price ? ` - ${formatCurrency(complement.price)}` : ''
           }`
         }),
-        item.observation ? `*Observação:*
-${item.observation}` : '',
-        '\n',
+        item.observation ? `*Observação:*\n${item.observation}` : '',
       ]
         .filter(Boolean)
         .join('\n')
     }
 
-    msg += `Total: ${formatCurrency(total)}`
+    if (checkoutOption === 'delivery' && address) {
+      msg += `\n\n*Endereço para entrega:*\n${address.street}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+
+      if (deliveryFare) {
+        msg += `\nTaxa de entrega: ${formatCurrency(deliveryFare)}`
+      }
+    }
+
+    if (checkoutOption === 'delivery' && deliveryFare) {
+      total += deliveryFare
+    }
+
+    msg += `\n\n*Total:* ${formatCurrency(total)}`
 
     if (spoons.complements[0].count === 1) {
       msg += '\n\nIncluir talheres, por favor.'
-    }
-
-    if (checkoutOption === 'delivery' && address) {
-      msg += `\n\n*Endereço para entrega:*
-${address.street}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
     }
 
     const phone = '5554984312998'
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(msg)}`
 
     return url
-  }, [cart, spoons.complements, checkoutOption, address])
+  }, [cart, spoons.complements, checkoutOption, address, deliveryFare])
 
   const openModal = useCallback(() => {
     setModalOpen(true)
@@ -119,7 +162,6 @@ ${address.street}, ${address.neighborhood}, ${address.city} - ${address.state}, 
       navigate('/')
     }
   }, [cart, navigate])
-
 
   return (
     <>
@@ -265,19 +307,29 @@ ${address.street}, ${address.neighborhood}, ${address.city} - ${address.state}, 
                   placeholder="CEP (apenas números)"
                   className="rounded-sm p-2"
                   value={cep}
-                  onChange={e => handleCepChange(e.target.value)}
+                  onChange={async e => handleCepChange(e.target.value)}
                   maxLength={8}
                 />
-                {cepLoading && <p className="text-white">Buscando CEP...</p>}
-                {addressError && (
+                {!!cepLoading && <p className="text-white">Buscando CEP...</p>}
+                {!!addressError && (
                   <p className="text-red-500">{addressError}</p>
                 )}
-                {address && (
+                {!!address && (
                   <div className="flex flex-col gap-1 text-white">
                     <p>Rua: {address.street}</p>
                     <p>Bairro: {address.neighborhood}</p>
                     <p>Cidade: {address.city}</p>
                     <p>Estado: {address.state}</p>
+                  </div>
+                )}
+                {!!fareLoading && (
+                  <p className="text-white">Calculando taxa de entrega...</p>
+                )}
+                {!!(deliveryFare && distance !== null) && (
+                  <div className="flex flex-col gap-1 text-white">
+                    <p>Distância: {distance.toFixed(2)} km</p>
+                    <p>Taxa de entrega: {formatCurrency(deliveryFare)}</p>
+                    <p className="text-sm">Não cobramos retorno</p>
                   </div>
                 )}
               </div>
