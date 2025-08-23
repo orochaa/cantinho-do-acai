@@ -32,14 +32,20 @@ export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
 
   const [spoons, addSpoonEvent] = useComplements(
-    [{ name: 'Sim, por favor' }, { name: 'Não, obrigado', count: 1 }],
+    [{ name: 'Não, obrigado', count: 1 }, { name: 'Sim, por favor' }],
     1
   )
+  const [checkoutOption, addCheckoutOptionEvent] = useComplements(
+    [
+      { name: 'Retirada no local', count: 1 },
+      { name: 'Entrega (com taxa de entrega)' },
+    ],
+    1
+  )
+  const isDelivery = checkoutOption.complements[1].count === 1
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [checkoutOption, setCheckoutOption] = useState<'delivery' | 'take-out'>(
-    'take-out'
-  )
+
   const [cep, setCep] = useState('')
   const [address, setAddress] = useState<CepAddress | null>(null)
   const [addressError, setAddressError] = useState<string | null>(null)
@@ -66,12 +72,12 @@ export function CartPage(): React.JSX.Element {
       total += item.total
     }
 
-    if (checkoutOption === 'delivery' && deliveryFare) {
+    if (isDelivery && deliveryFare) {
       total += deliveryFare
     }
 
     return total
-  }, [cart, checkoutOption, deliveryFare])
+  }, [cart, deliveryFare, isDelivery])
 
   const handleCepChange = useCallback(
     async (cep: string) => {
@@ -125,16 +131,13 @@ export function CartPage(): React.JSX.Element {
         .join('\n')
     }
 
-    if (checkoutOption === 'delivery' && address) {
+    if (isDelivery && address) {
       msg += `\n\n*Endereço para entrega:*\n${address.street}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
 
       if (deliveryFare) {
         msg += `\nTaxa de entrega: ${formatCurrency(deliveryFare)}`
+        total += deliveryFare
       }
-    }
-
-    if (checkoutOption === 'delivery' && deliveryFare) {
-      total += deliveryFare
     }
 
     msg += `\n\n*Total:* ${formatCurrency(total)}`
@@ -147,7 +150,7 @@ export function CartPage(): React.JSX.Element {
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(msg)}`
 
     return url
-  }, [cart, spoons.complements, checkoutOption, address, deliveryFare])
+  }, [isDelivery, address, spoons.complements, cart, deliveryFare])
 
   const openModal = useCallback(() => {
     setModalOpen(true)
@@ -272,36 +275,16 @@ export function CartPage(): React.JSX.Element {
             ctx={spoons}
             addComplementEvent={addSpoonEvent}
           />
-          <Container>
-            <h2 className="text-xl font-bold text-white">Opções de Entrega</h2>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="checkout"
-                  value="take-out"
-                  checked={checkoutOption === 'take-out'}
-                  onChange={() => setCheckoutOption('take-out')}
-                />
-                <span className="text-white">Retirada no local</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="checkout"
-                  value="delivery"
-                  checked={checkoutOption === 'delivery'}
-                  onChange={() => setCheckoutOption('delivery')}
-                />
-                <span className="text-white">Entrega</span>
-              </label>
-            </div>
-          </Container>
+          <OrderComplements
+            title="Opções de Entrega"
+            ctx={checkoutOption}
+            addComplementEvent={addCheckoutOptionEvent}
+          />
 
-          {checkoutOption === 'delivery' && (
+          {!!isDelivery && (
             <Container>
               <h2 className="text-xl font-bold text-white">Endereço</h2>
-              <div className="flex flex-col gap-2">
+              <div className="gap-2s flex flex-col">
                 <input
                   type="text"
                   placeholder="CEP (apenas números)"
@@ -337,13 +320,10 @@ export function CartPage(): React.JSX.Element {
           )}
         </div>
 
-        {checkoutOption === 'take-out' && (
+        {!isDelivery && (
           <div className="mt-6 rounded-sm bg-yellow-100 p-4 text-pretty text-yellow-800">
             <p className="font-semibold">Atenção:</p>
-            <p>
-              Não fazemos entregas. Todos os pedidos devem ser retirados no
-              local.
-            </p>
+            <p>Retirar pedido no local, no endereço abaixo:</p>
             <p>
               Endereço: Rua Olinda de Almeida Lima, 249 - Charqueadas, Caxias do
               Sul - RS
@@ -358,7 +338,7 @@ export function CartPage(): React.JSX.Element {
           <Button
             variant="confirm"
             onClick={openModal}
-            disabled={checkoutOption === 'delivery' && !address}
+            disabled={!!isDelivery && !address}
           >
             Confirmar Pedido
           </Button>
