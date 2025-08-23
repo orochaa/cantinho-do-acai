@@ -29,6 +29,29 @@ interface CepAddress {
   service: string
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const createMessageBuilder = () => {
+  const parts: string[] = []
+
+  return {
+    add: (text: string): void => {
+      parts.push(text)
+    },
+    addConditional: (condition: unknown, text: string | (() => void)): void => {
+      if (condition) {
+        if (typeof text === 'function') {
+          text()
+        } else {
+          parts.push(text)
+        }
+      }
+    },
+    build: (): string => {
+      return parts.join('\n')
+    },
+  }
+}
+
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
 
@@ -119,51 +142,71 @@ export function CartPage(): React.JSX.Element {
   }, [])
 
   const goToWhatsappLink = useMemo((): string => {
-    let msg = 'Olá, Cantinho do Açaí!\nGostaria de fazer um pedido:\n\n'
+    const builder = createMessageBuilder()
     let total = 0
+
+    builder.add('Olá, Cantinho do Açaí!')
+    builder.add('Gostaria de fazer um pedido:')
+    builder.add('')
 
     for (const item of cart) {
       total += item.total
-      msg += [
-        `*${item.count} - ${item.product.name}* ${item.product.price ? `- ${formatCurrency(item.product.price)}` : ''}`,
+      const itemParts = [
+        `*${item.count} - ${item.product.name}* ${
+          item.product.price ? `- ${formatCurrency(item.product.price)}` : ''
+        }`,
         ...item.complements.map(complement => {
           return `- ${complement.count} - ${complement.name}${
             complement.price ? ` - ${formatCurrency(complement.price)}` : ''
           }`
         }),
-        item.observation ? `*Observação:*\n${item.observation}` : '',
       ]
-        .filter(Boolean)
-        .join('\n')
+      builder.add(itemParts.filter(Boolean).join('\n'))
+      builder.addConditional(item.observation, () => {
+        builder.add(`*Observação:*
+${item.observation}`)
+      })
     }
 
-    msg += `\n\n*Opção de Entrega*`
+    builder.add('')
+    builder.add(`*Opção de Entrega*`)
+    builder.addConditional(isDelivery, () => {
+      builder.add('Entrega (com taxa de entrega)')
 
-    if (isDelivery) {
-      msg += `\nEntrega (com taxa de entrega)`
-      msg +=
-        address && addressNumber
-          ? `\nEndereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
-          : `\nEndereço: A informar`
+      if (address && addressNumber) {
+        builder.add(
+          `Endereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+        )
+      } else {
+        builder.add(`Endereço: (não informado por completo)`)
+        builder.addConditional(!address, `- Faltando CEP`)
+        builder.addConditional(!addressNumber, `- Faltando número`)
+      }
 
       if (deliveryFare) {
-        msg += `\nTaxa de entrega: ${formatCurrency(deliveryFare)}`
+        builder.add(`Taxa de entrega: ${formatCurrency(deliveryFare)}`)
         total += deliveryFare
       } else {
-        msg += `\nTaxa de entrega: A calcular`
+        builder.add(`Taxa de entrega: A calcular`)
       }
-    } else {
-      msg += '\nRetirada no local'
-    }
+    })
+    builder.addConditional(!isDelivery, () => {
+      builder.add('Retirada no local')
+    })
 
-    msg += `\n\n*Total:* ${formatCurrency(total)}`
+    builder.add('')
+    builder.add(`*Total:* ${formatCurrency(total)}`)
 
-    if (spoons.complements[1].count === 1) {
-      msg += '\n\nIncluir talheres, por favor.'
-    }
+    builder.addConditional(spoons.complements[1].count === 1, () => {
+      builder.add('')
+      builder.add('Incluir talheres, por favor.')
+    })
 
+    const msg = builder.build()
     const phone = '5554984312998'
-    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(msg)}`
+    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(
+      msg
+    )}`
 
     return url
   }, [
