@@ -20,7 +20,7 @@ Leite condensado
 Uma combinação doce e divertida que traz o sabor das balas para uma experiência ainda mais gostosa. Escolha seu sabor Fini e aproveite!`,
       people: 1,
       fullPrice: 25,
-      price: 23.5,
+      price: 20,
       quantity: 440,
       complements: ['Fini banana', 'Fini dentadura', 'Fini beijinho'],
     },

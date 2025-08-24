@@ -37,7 +37,7 @@ export const salgadosCategory: Category<Salgado> = {
   ].map(p => ({
     slang: slang(p.name),
     complements: [
-      'Churros de Doce de Leite',
+      // 'Churros de Doce de Leite',
       'Croquete',
       'Coxinha de Frango',
       'Almofadinha de Presunto e Queijo',
@@ -45,6 +45,7 @@ export const salgadosCategory: Category<Salgado> = {
       'Risoles de Frango',
       'Bolinha de Queijo',
       'Enroladinho de Salsicha',
+      'Bacon com Queijo',
     ],
     sauces: ['Molho Cheddar', 'Molho de Catupiri'],
     ...p,
