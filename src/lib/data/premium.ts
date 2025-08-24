@@ -74,8 +74,8 @@ Creme de avelã
 Chantilly de chocolate
 Uma combinação perfeita que derrete na boca e transforma cada colherada em um momento único. Experimente e surpreenda-se!`,
       people: 1,
-      fullPrice: 25,
-      price: 23.5,
+      fullPrice: 38,
+      price: 27,
       quantity: 440,
     },
     {

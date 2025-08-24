@@ -39,7 +39,7 @@ export const felicidadeCategory: Category<
       description:
         'Descubra a pura alegria encapsulada em nosso Copo da Felicidade de Kinder Bueno. Este prato é uma harmoniosa combinação de ingredientes: o irresistível Kinder Bueno, que adiciona uma textura crocante e um sabor de avelã distintivo; um creme de chocolate preto, que proporciona um toque de luxo e sofisticação; e por fim, o creme de chocolate branco, que equilibra perfeitamente, com sua doçura suave e cremosidade inigualável. Uma experiência de sabor inesquecível que transcende o ordinário, tornando cada colherada um momento de felicidade.',
       people: 1,
-      fullPrice: 25,
+      fullPrice: 32,
       price: 23,
     },
   ].map(p => ({ slang: slang(p.name), ...p })),
