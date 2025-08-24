@@ -81,6 +81,7 @@ export function CartPage(): React.JSX.Element {
   const [fareLoading, setFareLoading] = useState(false)
   const [fareError, setFareError] = useState<string | null>(null)
   const [addressNumber, setAddressNumber] = useState('')
+  const [clientName, setClientName] = useState('')
 
   const navigate = useNavigate()
 
@@ -202,6 +203,9 @@ ${item.observation}`)
       builder.add('Incluir talheres, por favor.')
     })
 
+    builder.add('')
+    builder.add(`Nome: ${clientName}`)
+
     const msg = builder.build()
     const phone = '5554984312998'
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(
@@ -211,11 +215,12 @@ ${item.observation}`)
     return url
   }, [
     isDelivery,
-    address,
     spoons.complements,
+    clientName,
     cart,
-    deliveryFare,
+    address,
     addressNumber,
+    deliveryFare,
   ])
 
   const openModal = useCallback(() => {
@@ -223,6 +228,12 @@ ${item.observation}`)
   }, [])
 
   const handleConfirmOrder = useCallback(() => {
+    if (!clientName.trim()) {
+      alert.popMessage('Por favor, informe o seu nome.')
+
+      return
+    }
+
     if (isDelivery) {
       if (!address) {
         alert.popMessage('Por favor, informe o seu CEP.')
@@ -238,7 +249,7 @@ ${item.observation}`)
     }
 
     openModal()
-  }, [isDelivery, address, addressNumber, alert, openModal])
+  }, [clientName, isDelivery, openModal, alert, address, addressNumber])
 
   const closeModal = useCallback(() => {
     setModalOpen(false)
@@ -352,6 +363,22 @@ ${item.observation}`)
                   </div>
                 )
               )}
+            </div>
+          </Container>
+          <Container>
+            <h2 className="text-xl font-bold text-white">Nome do cliente</h2>
+            <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
+              <label htmlFor="client-name" className="ml-1 leading-3 font-bold">
+                Seu nome:
+              </label>
+              <input
+                id="client-name"
+                type="text"
+                placeholder="Digite o seu nome"
+                className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
+                value={clientName}
+                onChange={e => setClientName(e.target.value)}
+              />
             </div>
           </Container>
           <OrderComplements
