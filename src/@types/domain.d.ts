@@ -4,6 +4,7 @@ type Category<
 > = {
   path: string
   products: TProduct[]
+  description: string
 } & TExtras
 
 interface Product {

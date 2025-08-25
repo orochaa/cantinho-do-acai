@@ -3,6 +3,7 @@ export const bebidaCategory: Category<
   { flavors: { name: string; price: number }[] }
 > = {
   path: 'bebidas',
+  description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa.',
   products: [
     {
       img: '/img/bebidas.png',

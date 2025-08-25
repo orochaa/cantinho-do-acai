@@ -17,12 +17,16 @@ export function HomePage(): React.JSX.Element {
           alt="logo cantinho do açaí"
           className="mx-auto mb-8 h-64 sm:h-72"
         />
+        <p className="text-center text-lg text-white/90 mb-8">
+          Selecione um produto para começar a montar o seu pedido.
+        </p>
         <div className="mx-auto flex w-full flex-col gap-10">
-          {Object.entries(categories).map(([name, { path, products }]) => (
+          {Object.entries(categories).map(([name, { path, products, description }]) => (
             <div key={name}>
-              <h1 className="font-raleway mb-4 border-b-2 border-amber-600 p-1 text-2xl text-white/90">
+              <h1 className="font-raleway mb-2 border-b-2 border-amber-600 p-1 text-2xl text-white/90">
                 {name}
               </h1>
+              <p className="text-white/80 mb-4">{description}</p>
               <div className="gap grid grid-cols-1 gap-4 md:grid-cols-2">
                 {products.map(product => (
                   <Link

@@ -5,6 +5,8 @@ export const felicidadeCategory: Category<
   { size: { name: string; price: number }[] }
 > = {
   path: 'felicidade',
+  description:
+    'Nossos copos da felicidade são uma explosão de sabores, com combinações irresistíveis de cremes, frutas e chocolates que vão te surpreender a cada colherada.',
   products: [
     {
       img: '/img/copo-da-felicidade-morango.avif',
