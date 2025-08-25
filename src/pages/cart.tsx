@@ -368,7 +368,7 @@ ${item.observation}`)
             </div>
           </Container>
           <Container>
-            <h2 className="text-xl font-bold text-white">Nome do cliente</h2>
+            <h2 className="text-xl font-bold text-white">Identificação do Pedido</h2>
             <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
               <label htmlFor="client-name" className="ml-1 leading-3 font-bold">
                 Seu nome:
@@ -381,6 +381,7 @@ ${item.observation}`)
                 value={clientName}
                 onChange={e => setClientName(e.target.value)}
               />
+              <p className="text-xs text-zinc-600 ml-1">Para que possamos identificar o seu pedido.</p>
             </div>
           </Container>
           <OrderComplements
