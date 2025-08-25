@@ -48,7 +48,10 @@ export const salgadosCategory: Category<Salgado> = {
       'Enroladinho de Salsicha',
       'Bacon com Queijo',
     ],
-    sauces: ['Molho Cheddar', 'Molho de Catupiri'],
+    sauces: [
+      // 'Molho Cheddar',
+      'Molho de Catupiri'
+    ],
     ...p,
   })),
 }
