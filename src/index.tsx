@@ -1,4 +1,4 @@
-import { AlertProvider } from '@/context/alert-provider'
+import { ToastProvider } from '@/context/toast-provider'
 import { Router } from '@/router'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -9,9 +9,9 @@ import './global.css'
 ReactDOM.createRoot(document.querySelector('#root')!).render(
   <React.StrictMode>
     <HelmetProvider>
-      <AlertProvider>
+      <ToastProvider>
         <Router />
-      </AlertProvider>
+      </ToastProvider>
     </HelmetProvider>
   </React.StrictMode>
 )

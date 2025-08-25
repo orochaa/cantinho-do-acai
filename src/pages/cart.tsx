@@ -5,8 +5,8 @@ import {
   OrderComplements,
 } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
-import { useAlert } from '@/context/alert-provider'
 import { useCart } from '@/context/cart-provider'
+import { useToast } from '@/context/toast-provider'
 import { useComplements } from '@/hooks/use-complements'
 import { getCepAddress } from '@/lib/brasil-api'
 import { formatCurrency } from '@/lib/format'
@@ -70,7 +70,7 @@ export function CartPage(): React.JSX.Element {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
-  const alert = useAlert()
+  const toast = useToast()
 
   const [cep, setCep] = useState('')
   const [address, setAddress] = useState<CepAddress | null>(null)
@@ -229,27 +229,29 @@ ${item.observation}`)
 
   const handleConfirmOrder = useCallback(() => {
     if (!clientName.trim()) {
-      alert.popMessage('Por favor, informe o seu nome.')
+      toast.error({ description: 'Por favor, informe o seu nome.' })
 
       return
     }
 
     if (isDelivery) {
       if (!address) {
-        alert.popMessage('Por favor, informe o seu CEP.')
+        toast.error({ description: 'Por favor, informe o seu CEP.' })
 
         return
       }
 
       if (!addressNumber) {
-        alert.popMessage('Por favor, informe o número do seu endereço.')
+        toast.error({
+          description: 'Por favor, informe o número do seu endereço.',
+        })
 
         return
       }
     }
 
     openModal()
-  }, [clientName, isDelivery, openModal, alert, address, addressNumber])
+  }, [clientName, isDelivery, openModal, toast, address, addressNumber])
 
   const closeModal = useCallback(() => {
     setModalOpen(false)
