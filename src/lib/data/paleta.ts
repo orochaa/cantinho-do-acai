@@ -5,6 +5,8 @@ export const paletaCategory: Category<
   { flavors: { name: string; price: number }[] }
 > = {
   path: 'paleta',
+  description:
+    'Paletas italianas, saborosas e refrescantes, perfeitas para qualquer ocasião.',
   products: [
     {
       img: '/img/paleta.jpg',

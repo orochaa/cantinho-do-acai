@@ -28,7 +28,8 @@ export type Acai = Product & {
 
 export const acaiCategory: Category<Acai> = {
   path: 'acai',
-  description: 'O melhor açaí da região, com ingredientes frescos e de qualidade. Monte o seu açaí do seu jeito, com diversos acompanhamentos e cremes.',
+  description:
+    'O melhor açaí da região, com ingredientes frescos e de qualidade. Monte o seu açaí do seu jeito, com diversos acompanhamentos e cremes.',
   products: [
     {
       img: '/img/barca.jfif',

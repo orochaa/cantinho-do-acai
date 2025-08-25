@@ -6,7 +6,8 @@ export type Premium = Product & {
 
 export const premiumCategory: Category<Premium> = {
   path: 'premium',
-  description: 'Nossos copos premium são criações exclusivas, com ingredientes selecionados e combinações que vão além do comum.',
+  description:
+    'Nossos copos premium são criações exclusivas, com ingredientes selecionados e combinações que vão além do comum.',
   products: [
     {
       img: '/img/finifest.avif',
