@@ -273,7 +273,7 @@ ${item.observation}`)
       <div className="mx-auto w-11/12 py-20">
         <div className="flex flex-col gap-8">
           <Container>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="ml-1 text-xl font-bold text-white">
               Pedido: {formatCurrency(totalOrder)}
             </h2>
             <div className="flex flex-col gap-2">
@@ -368,7 +368,9 @@ ${item.observation}`)
             </div>
           </Container>
           <Container>
-            <h2 className="text-xl font-bold text-white">Identificação do Pedido</h2>
+            <h2 className="ml-1 text-xl font-bold text-white">
+              Identificação do Pedido
+            </h2>
             <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
               <label htmlFor="client-name" className="ml-1 leading-3 font-bold">
                 Seu nome:
@@ -381,7 +383,9 @@ ${item.observation}`)
                 value={clientName}
                 onChange={e => setClientName(e.target.value)}
               />
-              <p className="text-xs text-zinc-600 ml-1">Para que possamos identificar o seu pedido.</p>
+              <p className="ml-1 text-xs text-zinc-600">
+                Para que possamos identificar o seu pedido.
+              </p>
             </div>
           </Container>
           <OrderComplements
@@ -397,7 +401,7 @@ ${item.observation}`)
 
           {!!isDelivery && (
             <Container>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="ml-1 text-xl font-bold text-white">
                 Endereço de entrega
               </h2>
               <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
