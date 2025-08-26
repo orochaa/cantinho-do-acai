@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import type { ReactNode } from 'react'
@@ -46,13 +47,24 @@ interface ToastProviderProps {
 
 export function ToastProvider(props: ToastProviderProps): React.JSX.Element {
   const [toast, setToast] = useState<ToastOptions | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const showToast = useCallback((options: ToastOptions) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
     setToast(options)
-    setTimeout(() => setToast(null), 5000)
+    timeoutRef.current = setTimeout(() => {
+      setToast(null)
+      timeoutRef.current = null
+    }, 7000)
   }, [])
 
   const handleClose = (): void => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
     setToast(null)
   }
 
