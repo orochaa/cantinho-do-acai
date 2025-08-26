@@ -18,7 +18,7 @@ export function HomePage(): React.JSX.Element {
           className="mx-auto mb-8 h-64 sm:h-72"
         />
         <p className="mb-8 text-center text-lg text-white/90">
-          Selecione um produto para começar a montar o seu pedido.
+          Clique em um produto para começar a montar o seu pedido.
         </p>
         <div className="mx-auto flex w-full flex-col gap-10">
           {Object.entries(categories).map(
