@@ -7,9 +7,9 @@ import {
 import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
 import { useToast } from '@/context/toast-provider'
-import { useComplements } from '@/hooks/use-complements'
+import { isComplementSelected, useComplements } from '@/hooks/use-complements'
 import { getCepAddress } from '@/lib/brasil-api'
-import { formatCurrency } from '@/lib/format'
+import { formatCurrency, parseCurrency } from '@/lib/format'
 import {
   COMPANY_COORDINATES,
   calculateDistance,
@@ -28,6 +28,10 @@ interface CepAddress {
   street: string
   service: string
 }
+
+type PaymentMethod = 'PIX' | 'Cartão de Crédito' | 'Dinheiro'
+
+type CheckoutOption = 'Retirada no local' | 'Entrega (com taxa de entrega)'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const createMessageBuilder = () => {
@@ -55,17 +59,27 @@ const createMessageBuilder = () => {
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
 
+  const [paymentMethod, addPaymentMethodEvent] = useComplements<PaymentMethod>(
+    [
+      { name: 'PIX', count: 1 },
+      { name: 'Cartão de Crédito' },
+      { name: 'Dinheiro' },
+    ],
+    1
+  )
+
   const [spoons, addSpoonEvent] = useComplements(
     [{ name: 'Não, obrigado', count: 1 }, { name: 'Sim, por favor' }],
     1
   )
-  const [checkoutOption, addCheckoutOptionEvent] = useComplements(
-    [
-      { name: 'Retirada no local', count: 1 },
-      { name: 'Entrega (com taxa de entrega)' },
-    ],
-    1
-  )
+  const [checkoutOption, addCheckoutOptionEvent] =
+    useComplements<CheckoutOption>(
+      [
+        { name: 'Retirada no local', count: 1 },
+        { name: 'Entrega (com taxa de entrega)' },
+      ],
+      1
+    )
   const isDelivery = checkoutOption.complements[1].count === 1
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -82,6 +96,7 @@ export function CartPage(): React.JSX.Element {
   const [fareError, setFareError] = useState<string | null>(null)
   const [addressNumber, setAddressNumber] = useState('')
   const [clientName, setClientName] = useState('')
+  const [cashValue, setCashValue] = useState<string>('')
 
   const navigate = useNavigate()
 
@@ -98,6 +113,19 @@ export function CartPage(): React.JSX.Element {
 
     return total
   }, [cart, deliveryFare, isDelivery])
+
+  const change = useMemo(() => {
+    const cash = parseCurrency(cashValue)
+
+    if (
+      isComplementSelected(paymentMethod, 'Dinheiro') &&
+      !Number.isNaN(cash)
+    ) {
+      return cash - totalOrder
+    }
+
+    return 0
+  }, [cashValue, paymentMethod, totalOrder])
 
   const handleCepChange = useCallback(async (cep: string) => {
     cep = cep.replaceAll(/\D/g, '')
@@ -204,6 +232,20 @@ ${item.observation}`)
     })
 
     builder.add('')
+    builder.add(
+      `*Forma de Pagamento:* ${paymentMethod.complements.find(c => !!c.count)?.name}`
+    )
+    builder.addConditional(
+      isComplementSelected(paymentMethod, 'Dinheiro'),
+      () => {
+        builder.add(
+          `Valor pago em dinheiro: ${formatCurrency(parseCurrency(cashValue))}`
+        )
+        builder.add(`Troco: ${formatCurrency(change)}`)
+      }
+    )
+
+    builder.add('')
     builder.add(`Nome: ${clientName}`)
 
     const msg = builder.build()
@@ -221,6 +263,9 @@ ${item.observation}`)
     address,
     addressNumber,
     deliveryFare,
+    paymentMethod,
+    cashValue,
+    change,
   ])
 
   const openModal = useCallback(() => {
@@ -250,8 +295,31 @@ ${item.observation}`)
       }
     }
 
+    if (isComplementSelected(paymentMethod, 'Dinheiro')) {
+      const cash = parseCurrency(cashValue)
+
+      if (Number.isNaN(cash) || cash < totalOrder) {
+        toast.error({
+          description:
+            'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
+        })
+
+        return
+      }
+    }
+
     openModal()
-  }, [clientName, isDelivery, openModal, toast, address, addressNumber])
+  }, [
+    clientName,
+    isDelivery,
+    openModal,
+    toast,
+    address,
+    addressNumber,
+    paymentMethod,
+    cashValue,
+    totalOrder,
+  ])
 
   const closeModal = useCallback(() => {
     setModalOpen(false)
@@ -369,7 +437,7 @@ ${item.observation}`)
           </Container>
           <Container>
             <h2 className="ml-1 text-xl font-bold text-white">
-              Identificação do Pedido
+              Identificação do pedido
             </h2>
             <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
               <label htmlFor="client-name" className="ml-1 leading-3 font-bold">
@@ -493,18 +561,79 @@ ${item.observation}`)
               </div>
             </Container>
           )}
-        </div>
+          {!isDelivery && (
+            <div className="rounded-sm bg-yellow-100 p-4 text-pretty text-yellow-800">
+              <p className="font-semibold">Atenção:</p>
+              <p>Retirar pedido no local, no endereço abaixo:</p>
+              <p>
+                Endereço: Rua Olinda de Almeida Lima, 249 - Charqueadas, Caxias
+                do Sul - RS
+              </p>
+            </div>
+          )}
 
-        {!isDelivery && (
-          <div className="mt-6 rounded-sm bg-yellow-100 p-4 text-pretty text-yellow-800">
-            <p className="font-semibold">Atenção:</p>
-            <p>Retirar pedido no local, no endereço abaixo:</p>
-            <p>
-              Endereço: Rua Olinda de Almeida Lima, 249 - Charqueadas, Caxias do
-              Sul - RS
-            </p>
-          </div>
-        )}
+          <OrderComplements
+            title="Forma de pagamento"
+            ctx={paymentMethod}
+            addComplementEvent={addPaymentMethodEvent}
+          />
+
+          {isComplementSelected(paymentMethod, 'Dinheiro') && (
+            <Container>
+              <h2 className="ml-1 text-xl font-bold text-white">
+                Pagamento em dinheiro
+              </h2>
+              <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
+                <label
+                  htmlFor="cash-value"
+                  className="ml-1 leading-3 font-bold"
+                >
+                  Valor em dinheiro:
+                </label>
+                <div className="flex items-center justify-start gap-3">
+                  <button
+                    type="button"
+                    className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
+                    onClick={() => setCashValue(formatCurrency(20))}
+                  >
+                    {formatCurrency(20)}
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
+                    onClick={() => setCashValue(formatCurrency(50))}
+                  >
+                    {formatCurrency(50)}
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
+                    onClick={() => setCashValue(formatCurrency(100))}
+                  >
+                    {formatCurrency(100)}
+                  </button>
+                </div>
+                <input
+                  id="cash-value"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Digite outro valor que você irá pagar em dinheiro"
+                  className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
+                  value={cashValue}
+                  onChange={e => setCashValue(e.target.value)}
+                />
+                <p className="text-sm text-zinc-600">
+                  Informe o valor que você irá pagar em dinheiro, para que
+                  possamos providenciar o troco.
+                </p>
+                <p className="text-sm text-zinc-600">
+                  <span className="font-semibold">Troco:</span>{' '}
+                  {formatCurrency(change)}
+                </p>
+              </div>
+            </Container>
+          )}
+        </div>
 
         <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Button variant="cancel" onClick={async () => navigate('/')}>

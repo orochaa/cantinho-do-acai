@@ -32,3 +32,7 @@ export function formatCurrency(value: string | number): string {
     currency: 'BRL',
   })
 }
+
+export function parseCurrency(value: string): number {
+  return Number.parseFloat(value.replace(',', '.').replaceAll(/[^\d.-]/g, ''))
+}

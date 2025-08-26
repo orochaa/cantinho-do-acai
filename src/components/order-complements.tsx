@@ -4,14 +4,14 @@ import { cn, formatCurrency } from '@/lib/format'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { Container } from './container'
 
-export interface OrderComplementsProps {
+export interface OrderComplementsProps<TComplementName extends string> {
   title: string
-  ctx: ComplementState
-  addComplementEvent: (event: ComplementEvent) => void
+  ctx: ComplementState<TComplementName>
+  addComplementEvent: (event: ComplementEvent<TComplementName>) => void
 }
 
-export function OrderComplements(
-  props: OrderComplementsProps
+export function OrderComplements<TComplementName extends string>(
+  props: OrderComplementsProps<TComplementName>
 ): React.JSX.Element {
   const { title, ctx, addComplementEvent } = props
 
@@ -73,15 +73,15 @@ export function OrderComplements(
   )
 }
 
-interface MultiComponentsContainerProps {
-  complement: Complement
-  ctx: ComplementState
-  addComplementEvent: (event: ComplementEvent) => void
+interface MultiComponentsContainerProps<TComplementName extends string> {
+  complement: Complement<TComplementName>
+  ctx: ComplementState<TComplementName>
+  addComplementEvent: (event: ComplementEvent<TComplementName>) => void
   containerClassName?: string
 }
 
-export function MultiComponentsContainer(
-  props: MultiComponentsContainerProps
+export function MultiComponentsContainer<TComplementName extends string>(
+  props: MultiComponentsContainerProps<TComplementName>
 ): React.JSX.Element {
   const { addComplementEvent, complement, ctx, containerClassName } = props
 
@@ -118,14 +118,14 @@ export function MultiComponentsContainer(
   )
 }
 
-interface AddComplementButtonProps {
-  complement: Complement
-  ctx: ComplementState
-  addComplementEvent: (event: ComplementEvent) => void
+interface AddComplementButtonProps<TComplementName extends string> {
+  complement: Complement<TComplementName>
+  ctx: ComplementState<TComplementName>
+  addComplementEvent: (event: ComplementEvent<TComplementName>) => void
 }
 
-function AddComplementButton(
-  props: AddComplementButtonProps
+function AddComplementButton<TComplementName extends string>(
+  props: AddComplementButtonProps<TComplementName>
 ): React.JSX.Element {
   const { addComplementEvent, complement, ctx } = props
 
@@ -142,13 +142,13 @@ function AddComplementButton(
   )
 }
 
-interface ToggleComplementButtonProps {
-  complement: Complement
-  addComplementEvent: (event: ComplementEvent) => void
+interface ToggleComplementButtonProps<TComplementName extends string> {
+  complement: Complement<TComplementName>
+  addComplementEvent: (event: ComplementEvent<TComplementName>) => void
 }
 
-function ToggleComplementButton(
-  props: ToggleComplementButtonProps
+function ToggleComplementButton<TComplementName extends string>(
+  props: ToggleComplementButtonProps<TComplementName>
 ): React.JSX.Element {
   const { addComplementEvent, complement } = props
 

@@ -1,23 +1,23 @@
 import { useReducer } from 'react'
 
-export interface ComplementState {
+export interface ComplementState<TName extends string = string> {
   countLimit: number
   countTotal: number
-  complements: Complement[]
+  complements: Complement<TName>[]
 }
 
-export interface ComplementEvent {
+export interface ComplementEvent<TName extends string = string> {
   type: 'ADD' | 'REMOVE' | 'SELECT'
-  complement: Complement
+  complement: Complement<TName>
 }
 
-export function complementsReducer(
-  state: ComplementState,
-  event: ComplementEvent
-): ComplementState {
+export function complementsReducer<TName extends string = string>(
+  state: ComplementState<TName>,
+  event: ComplementEvent<TName>
+): ComplementState<TName> {
   if (event.type === 'ADD') {
     let countTotal = 0
-    const result: Complement[] = []
+    const result: Complement<TName>[] = []
 
     for (const complement of state.complements) {
       if (complement.name === event.complement.name) {
@@ -63,13 +63,30 @@ export function complementsReducer(
   return state
 }
 
-export function useComplements(
-  complements: Optional<Complement, 'count'>[],
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+export function useComplements<TName extends string>(
+  complements: Optional<Complement<TName>, 'count'>[],
   countLimit: number
-): [ComplementState, (event: ComplementEvent) => void] {
-  return useReducer<ComplementState, [ComplementEvent]>(complementsReducer, {
+) {
+  const [complementsState, addComplementEvent] = useReducer<
+    ComplementState<TName>,
+    [ComplementEvent<TName>]
+  >(complementsReducer, {
     countTotal: 0,
     countLimit,
-    complements: complements.map(c => ({ count: 0, ...c })),
+    complements: complements.map(
+      c => ({ count: 0, ...c }) as unknown as Complement<TName>
+    ),
   })
+
+  return [complementsState, addComplementEvent] as const
+}
+
+export function isComplementSelected<TName extends string>(
+  complementsState: ComplementState<TName>,
+  name: NoInfer<TName>
+): boolean {
+  const complement = complementsState.complements.find(c => c.name === name)
+
+  return !!complement && complement.count > 0
 }
