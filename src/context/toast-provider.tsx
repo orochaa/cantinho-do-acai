@@ -96,7 +96,7 @@ export function ToastProvider(props: ToastProviderProps): React.JSX.Element {
             x: 0,
             opacity: 1,
           }}
-          className="fixed right-5 bottom-5 z-50 w-11/12 max-w-sm rounded-md bg-slate-800 p-4 text-white shadow-lg"
+          className="fixed right-2 bottom-2 z-50 w-11/12 max-w-sm rounded-md bg-slate-800 p-4 text-white shadow-lg md:right-5 md:bottom-5"
         >
           <div className="flex items-center gap-4">
             {toast.type === 'success' ? (
