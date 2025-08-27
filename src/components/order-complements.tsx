@@ -33,7 +33,7 @@ export function OrderComplements<TComplementName extends string>(
         >
           <button
             type="button"
-            className="flex h-[3.5rem] grow flex-col p-3 md:flex-row md:items-center md:justify-between"
+            className="flex h-[3.5rem] grow flex-col justify-center p-3 md:flex-row md:items-center md:justify-between"
             onClick={() =>
               addComplementEvent({
                 type: ctx.countLimit === 1 ? 'SELECT' : 'ADD',
