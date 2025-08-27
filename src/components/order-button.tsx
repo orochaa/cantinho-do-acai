@@ -73,7 +73,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
         </div>
       )}
       <Button variant="confirm" className="grow" onClick={addOrder}>
-        Adicionar ao Carrinho - {formatCurrency(totalPrice * counter)}
+        Adicionar ao Pedido - {formatCurrency(totalPrice * counter)}
       </Button>
     </div>
   )

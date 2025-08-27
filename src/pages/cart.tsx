@@ -342,7 +342,7 @@ ${item.observation}`)
   return (
     <>
       <Seo
-        title="Carrinho - Cantinho do Açaí"
+        title="Pedido - Cantinho do Açaí"
         description="Confira o seu pedido e finalize a sua compra no Cantinho do Açaí."
         imgUrl="https://cantinhodoacai.vercel.app/img/novo-logo.png"
       />

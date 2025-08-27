@@ -30,7 +30,7 @@ export function Background(): React.JSX.Element {
               title="Ir para página do carrinho"
             >
               <ShoppingCart className="size-5 shrink-0" />
-              Carrinho
+              Pedido
             </Link>
           )}
         </div>
