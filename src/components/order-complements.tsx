@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import type { ComplementEvent, ComplementState } from '@/hooks/use-complements'
-import { cn, formatCurrency } from '@/lib/format'
+import { formatCurrency } from '@/lib/format'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { Container } from './container'
 
@@ -29,11 +29,11 @@ export function OrderComplements<TComplementName extends string>(
       {ctx.complements.map(complement => (
         <div
           key={complement.name}
-          className="flex items-center gap-3.5 rounded-sm bg-zinc-100 p-2 active:bg-zinc-200"
+          className="flex rounded-sm bg-zinc-100 active:bg-zinc-200"
         >
           <button
             type="button"
-            className="flex grow flex-col md:flex-row md:items-center md:justify-between"
+            className="flex h-[3.5rem] grow flex-col p-3 md:flex-row md:items-center md:justify-between"
             onClick={() =>
               addComplementEvent({
                 type: ctx.countLimit === 1 ? 'SELECT' : 'ADD',
@@ -49,24 +49,26 @@ export function OrderComplements<TComplementName extends string>(
             )}
           </button>
 
-          {ctx.countLimit === 1 ? (
-            <ToggleComplementButton
-              addComplementEvent={addComplementEvent}
-              complement={complement}
-            />
-          ) : complement.count === 0 ? (
-            <AddComplementButton
-              addComplementEvent={addComplementEvent}
-              complement={complement}
-              ctx={ctx}
-            />
-          ) : (
-            <MultiComponentsContainer
-              addComplementEvent={addComplementEvent}
-              complement={complement}
-              ctx={ctx}
-            />
-          )}
+          <div className="h-[3.5rem]">
+            {ctx.countLimit === 1 ? (
+              <ToggleComplementButton
+                addComplementEvent={addComplementEvent}
+                complement={complement}
+              />
+            ) : complement.count === 0 ? (
+              <AddComplementButton
+                addComplementEvent={addComplementEvent}
+                complement={complement}
+                ctx={ctx}
+              />
+            ) : (
+              <MultiComponentsContainer
+                addComplementEvent={addComplementEvent}
+                complement={complement}
+                ctx={ctx}
+              />
+            )}
+          </div>
         </div>
       ))}
     </Container>
@@ -77,43 +79,39 @@ interface MultiComponentsContainerProps<TComplementName extends string> {
   complement: Complement<TComplementName>
   ctx: ComplementState<TComplementName>
   addComplementEvent: (event: ComplementEvent<TComplementName>) => void
-  containerClassName?: string
 }
 
 export function MultiComponentsContainer<TComplementName extends string>(
   props: MultiComponentsContainerProps<TComplementName>
 ): React.JSX.Element {
-  const { addComplementEvent, complement, ctx, containerClassName } = props
+  const { addComplementEvent, complement, ctx } = props
 
   return (
-    <div
-      className={cn(
-        'flex items-center gap-3 rounded-xs border border-zinc-300 bg-zinc-100 p-1.5 shadow-sm',
-        containerClassName
-      )}
-    >
-      <button
-        type="button"
-        className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200"
-        title="Remover"
-        onClick={() => addComplementEvent({ type: 'REMOVE', complement })}
-      >
-        {complement.count === 1 ? (
-          <Trash2 className="size-5 shrink-0" />
-        ) : (
-          <Minus className="size-5 shrink-0" />
-        )}
-      </button>
-      <span>{complement.count}</span>
-      <button
-        type="button"
-        className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
-        title="Adicionar"
-        disabled={ctx.countTotal >= ctx.countLimit}
-        onClick={() => addComplementEvent({ type: 'ADD', complement })}
-      >
-        <Plus className="size-5 shrink-0" />
-      </button>
+    <div className="flex h-full items-center p-3 pl-0">
+      <div className="flex items-center rounded-xs border border-zinc-300 bg-zinc-100 p-0.5 shadow-sm">
+        <button
+          type="button"
+          className="rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200"
+          title="Remover"
+          onClick={() => addComplementEvent({ type: 'REMOVE', complement })}
+        >
+          {complement.count === 1 ? (
+            <Trash2 className="size-5 shrink-0" />
+          ) : (
+            <Minus className="size-5 shrink-0" />
+          )}
+        </button>
+        <span className="px-2 py-1.5">{complement.count}</span>
+        <button
+          type="button"
+          className="rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+          title="Adicionar"
+          disabled={ctx.countTotal >= ctx.countLimit}
+          onClick={() => addComplementEvent({ type: 'ADD', complement })}
+        >
+          <Plus className="size-5 shrink-0" />
+        </button>
+      </div>
     </div>
   )
 }
@@ -132,7 +130,7 @@ function AddComplementButton<TComplementName extends string>(
   return (
     <button
       type="button"
-      className="block h-[2.4rem] rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+      className="flex h-full items-center justify-center rounded-xs p-3 pl-0 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
       onClick={() => addComplementEvent({ type: 'ADD', complement })}
@@ -155,10 +153,15 @@ function ToggleComplementButton<TComplementName extends string>(
   return (
     <button
       type="button"
-      className="block size-6 rounded-full bg-zinc-200 ring-2 ring-red-500 ring-offset-2 active:bg-red-300 disabled:bg-red-500"
       title="Selecionar"
+      className="flex h-full items-center justify-center p-3 pl-0"
       disabled={complement.count === 1}
       onClick={() => addComplementEvent({ type: 'SELECT', complement })}
-    />
+    >
+      <span
+        data-disabled={complement.count === 1}
+        className="block size-6 rounded-full bg-zinc-200 ring-2 ring-red-500 ring-offset-2 active:bg-red-300 data-[disabled=true]:bg-red-500"
+      />
+    </button>
   )
 }
