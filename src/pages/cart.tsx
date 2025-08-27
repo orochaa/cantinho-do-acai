@@ -95,6 +95,8 @@ export function CartPage(): React.JSX.Element {
   const [fareLoading, setFareLoading] = useState(false)
   const [fareError, setFareError] = useState<string | null>(null)
   const [addressNumber, setAddressNumber] = useState('')
+  const [addressComplement, setAddressComplement] = useState('')
+  const [addressReference, setAddressReference] = useState('')
   const [clientName, setClientName] = useState('')
   const [cashValue, setCashValue] = useState<string>('')
 
@@ -206,6 +208,12 @@ ${item.observation}`)
         builder.add(
           `Endereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
         )
+        builder.addConditional(addressComplement, () => {
+          builder.add(`Complemento: ${addressComplement}`)
+        })
+        builder.addConditional(addressReference, () => {
+          builder.add(`Ponto de referência: ${addressReference}`)
+        })
       } else {
         builder.add(`Endereço: (não informado por completo)`)
         builder.addConditional(!address, `- Faltando CEP`)
@@ -530,6 +538,36 @@ ${item.observation}`)
                         className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
                         value={addressNumber}
                         onChange={e => setAddressNumber(e.target.value)}
+                      />
+
+                      <label
+                        htmlFor="address-complement"
+                        className="mt-2 ml-1 leading-3 font-bold"
+                      >
+                        Complemento (opcional):
+                      </label>
+                      <input
+                        id="address-complement"
+                        type="text"
+                        placeholder="Ex: Apartamento 101, Bloco A"
+                        className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
+                        value={addressComplement}
+                        onChange={e => setAddressComplement(e.target.value)}
+                      />
+
+                      <label
+                        htmlFor="address-reference"
+                        className="mt-2 ml-1 leading-3 font-bold"
+                      >
+                        Ponto de referência (opcional):
+                      </label>
+                      <input
+                        id="address-reference"
+                        type="text"
+                        placeholder="Ex: Próximo à padaria"
+                        className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
+                        value={addressReference}
+                        onChange={e => setAddressReference(e.target.value)}
                       />
                     </div>
                   )
