@@ -34,5 +34,7 @@ export function formatCurrency(value: string | number): string {
 }
 
 export function parseCurrency(value: string): number {
-  return Number.parseFloat(value.replace(',', '.').replaceAll(/[^\d.-]/g, ''))
+  return Number.parseFloat(
+    value.replace(',', '.').replaceAll(/[^\d.-]/g, '') || '0'
+  )
 }

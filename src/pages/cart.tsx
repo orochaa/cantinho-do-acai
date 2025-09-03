@@ -630,23 +630,41 @@ ${item.observation}`)
                   <button
                     type="button"
                     className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
-                    onClick={() => setCashValue(formatCurrency(20))}
+                    onClick={() =>
+                      setCashValue(
+                        formatCurrency(
+                          parseCurrency(cashValue) +
+                            Math.max(totalOrder - parseCurrency(cashValue), 0)
+                        )
+                      )
+                    }
                   >
-                    {formatCurrency(20)}
+                    +
+                    {formatCurrency(
+                      Math.max(totalOrder - parseCurrency(cashValue), 0)
+                    )}
                   </button>
                   <button
                     type="button"
                     className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
-                    onClick={() => setCashValue(formatCurrency(50))}
+                    onClick={() =>
+                      setCashValue(
+                        formatCurrency(parseCurrency(cashValue) + 20)
+                      )
+                    }
                   >
-                    {formatCurrency(50)}
+                    +{formatCurrency(20)}
                   </button>
                   <button
                     type="button"
                     className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
-                    onClick={() => setCashValue(formatCurrency(100))}
+                    onClick={() =>
+                      setCashValue(
+                        formatCurrency(parseCurrency(cashValue) + 50)
+                      )
+                    }
                   >
-                    {formatCurrency(100)}
+                    +{formatCurrency(50)}
                   </button>
                 </div>
                 <input
