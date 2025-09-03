@@ -1,11 +1,11 @@
 import { Banner } from '@/components/banner'
 import { Description } from '@/components/description'
 import { OrderButton } from '@/components/order-button'
-import { OrderComplements } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
+import { SingleOptionSelector } from '@/components/single-option-selector'
 import { useCart } from '@/context/cart-provider'
-import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
+import { useSingleOption } from '@/hooks/use-single-option'
 import { useTotal } from '@/hooks/use-total'
 import { felicidadeCategory } from '@/lib/data/felicidade'
 import { formatCurrency } from '@/lib/format'
@@ -15,14 +15,11 @@ export function FelicidadePage(): React.JSX.Element {
 
   const { addCartEvent } = useCart()
 
-  const [size, addSizeEvent] = useComplements(
-    felicidadeCategory.size.map(item =>
-      item.price ? item : { ...item, count: 1 }
-    ),
-    1
+  const [size, selectSizeOption] = useSingleOption(
+    felicidadeCategory.size.map((item, i) => ({ ...item, isSelected: i === 0 }))
   )
 
-  const total = useTotal(copo.price, ...size.complements)
+  const total = useTotal(copo.price, size.options)
 
   return (
     <div>
@@ -49,8 +46,8 @@ export function FelicidadePage(): React.JSX.Element {
           </div>
         </div>
 
-        <OrderComplements
-          addComplementEvent={addSizeEvent}
+        <SingleOptionSelector
+          onSelectionChange={selectSizeOption}
           ctx={size}
           title="Tamanho:"
         />
@@ -63,7 +60,7 @@ export function FelicidadePage(): React.JSX.Element {
               type: 'ADD',
               item: {
                 product: copo,
-                complements: size.complements,
+                options: size.options,
                 count,
               },
             })

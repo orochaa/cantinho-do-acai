@@ -18,7 +18,7 @@ interface Product {
   people: number
 }
 
-interface Complement<TName extends string = string> {
+interface Option<TName extends string = string> {
   name: TName
   count: number
   price?: number

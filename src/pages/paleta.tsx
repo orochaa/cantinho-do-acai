@@ -1,8 +1,8 @@
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button'
-import { OrderComplements } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
-import { useComplements } from '@/hooks/use-complements'
+import { useMultipleOptions } from '@/hooks/use-multiple-options'
 import { useProduct } from '@/hooks/use-product'
 import { useTotal } from '@/hooks/use-total'
 import { paletaCategory } from '@/lib/data/paleta'
@@ -12,9 +12,12 @@ export function PaletaPage(): React.JSX.Element {
 
   const { addCartEvent } = useCart()
 
-  const [flavors, addFlavorEvent] = useComplements(paletaCategory.flavors, 20)
+  const [flavors, addFlavorEvent] = useMultipleOptions(
+    paletaCategory.flavors,
+    20
+  )
 
-  const total = useTotal(0, ...flavors.complements)
+  const total = useTotal(0, flavors.options)
 
   return (
     <>
@@ -24,8 +27,8 @@ export function PaletaPage(): React.JSX.Element {
         imgUrl={`https://cantinhodoacai.vercel.app${paleta.img}`}
       />
       <div className="flex flex-col gap-8">
-        <OrderComplements
-          addComplementEvent={addFlavorEvent}
+        <MultipleOptionsSelector
+          dispatchEvent={addFlavorEvent}
           ctx={flavors}
           title="Sabores:"
         />
@@ -43,7 +46,7 @@ export function PaletaPage(): React.JSX.Element {
             type: 'ADD',
             item: {
               product: { ...paleta, price: 0 },
-              complements: flavors.complements,
+              options: flavors.options,
               count,
             },
           })

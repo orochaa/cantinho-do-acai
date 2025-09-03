@@ -1,10 +1,12 @@
 import { Banner } from '@/components/banner'
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button'
-import { OrderComplements } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
+import { SingleOptionSelector } from '@/components/single-option-selector'
 import { useCart } from '@/context/cart-provider'
-import { useComplements } from '@/hooks/use-complements'
+import { useMultipleOptions } from '@/hooks/use-multiple-options'
 import { useProduct } from '@/hooks/use-product'
+import { useSingleOption } from '@/hooks/use-single-option'
 import { useTotal } from '@/hooks/use-total'
 import { acaiCategory } from '@/lib/data/acai'
 import { formatCurrency } from '@/lib/format'
@@ -14,22 +16,21 @@ export function AcaiPage(): React.JSX.Element {
 
   const { addCartEvent } = useCart()
 
-  const [type, addTypeEvent] = useComplements(
-    acai.type.map((name, i) => ({ name, count: i === 0 ? 1 : 0 })),
-    1
+  const [acaiTypes, selectAcaiType] = useSingleOption(
+    acai.type.map((name, i) => ({ name, isSelected: i === 0 }))
   )
 
-  const [complements, addComplementEvent] = useComplements(
+  const [complements, addComplementEvent] = useMultipleOptions(
     acai.complements.map(name => ({ name })),
     acai.complementsLimit
   )
 
-  const [extras, addExtraEvent] = useComplements(
+  const [extras, addExtraEvent] = useMultipleOptions(
     Object.entries(acai.extras).map(([name, price]) => ({ name, price })),
     acai.extrasLimit
   )
 
-  const total = useTotal(acai.price, ...extras.complements)
+  const total = useTotal(acai.price, extras.options)
 
   return (
     <div>
@@ -58,18 +59,18 @@ export function AcaiPage(): React.JSX.Element {
           </div>
         </div>
         <div className="flex flex-col gap-8">
-          <OrderComplements
-            addComplementEvent={addTypeEvent}
-            ctx={type}
+          <SingleOptionSelector
+            onSelectionChange={selectAcaiType}
+            ctx={acaiTypes}
             title="Tipo de Açaí:"
           />
-          <OrderComplements
-            addComplementEvent={addComplementEvent}
+          <MultipleOptionsSelector
+            dispatchEvent={addComplementEvent}
             ctx={complements}
             title="Acompanhamentos:"
           />
-          <OrderComplements
-            addComplementEvent={addExtraEvent}
+          <MultipleOptionsSelector
+            dispatchEvent={addExtraEvent}
             ctx={extras}
             title="Adicionais:"
           />
@@ -83,8 +84,8 @@ export function AcaiPage(): React.JSX.Element {
               type: 'ADD',
               item: {
                 product: acai,
-                complements: [type, complements, extras].flatMap(
-                  i => i.complements
+                options: [acaiTypes, complements, extras].flatMap(
+                  item => item.options
                 ),
                 count,
               },

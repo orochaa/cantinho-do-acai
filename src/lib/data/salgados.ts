@@ -3,7 +3,6 @@ import { slang } from '../format'
 export type Salgado = Product & {
   complementsLimit: number
   complements: string[]
-  saucesLimit: number
   sauces: string[]
 }
 
@@ -22,7 +21,6 @@ export const salgadosCategory: Category<Salgado> = {
       price: 20,
       quantity: 300,
       complementsLimit: 15,
-      saucesLimit: 1,
     },
     {
       img: '/img/salgados-medio.jpeg',
@@ -34,7 +32,6 @@ export const salgadosCategory: Category<Salgado> = {
       price: 28,
       quantity: 500,
       complementsLimit: 5,
-      saucesLimit: 2,
     },
   ].map(p => ({
     slang: slang(p.name),

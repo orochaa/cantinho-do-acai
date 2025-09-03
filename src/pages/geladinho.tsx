@@ -1,9 +1,9 @@
 import { Banner } from '@/components/banner'
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button'
-import { OrderComplements } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
 import { useCart } from '@/context/cart-provider'
-import { useComplements } from '@/hooks/use-complements'
+import { useMultipleOptions } from '@/hooks/use-multiple-options'
 import { useProduct } from '@/hooks/use-product'
 import { useTotal } from '@/hooks/use-total'
 import { geladinhoCategory } from '@/lib/data/geladinho'
@@ -13,12 +13,12 @@ export function GeladinhoPage(): React.JSX.Element {
 
   const { addCartEvent } = useCart()
 
-  const [flavors, addFlavorEvent] = useComplements(
+  const [flavors, addFlavorEvent] = useMultipleOptions(
     geladinhoCategory.flavors,
     20
   )
 
-  const total = useTotal(0, ...flavors.complements)
+  const total = useTotal(0, flavors.options)
 
   return (
     <div>
@@ -50,8 +50,8 @@ export function GeladinhoPage(): React.JSX.Element {
           </div>
         </div>
         <div className="flex flex-col gap-8">
-          <OrderComplements
-            addComplementEvent={addFlavorEvent}
+          <MultipleOptionsSelector
+            dispatchEvent={addFlavorEvent}
             ctx={flavors}
             title="Sabores:"
           />
@@ -69,7 +69,7 @@ export function GeladinhoPage(): React.JSX.Element {
               type: 'ADD',
               item: {
                 product: { ...geladinho, price: 0 },
-                complements: flavors.complements,
+                options: flavors.options,
                 count,
               },
             })

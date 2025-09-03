@@ -1,11 +1,11 @@
 import { Banner } from '@/components/banner'
 import { Container } from '@/components/container'
 import { OrderButton } from '@/components/order-button'
-import { OrderComplements } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
+import { SingleOptionSelector } from '@/components/single-option-selector'
 import { useCart } from '@/context/cart-provider'
-import { useComplements } from '@/hooks/use-complements'
 import { useProduct } from '@/hooks/use-product'
+import { useSingleOption } from '@/hooks/use-single-option'
 import { premiumCategory } from '@/lib/data/premium'
 import { formatCurrency } from '@/lib/format'
 import { useState } from 'react'
@@ -17,9 +17,8 @@ export function PremiumPage(): React.JSX.Element {
 
   const { addCartEvent } = useCart()
 
-  const [complement, addComplementEvent] = useComplements(
-    (copo.complements ?? []).map(c => ({ name: c })),
-    1
+  const [complements, selectComplement] = useSingleOption(
+    (copo.complements ?? []).map(c => ({ name: c }))
   )
 
   return (
@@ -51,10 +50,10 @@ export function PremiumPage(): React.JSX.Element {
 
         <div className="flex flex-col gap-8">
           {!!copo.complements && (
-            <OrderComplements
+            <SingleOptionSelector
               title="Fini"
-              ctx={complement}
-              addComplementEvent={addComplementEvent}
+              ctx={complements}
+              onSelectionChange={selectComplement}
             />
           )}
 
@@ -81,7 +80,7 @@ export function PremiumPage(): React.JSX.Element {
           totalPrice={copo.price}
           multiple
           validate={() => {
-            if (copo.complements?.length && complement.countTotal === 0) {
+            if (copo.complements?.length && !complements.isSelected) {
               return 'Escolha seu Fini'
             }
           }}
@@ -90,7 +89,7 @@ export function PremiumPage(): React.JSX.Element {
               type: 'ADD',
               item: {
                 product: copo,
-                complements: complement.complements,
+                options: complements.options,
                 count,
                 observation,
               },

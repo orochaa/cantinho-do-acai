@@ -1,13 +1,11 @@
 import { Button } from '@/components/button'
 import { Container } from '@/components/container'
-import {
-  MultiComponentsContainer,
-  OrderComplements,
-} from '@/components/order-complements'
+import { QuantitySelector } from '@/components/multiple-options-selector'
 import { Seo } from '@/components/seo'
+import { SingleOptionSelector } from '@/components/single-option-selector'
 import { useCart } from '@/context/cart-provider'
 import { useToast } from '@/context/toast-provider'
-import { isComplementSelected, useComplements } from '@/hooks/use-complements'
+import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option'
 import { getCepAddress } from '@/lib/brasil-api'
 import { formatCurrency, parseCurrency } from '@/lib/format'
 import {
@@ -30,6 +28,8 @@ interface CepAddress {
 }
 
 type PaymentMethod = 'PIX' | 'Cartão de Crédito' | 'Dinheiro'
+
+type SpoonOption = 'Não, obrigado' | 'Sim, por favor'
 
 type CheckoutOption = 'Retirada no local' | 'Entrega (com taxa de entrega)'
 
@@ -59,28 +59,26 @@ const createMessageBuilder = () => {
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart()
 
-  const [paymentMethod, addPaymentMethodEvent] = useComplements<PaymentMethod>(
-    [
-      { name: 'PIX', count: 1 },
-      { name: 'Cartão de Crédito' },
-      { name: 'Dinheiro' },
-    ],
-    1
-  )
+  const [paymentMethod, selectPaymentMethod] = useSingleOption<PaymentMethod>([
+    { name: 'PIX', isSelected: true },
+    { name: 'Cartão de Crédito' },
+    { name: 'Dinheiro' },
+  ])
 
-  const [spoons, addSpoonEvent] = useComplements(
-    [{ name: 'Não, obrigado', count: 1 }, { name: 'Sim, por favor' }],
-    1
+  const [spoonOption, selectSpoonOption] = useSingleOption<SpoonOption>([
+    { name: 'Não, obrigado', isSelected: true },
+    { name: 'Sim, por favor' },
+  ])
+  const [checkoutOption, selectCheckoutOption] =
+    useSingleOption<CheckoutOption>([
+      { name: 'Retirada no local', isSelected: true },
+      { name: 'Entrega (com taxa de entrega)' },
+    ])
+
+  const isDelivery = isOptionSelected(
+    checkoutOption.options,
+    'Entrega (com taxa de entrega)'
   )
-  const [checkoutOption, addCheckoutOptionEvent] =
-    useComplements<CheckoutOption>(
-      [
-        { name: 'Retirada no local', count: 1 },
-        { name: 'Entrega (com taxa de entrega)' },
-      ],
-      1
-    )
-  const isDelivery = checkoutOption.complements[1].count === 1
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
@@ -120,7 +118,7 @@ export function CartPage(): React.JSX.Element {
     const cash = parseCurrency(cashValue)
 
     if (
-      isComplementSelected(paymentMethod, 'Dinheiro') &&
+      isOptionSelected(paymentMethod.options, 'Dinheiro') &&
       !Number.isNaN(cash)
     ) {
       return cash - totalOrder
@@ -186,7 +184,7 @@ export function CartPage(): React.JSX.Element {
         `*${item.count} - ${item.product.name}* ${
           item.product.price ? `- ${formatCurrency(item.product.price)}` : ''
         }`,
-        ...item.complements.map(complement => {
+        ...item.options.map(complement => {
           return `- ${complement.count} - ${complement.name}${
             complement.price ? ` - ${formatCurrency(complement.price)}` : ''
           }`
@@ -234,17 +232,20 @@ ${item.observation}`)
     builder.add('')
     builder.add(`*Total:* ${formatCurrency(total)}`)
 
-    builder.addConditional(spoons.complements[1].count === 1, () => {
-      builder.add('')
-      builder.add('Incluir talheres, por favor.')
-    })
+    builder.addConditional(
+      isOptionSelected(spoonOption.options, 'Sim, por favor'),
+      () => {
+        builder.add('')
+        builder.add('Incluir talheres, por favor.')
+      }
+    )
 
     builder.add('')
     builder.add(
-      `*Forma de Pagamento:* ${paymentMethod.complements.find(c => !!c.count)?.name}`
+      `*Forma de Pagamento:* ${paymentMethod.options.find(option => option.isSelected)?.name}`
     )
     builder.addConditional(
-      isComplementSelected(paymentMethod, 'Dinheiro'),
+      isOptionSelected(paymentMethod.options, 'Dinheiro'),
       () => {
         builder.add(
           `Valor pago em dinheiro: ${formatCurrency(parseCurrency(cashValue))}`
@@ -265,11 +266,13 @@ ${item.observation}`)
     return url
   }, [
     isDelivery,
-    spoons.complements,
+    spoonOption,
     clientName,
     cart,
     address,
     addressNumber,
+    addressComplement,
+    addressReference,
     deliveryFare,
     paymentMethod,
     cashValue,
@@ -303,7 +306,7 @@ ${item.observation}`)
       }
     }
 
-    if (isComplementSelected(paymentMethod, 'Dinheiro')) {
+    if (isOptionSelected(paymentMethod.options, 'Dinheiro')) {
       const cash = parseCurrency(cashValue)
 
       if (Number.isNaN(cash) || cash < totalOrder) {
@@ -354,7 +357,7 @@ ${item.observation}`)
             </h2>
             <div className="flex flex-col gap-2">
               {cart.map(
-                ({ product, complements, observation, count, total }, i) => (
+                ({ product, options, observation, count, total }, i) => (
                   <div
                     // eslint-disable-next-line react/no-array-index-key
                     key={i}
@@ -366,8 +369,8 @@ ${item.observation}`)
                         {!!product.price &&
                           `- ${formatCurrency(product.price)}`}
                       </h3>
-                      <MultiComponentsContainer
-                        addComplementEvent={e => {
+                      <QuantitySelector
+                        onCountChange={e => {
                           switch (e.type) {
                             case 'ADD':
                               addCartEvent({
@@ -390,16 +393,11 @@ ${item.observation}`)
                                 })
                               }
                               break
-                            case 'SELECT':
                           }
                         }}
-                        complement={{ name: product.name, count }}
+                        item={{ name: product.name, count }}
                         ctx={{
                           countLimit: 15,
-                          complements: cart.map(item => ({
-                            name: item.product.name,
-                            count: item.count,
-                          })),
                           countTotal: cart.reduce(
                             (acc, item) => acc + item.count,
                             0
@@ -408,7 +406,7 @@ ${item.observation}`)
                       />
                     </div>
                     <ul className="flex flex-col gap-1">
-                      {complements.map(complement => (
+                      {options.map(complement => (
                         <li
                           key={complement.name}
                           className="flex items-center gap-1"
@@ -433,7 +431,7 @@ ${item.observation}`)
                         </p>
                       </div>
                     )}
-                    {complements.length > 0 && (
+                    {options.length > 0 && (
                       <p className="font-semibold">
                         Total: {formatCurrency(total)}
                       </p>
@@ -464,15 +462,15 @@ ${item.observation}`)
               </p>
             </div>
           </Container>
-          <OrderComplements
+          <SingleOptionSelector
             title="Precisa de talheres?"
-            ctx={spoons}
-            addComplementEvent={addSpoonEvent}
+            ctx={spoonOption}
+            onSelectionChange={selectSpoonOption}
           />
-          <OrderComplements
+          <SingleOptionSelector
             title="Opções de entrega"
             ctx={checkoutOption}
-            addComplementEvent={addCheckoutOptionEvent}
+            onSelectionChange={selectCheckoutOption}
           />
 
           {!!isDelivery && (
@@ -610,13 +608,13 @@ ${item.observation}`)
             </div>
           )}
 
-          <OrderComplements
+          <SingleOptionSelector
             title="Forma de pagamento"
             ctx={paymentMethod}
-            addComplementEvent={addPaymentMethodEvent}
+            onSelectionChange={selectPaymentMethod}
           />
 
-          {isComplementSelected(paymentMethod, 'Dinheiro') && (
+          {isOptionSelected(paymentMethod.options, 'Dinheiro') && (
             <Container>
               <h2 className="ml-1 text-xl font-bold text-white">
                 Pagamento em dinheiro

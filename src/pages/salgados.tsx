@@ -1,10 +1,12 @@
 import { Banner } from '@/components/banner'
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button'
-import { OrderComplements } from '@/components/order-complements'
 import { Seo } from '@/components/seo'
+import { SingleOptionSelector } from '@/components/single-option-selector'
 import { useCart } from '@/context/cart-provider'
-import { useComplements } from '@/hooks/use-complements'
+import { useMultipleOptions } from '@/hooks/use-multiple-options'
 import { useProduct } from '@/hooks/use-product'
+import { useSingleOption } from '@/hooks/use-single-option'
 import { salgadosCategory } from '@/lib/data/salgados'
 import { formatCurrency } from '@/lib/format'
 
@@ -13,14 +15,13 @@ export function SalgadosPage(): React.JSX.Element {
 
   const { addCartEvent } = useCart()
 
-  const [complements, addComplementEvent] = useComplements(
+  const [complements, addComplementEvent] = useMultipleOptions(
     salgado.complements.map(name => ({ name })),
     salgado.complementsLimit
   )
 
-  const [sauces, addSauceEvent] = useComplements(
-    salgado.sauces.map(name => ({ name })),
-    salgado.saucesLimit
+  const [sauces, addSauceEvent] = useSingleOption(
+    salgado.sauces.map(name => ({ name }))
   )
 
   return (
@@ -52,13 +53,13 @@ export function SalgadosPage(): React.JSX.Element {
           </div>
         </div>
         <div className="flex flex-col gap-8">
-          <OrderComplements
-            addComplementEvent={addComplementEvent}
+          <MultipleOptionsSelector
+            dispatchEvent={addComplementEvent}
             ctx={complements}
             title="Salgados:"
           />
-          <OrderComplements
-            addComplementEvent={addSauceEvent}
+          <SingleOptionSelector
+            onSelectionChange={addSauceEvent}
             ctx={sauces}
             title="Molhos:"
           />
@@ -72,7 +73,7 @@ export function SalgadosPage(): React.JSX.Element {
               return 'Favor escolher salgados'
             }
 
-            if (sauces.countTotal === 0) {
+            if (!sauces.isSelected) {
               return 'Favor escolher molho'
             }
           }}
@@ -81,7 +82,7 @@ export function SalgadosPage(): React.JSX.Element {
               type: 'ADD',
               item: {
                 product: salgado,
-                complements: [complements, sauces].flatMap(i => i.complements),
+                options: [complements, sauces].flatMap(item => item.options),
                 count,
               },
             })

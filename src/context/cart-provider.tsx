@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 
 interface CartItem {
   product: Product
-  complements: Complement[]
+  options: Option[]
   count: number
   observation?: string
   total: number
@@ -39,16 +39,16 @@ function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
   return exhaustive(event, 'type', {
     ADD: ({ item }) => {
       let total = item.product.price
-      const complements: Complement[] = []
+      const options: Option[] = []
 
-      for (const complement of item.complements) {
-        if (complement.count > 0) {
-          complements.push(complement)
-          total += (complement.price ?? 0) * complement.count
+      for (const option of item.options) {
+        if (option.count > 0) {
+          options.push(option)
+          total += (option.price ?? 0) * option.count
         }
       }
 
-      return [...state, { ...item, complements, total: total * item.count }]
+      return [...state, { ...item, options, total: total * item.count }]
     },
     REMOVE: ({ index }) => state.filter((_, i) => i !== index),
     'UPDATE-QUANTITY': ({ index, count }) => {
@@ -56,8 +56,8 @@ function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
       const item = updatedCart[index]
       let total = item.product.price
 
-      for (const complement of item.complements) {
-        total += (complement.price ?? 0) * complement.count
+      for (const option of item.options) {
+        total += (option.price ?? 0) * option.count
       }
 
       updatedCart[index] = { ...item, count, total: total * count }

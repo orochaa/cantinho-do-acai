@@ -1,19 +1,16 @@
 import { useMemo } from 'react'
 
-export function useTotal(
-  initialPrice: number,
-  ...complements: Complement[]
-): number {
+export function useTotal(initialPrice: number, options: Option[]): number {
   return useMemo(() => {
     let result = initialPrice
 
-    for (const complement of complements) {
-      if (!complement.price || !complement.count) {
+    for (const option of options) {
+      if (!option.price || !option.count) {
         continue
       }
-      result += complement.price * complement.count
+      result += option.price * option.count
     }
 
     return result
-  }, [complements, initialPrice])
+  }, [options, initialPrice])
 }
