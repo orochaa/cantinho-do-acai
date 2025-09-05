@@ -1,4 +1,5 @@
 import { DesktopNav } from '@/components/desktop-nav'
+import { MobileNav } from '@/components/mobile-nav'
 import { ScrollToTopButton } from '@/components/scroll-to-top-button'
 import { Seo } from '@/components/seo'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
@@ -39,7 +40,11 @@ export function HomePage(): React.JSX.Element {
         </p>
 
         <div className="relative">
-          {!!isDesktop && <DesktopNav activeId={activeId} />}
+          {isDesktop ? (
+            <DesktopNav activeId={activeId} />
+          ) : (
+            <MobileNav activeId={activeId} />
+          )}
 
           <main className="flex w-full flex-col gap-10">
             {categoriesList.map((category, index) => (
