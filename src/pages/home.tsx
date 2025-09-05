@@ -1,4 +1,5 @@
 import { DesktopNav } from '@/components/desktop-nav'
+import { ScrollToTopButton } from '@/components/scroll-to-top-button'
 import { Seo } from '@/components/seo'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { DESKTOP_BREAKPOINT, useWindowSize } from '@/hooks/use-window-size'
@@ -102,6 +103,8 @@ export function HomePage(): React.JSX.Element {
             ))}
           </main>
         </div>
+
+        <ScrollToTopButton className="sticky right-4 bottom-4 ml-auto" />
       </div>
     </>
   )
