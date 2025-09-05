@@ -9,8 +9,8 @@ export const geladinhoCategory: Category<
     {
       img: '/img/Geladinho de Morango com Nutella.jpg',
       name: 'Geladinho Gourmet',
-      fullPrice: 7,
-      price: 5,
+      fullPrice: 8,
+      price: 6,
       people: 1,
       quantity: 70,
       slang: 'geladinho-gourmet',
