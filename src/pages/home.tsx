@@ -1,9 +1,25 @@
+import { DesktopNav } from '@/components/desktop-nav'
 import { Seo } from '@/components/seo'
-import { categories } from '@/lib/data/categories'
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
+import { DESKTOP_BREAKPOINT, useWindowSize } from '@/hooks/use-window-size'
+import { categoriesList } from '@/lib/data/categories'
 import { formatCurrency, slang } from '@/lib/format'
+import { createRef, useMemo } from 'react'
 import { Link } from 'react-router'
 
 export function HomePage(): React.JSX.Element {
+  const { width } = useWindowSize()
+  const isDesktop = width >= DESKTOP_BREAKPOINT
+
+  const sectionRefs = useMemo(
+    () => categoriesList.map(() => createRef<HTMLHeadingElement>()),
+    []
+  )
+
+  const activeId = useIntersectionObserver(sectionRefs, {
+    rootMargin: '-20% 0px -80% 0px',
+  })
+
   return (
     <>
       <Seo
@@ -20,19 +36,26 @@ export function HomePage(): React.JSX.Element {
         <p className="mb-8 text-center text-lg text-white/90">
           Clique em um produto para começar a montar o seu pedido.
         </p>
-        <div className="mx-auto flex w-full flex-col gap-10">
-          {Object.entries(categories).map(
-            ([name, { path, products, description }]) => (
-              <div key={name}>
-                <h1 className="font-raleway mb-2 border-b-2 border-amber-600 p-1 text-2xl text-white/90">
-                  {name}
+
+        <div className="relative">
+          {!!isDesktop && <DesktopNav activeId={activeId} />}
+
+          <main className="flex w-full flex-col gap-10">
+            {categoriesList.map((category, index) => (
+              <div key={category.slang}>
+                <h1
+                  id={category.slang}
+                  ref={sectionRefs[index]}
+                  className="font-raleway scroll-mt-24 border-b-2 border-amber-600 p-1 text-2xl text-white/90"
+                >
+                  {category.name}
                 </h1>
-                <p className="mb-4 text-white/80">{description}</p>
+                <p className="mb-4 text-white/80">{category.description}</p>
                 <div className="gap grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {products.map(product => (
+                  {category.products.map(product => (
                     <Link
                       key={slang(product.name)}
-                      to={`${path}/${product.slang}`}
+                      to={`${category.slang}/${product.slang}`}
                       className="h-[350px] rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
                       title={`Selecionar ${product.name}`}
                     >
@@ -76,8 +99,8 @@ export function HomePage(): React.JSX.Element {
                   ))}
                 </div>
               </div>
-            )
-          )}
+            ))}
+          </main>
         </div>
       </div>
     </>
