@@ -2,7 +2,7 @@ type Category<
   TProduct extends Product = Product,
   TExtras extends Record<string, unknown> = {},
 > = {
-  path: string
+  slang: string
   products: TProduct[]
   description: string
 } & TExtras

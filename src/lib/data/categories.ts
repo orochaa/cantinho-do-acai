@@ -1,4 +1,5 @@
 import { bebidaCategory } from '@/lib/data/bebida'
+import { entries } from 'remeda'
 import { acaiCategory } from './acai'
 import { felicidadeCategory } from './felicidade'
 // import { geladinhoCategory } from './geladinho'
@@ -15,3 +16,8 @@ export const categories = {
   Salgados: salgadosCategory,
   Bebidas: bebidaCategory,
 } satisfies Record<string, Category>
+
+export const categoriesList = entries(categories).map(([name, data]) => ({
+  name,
+  ...data,
+}))

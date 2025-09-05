@@ -2,7 +2,7 @@ export const geladinhoCategory: Category<
   Product,
   { flavors: { name: string; price: number }[] }
 > = {
-  path: 'geladinho',
+  slang: 'geladinho',
   description:
     'Geladinhos gourmet, feitos com ingredientes selecionados e nos sabores mais pedidos. Uma explosão de sabor e refrescância a cada mordida.',
   products: [

@@ -7,7 +7,7 @@ export type Salgado = Product & {
 }
 
 export const salgadosCategory: Category<Salgado> = {
-  path: 'salgados',
+  slang: 'salgados',
   description:
     'Deliciosos salgados para matar a sua fome. Escolha o seu kit e se delicie.',
   products: [

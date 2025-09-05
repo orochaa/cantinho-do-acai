@@ -2,7 +2,7 @@ export const bebidaCategory: Category<
   Product,
   { flavors: { name: string; price: number }[] }
 > = {
-  path: 'bebidas',
+  slang: 'bebidas',
   description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa.',
   products: [
     {
