@@ -19,9 +19,9 @@ export const geladinhoCategory: Category<
     },
   ],
   flavors: [
-    { name: 'Morango com Nutella', price: 5 },
-    { name: 'Ninho com Nutella', price: 5 },
-    { name: 'Paçoca', price: 5 },
-    { name: 'Oreo', price: 5 },
+    { name: 'Morango com Nutella', price: 6 },
+    { name: 'Ninho com Nutella', price: 6 },
+    { name: 'Paçoca', price: 6 },
+    { name: 'Oreo', price: 6 },
   ],
 }
