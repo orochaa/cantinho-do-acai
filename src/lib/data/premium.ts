@@ -11,7 +11,7 @@ export const premiumCategory: Category<Premium> = {
   products: [
     {
       img: '/img/finifest.avif',
-      name: 'Fini fest',
+      name: 'Fini Fest',
       description: `Para quem ama o sabor das balas Fini, preparamos uma versão incrível em copo! Cada copo acompanha:
 
 Açaí
@@ -24,7 +24,45 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       fullPrice: 25,
       price: 20,
       quantity: 440,
-      complements: ['Fini banana', 'Fini dentadura', 'Fini beijinho'],
+      complements: ['Fini banana'],
+    },
+    {
+      img: '/img/raffaello.jpg',
+      name: 'Raffaello',
+      description: `Uma combinação leve, deliciosa e sofisticada, perfeita para quem ama a mistura do doce com o frescor da fruta.
+      
+      Açaí
+      Creme de Beijinho
+      Leite em pó
+      Leite condensado
+      Morango
+      Bombom raffaello
+      Coco ralado
+      
+      Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremosidade e o sabor delicioso dessa combinação única!`,
+      people: 1,
+      fullPrice: 38,
+      price: 27,
+      quantity: 440,
+    },
+    {
+      img: '/img/ferrero.jpg',
+      name: 'Ferrero Rocher',
+      description: `Perfeito para quem ama sobremesas intensas, cremosas e cheias de textura.
+      
+      Açaí
+      Ferrero Rocher
+      Creme de avelã
+      Amendoim
+      Chantilly
+      Leite em pó
+      Leite condensado
+      
+      Experimente e se apaixone pelo sabor mais chique do nosso cardápio!`,
+      people: 1,
+      fullPrice: 38,
+      price: 27,
+      quantity: 440,
     },
     {
       img: '/img/galagresco.avif',
