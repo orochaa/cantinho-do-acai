@@ -42,7 +42,7 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremosidade e o sabor delicioso dessa combinação única!`,
       people: 1,
       fullPrice: 38,
-      price: 27,
+      price: 30,
       quantity: 440,
     },
     {
@@ -61,7 +61,25 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       Experimente e se apaixone pelo sabor mais chique do nosso cardápio!`,
       people: 1,
       fullPrice: 38,
-      price: 27,
+      price: 30,
+      quantity: 440,
+    },
+    {
+      img: '/img/kinder-ninho.avif',
+      name: 'Kinder Ninho',
+      description: `Delicie-se com o nosso copo exclusivo recheado de sabores irresistíveis. Feito especialmente para os apaixonados por chocolate, ele traz:
+
+Açaí
+Pedaços generosos de Kinder Bueno
+Creme de Ninho
+Leite condensado
+Leite em pó
+Creme de avelã
+Chantilly de chocolate
+Uma combinação perfeita que derrete na boca e transforma cada colherada em um momento único. Experimente e surpreenda-se!`,
+      people: 1,
+      fullPrice: 38,
+      price: 30,
       quantity: 440,
     },
     {
@@ -98,24 +116,6 @@ Camadas deliciosas que tornam cada colherada uma verdadeira explosão de sabor. 
       people: 1,
       fullPrice: 25,
       price: 23.5,
-      quantity: 440,
-    },
-    {
-      img: '/img/kinder-ninho.avif',
-      name: 'Kinder Ninho',
-      description: `Delicie-se com o nosso copo exclusivo recheado de sabores irresistíveis. Feito especialmente para os apaixonados por chocolate, ele traz:
-
-Açaí
-Pedaços generosos de Kinder Bueno
-Creme de Ninho
-Leite condensado
-Leite em pó
-Creme de avelã
-Chantilly de chocolate
-Uma combinação perfeita que derrete na boca e transforma cada colherada em um momento único. Experimente e surpreenda-se!`,
-      people: 1,
-      fullPrice: 38,
-      price: 27,
       quantity: 440,
     },
     {
