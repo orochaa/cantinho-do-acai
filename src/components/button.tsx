@@ -13,8 +13,7 @@ const buttonStyles = tv({
 })
 
 export interface ButtonProps
-  extends VariantProps<typeof buttonStyles>,
-    ComponentProps<'button'> {}
+  extends VariantProps<typeof buttonStyles>, ComponentProps<'button'> {}
 
 export function Button(props: ButtonProps): React.JSX.Element {
   return (
