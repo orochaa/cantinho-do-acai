@@ -6,7 +6,7 @@ export const bebidaCategory: Category<
   description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa.',
   products: [
     {
-      img: '/img/bebidas.png',
+      img: '/img/bebidas/bebidas.png',
       name: 'Refrigerantes',
       fullPrice: 10,
       price: 10,

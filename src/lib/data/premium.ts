@@ -10,7 +10,7 @@ export const premiumCategory: Category<Premium> = {
     'Nossos copos premium são criações exclusivas, com ingredientes selecionados e combinações que vão além do comum.',
   products: [
     {
-      img: '/img/tentacao.avif',
+      img: '/img/premium/tentacao.avif',
       name: 'Tentação',
       description: `Descubra o sabor único do nosso copo Sensação, uma experiência irresistível para os amantes de açaí! Combinação perfeita de:
 
@@ -29,7 +29,7 @@ Camadas deliciosas que tornam cada colherada uma verdadeira explosão de sabor. 
       quantity: 440,
     },
     {
-      img: '/img/finifest.avif',
+      img: '/img/premium/finifest.avif',
       name: 'Fini Fest',
       description: `Para quem ama o sabor das balas Fini, preparamos uma versão incrível em copo! Cada copo acompanha:
 
@@ -47,7 +47,7 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       disabled: true,
     },
     {
-      img: '/img/ferrero.jpg',
+      img: '/img/premium/ferrero.jpg',
       name: 'Ferrero Rocher',
       description: `Perfeito para quem ama sobremesas intensas, cremosas e cheias de textura.
       
@@ -66,7 +66,7 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       quantity: 440,
     },
     {
-      img: '/img/raffaello.jpg',
+      img: '/img/premium/raffaello.jpg',
       name: 'Raffaello',
       description: `Uma combinação leve, deliciosa e sofisticada, perfeita para quem ama a mistura do doce com o frescor da fruta.
       
@@ -85,7 +85,7 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       quantity: 440,
     },
     {
-      img: '/img/galagresco.avif',
+      img: '/img/premium/galagresco.avif',
       name: 'Galagresco',
       description: `Uma combinação perfeita para quem ama o sabor único do Negresco com o toque suave do chocolate branco! No nosso copo, você vai encontrar:
 
@@ -102,7 +102,7 @@ Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremo
       quantity: 440,
     },
     {
-      img: '/img/kinder-ninho.avif',
+      img: '/img/premium/kinder-ninho.avif',
       name: 'Kinder Ninho',
       description: `Delicie-se com o nosso copo exclusivo recheado de sabores irresistíveis. Feito especialmente para os apaixonados por chocolate, ele traz:
 
@@ -120,7 +120,7 @@ Uma combinação perfeita que derrete na boca e transforma cada colherada em um 
       quantity: 440,
     },
     {
-      img: '/img/maramor.jpg',
+      img: '/img/premium/maramor.jpg',
       name: 'Maramor',
       description: `Experimente a combinação perfeita de cremosidade e frescor com o nosso copo de maracujá! Ele traz:
 

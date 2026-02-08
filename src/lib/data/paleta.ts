@@ -9,7 +9,7 @@ export const paletaCategory: Category<
     'Paletas italianas, saborosas e refrescantes, perfeitas para qualquer ocasião.',
   products: [
     {
-      img: '/img/paleta.jpg',
+      img: '/img/paleta/paleta.jpg',
       name: 'Paleta Italiana',
       fullPrice: 12,
       price: 10,

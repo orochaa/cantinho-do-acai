@@ -12,7 +12,7 @@ export const salgadosCategory: Category<Salgado> = {
     'Deliciosos salgados para matar a sua fome. Escolha o seu kit e se delicie.',
   products: [
     {
-      img: '/img/salgados-pequeno.jpeg',
+      img: '/img/salgados/salgados-pequeno.jpeg',
       name: 'Kit Salgados Pequeno + Mini Coca',
       description:
         'Um kit de salgados com 15 unidades, com molho e uma mini Coca (caçulinha)',
@@ -23,7 +23,7 @@ export const salgadosCategory: Category<Salgado> = {
       complementsLimit: 15,
     },
     {
-      img: '/img/salgados-medio.jpeg',
+      img: '/img/salgados/salgados-medio.jpeg',
       name: 'Kit Salgados Médio',
       description:
         'Um kit de salgados com 25 unidades, mais um ou dois molhos complementares.',

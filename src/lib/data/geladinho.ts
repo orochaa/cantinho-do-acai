@@ -1,13 +1,13 @@
 export const geladinhoCategory: Category<
   Product,
-  { flavors: { name: string; price: number }[] }
+  { flavors: { name: string; price: number; img: string }[] }
 > = {
   slang: 'geladinho',
   description:
     'Geladinhos gourmet, feitos com ingredientes selecionados e nos sabores mais pedidos. Uma explosão de sabor e refrescância a cada mordida.',
   products: [
     {
-      img: '/img/Geladinho de Morango com Nutella.jpg',
+      img: '/img/geladinho/Geladinho de Morango com Nutella.jpg',
       name: 'Geladinho Gourmet',
       fullPrice: 8,
       price: 6,

@@ -16,7 +16,7 @@ export const acaiCategory: Category<Acai> = {
     'O melhor açaí da região, com ingredientes frescos e de qualidade. Monte o seu açaí do seu jeito, com diversos acompanhamentos e cremes.',
   products: [
     {
-      img: '/img/barca.jfif',
+      img: '/img/acai/barca.jfif',
       name: 'Barca de Açaí',
       people: 4,
       fullPrice: 65,
@@ -27,7 +27,7 @@ export const acaiCategory: Category<Acai> = {
       extras: ACAI_EXTRA_GROUP['Copo Grande'],
     },
     {
-      img: '/img/kit-para-familia.jpeg',
+      img: '/img/acai/kit-para-familia.jpeg',
       name: 'Kit para Família',
       people: 4,
       fullPrice: 52,
@@ -38,7 +38,7 @@ export const acaiCategory: Category<Acai> = {
       extras: ACAI_EXTRA_GROUP['Copo Grande'],
     },
     {
-      img: '/img/marmitex-turbinada.avif',
+      img: '/img/acai/marmitex-turbinada.avif',
       name: 'Marmitex Turbinada',
       people: 3,
       fullPrice: 50,
@@ -49,7 +49,7 @@ export const acaiCategory: Category<Acai> = {
       extras: ACAI_EXTRA_GROUP['Marmita Turbinada'],
     },
     {
-      img: '/img/marmitex.avif',
+      img: '/img/acai/marmitex.avif',
       name: 'Marmitex do Cantinho',
       people: 3,
       fullPrice: 35,
@@ -60,7 +60,7 @@ export const acaiCategory: Category<Acai> = {
       extras: ACAI_EXTRA_GROUP['Copo Grande'],
     },
     {
-      img: '/img/copo-grande.avif',
+      img: '/img/acai/copo-grande.avif',
       name: 'Copo de Açaí Grande',
       people: 1,
       fullPrice: 35,
@@ -71,7 +71,7 @@ export const acaiCategory: Category<Acai> = {
       extras: ACAI_EXTRA_GROUP['Copo Grande'],
     },
     {
-      img: '/img/copo-medio.jpeg',
+      img: '/img/acai/copo-medio.jpeg',
       name: 'Copo de Açaí Médio',
       people: 1,
       fullPrice: 23,
@@ -82,7 +82,7 @@ export const acaiCategory: Category<Acai> = {
       extras: ACAI_EXTRA_GROUP['Copo Médio/Pequeno'],
     },
     {
-      img: '/img/copo-pequeno.jpeg',
+      img: '/img/acai/copo-pequeno.jpeg',
       name: 'Copo de Açaí Pequeno',
       people: 1,
       fullPrice: 14,
