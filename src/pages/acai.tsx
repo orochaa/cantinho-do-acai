@@ -17,16 +17,16 @@ export function AcaiPage(): React.JSX.Element {
   const { addCartEvent } = useCart()
 
   const [acaiTypes, selectAcaiType] = useSingleOption(
-    acai.type.map((name, i) => ({ name, isSelected: i === 0 }))
+    acai.type.map((type, i) => ({ ...type, isSelected: i === 0 }))
   )
 
   const [complements, addComplementEvent] = useMultipleOptions(
-    acai.complements.map(name => ({ name })),
+    acai.complements,
     acai.complementsLimit
   )
 
   const [extras, addExtraEvent] = useMultipleOptions(
-    Object.entries(acai.extras).map(([name, price]) => ({ name, price })),
+    acai.extras,
     acai.extrasLimit
   )
 

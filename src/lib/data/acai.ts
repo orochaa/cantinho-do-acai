@@ -1,13 +1,17 @@
-import { ACAI_EXTRA_GROUP } from '@/lib/data/extras'
-import type { AcaiExtra } from '@/lib/data/extras'
+import { acaiComplements } from '@/lib/data/acai-complements'
+import type { AcaiComplement } from '@/lib/data/acai-complements'
+import type { AcaiExtra } from '@/lib/data/acai-extra'
+import { acaiExtraGroup } from '@/lib/data/acai-extra-group'
+import { acaiType } from '@/lib/data/acai-type'
+import { entries } from 'remeda'
 import { slang } from '../format'
 
 export type Acai = Product & {
-  type: string[]
+  type: { name: string; img: string }[]
   complementsLimit: number
-  complements: string[]
+  complements: { name: AcaiComplement; img: string }[]
+  extras: { name: AcaiExtra; price: number; img: string }[]
   extrasLimit: number
-  extras: Record<AcaiExtra, number>
 }
 
 export const acaiCategory: Category<Acai> = {
@@ -24,7 +28,7 @@ export const acaiCategory: Category<Acai> = {
       quantity: 1000,
       complementsLimit: 7,
       extrasLimit: 10,
-      extras: ACAI_EXTRA_GROUP['Copo Grande'],
+      extras: acaiExtraGroup['Copo Grande'],
     },
     {
       img: '/img/acai/kit-para-familia.jpeg',
@@ -35,7 +39,7 @@ export const acaiCategory: Category<Acai> = {
       quantity: 900,
       complementsLimit: 7,
       extrasLimit: 15,
-      extras: ACAI_EXTRA_GROUP['Copo Grande'],
+      extras: acaiExtraGroup['Copo Grande'],
     },
     {
       img: '/img/acai/marmitex-turbinada.avif',
@@ -46,7 +50,7 @@ export const acaiCategory: Category<Acai> = {
       quantity: 800,
       complementsLimit: 5,
       extrasLimit: 15,
-      extras: ACAI_EXTRA_GROUP['Marmita Turbinada'],
+      extras: acaiExtraGroup['Marmita Turbinada'],
     },
     {
       img: '/img/acai/marmitex.avif',
@@ -57,7 +61,7 @@ export const acaiCategory: Category<Acai> = {
       quantity: 800,
       complementsLimit: 5,
       extrasLimit: 15,
-      extras: ACAI_EXTRA_GROUP['Copo Grande'],
+      extras: acaiExtraGroup['Copo Grande'],
     },
     {
       img: '/img/acai/copo-grande.avif',
@@ -68,7 +72,7 @@ export const acaiCategory: Category<Acai> = {
       quantity: 770,
       complementsLimit: 5,
       extrasLimit: 10,
-      extras: ACAI_EXTRA_GROUP['Copo Grande'],
+      extras: acaiExtraGroup['Copo Grande'],
     },
     {
       img: '/img/acai/copo-medio.jpeg',
@@ -79,7 +83,7 @@ export const acaiCategory: Category<Acai> = {
       quantity: 440,
       complementsLimit: 3,
       extrasLimit: 10,
-      extras: ACAI_EXTRA_GROUP['Copo Médio/Pequeno'],
+      extras: acaiExtraGroup['Copo Médio/Pequeno'],
     },
     {
       img: '/img/acai/copo-pequeno.jpeg',
@@ -90,25 +94,15 @@ export const acaiCategory: Category<Acai> = {
       quantity: 250,
       complementsLimit: 3,
       extrasLimit: 5,
-      extras: ACAI_EXTRA_GROUP['Copo Médio/Pequeno'],
+      extras: acaiExtraGroup['Copo Médio/Pequeno'],
     },
   ].map(p => ({
+    ...p,
     slang: slang(p.name),
-    type: ['Açaí Tradicional', 'Açaí com Sorvete de Ninho'],
+    type: acaiType,
     description:
       'Monte o seu copo de açaí! Escolha entre nossos deliciosos complementos para criar o seu próprio refresco personalizado.',
-    complements: [
-      'Banana',
-      'Morango',
-      'Manga',
-      'Leite Condensado',
-      'Leite Ninho',
-      'Granola',
-      'Paçoca',
-      'Ovomaltine',
-      'Chocoball',
-      'Sucrilhos',
-    ],
-    ...p,
+    complements: acaiComplements,
+    extras: entries(p.extras).map(([name, data]) => ({ ...data, name })),
   })),
 }

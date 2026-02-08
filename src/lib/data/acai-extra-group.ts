@@ -1,46 +1,23 @@
-export type AcaiExtra =
-  | 'KitKat'
-  | 'Bis'
-  | 'Amor Carioca'
-  | 'Batom'
-  | 'Bala de Goma'
-  | 'Diamante Negro'
-  | 'Laka'
-  | 'Charge'
-  | '5 Star'
-  | 'Stikadinho'
-  | "M&M's"
-  | "Bib's"
-  | 'Kiwi'
-  | 'Creme de Ninho'
-  | 'Creme de Chocolate Branco'
-  | 'Creme de Avelã'
-  | 'Creme de Oreo'
-  | 'Creme de Morango'
-  | 'Creme de Ovomaltine'
-  | 'Creme de Kit Kat'
-  | 'Creme de Pistache'
-  | 'Creme de Beijinho'
-  | 'Creme de Bombom'
-  | 'Creme Meio Amargo'
-  | 'Creme de Cappuccino'
-  | 'Creme de Doce de Leite'
-  | 'Calda de Chocolate'
-  | 'Calda de Morango'
+import { ACAI_EXTRA } from '@/lib/data/acai-extra'
+import type { AcaiExtra } from '@/lib/data/acai-extra'
+import { entries, fromEntries } from 'remeda'
 
-export const ACAI_EXTRA_GROUP = {
+export type AcaiExtraGroup = keyof typeof ACAI_EXTRA_GROUP
+
+const ACAI_EXTRA_GROUP = {
   'Marmita Turbinada': {
     Kiwi: 4,
     KitKat: 7,
     Bis: 5,
     'Amor Carioca': 6,
-    Batom: 6,
+    'Chocolate Preto': 6,
     'Bala de Goma': 5,
     'Diamante Negro': 6,
     Laka: 6,
     Charge: 5,
     '5 Star': 8,
     Stikadinho: 8,
+    Marshmallow: 6,
     'Creme de Chocolate Branco': 11,
     'Creme de Avelã': 11,
     'Creme de Oreo': 11,
@@ -67,12 +44,13 @@ export const ACAI_EXTRA_GROUP = {
     'Diamante Negro': 3,
     "Bib's": 4,
     "M&M's": 3,
-    Batom: 3,
+    'Chocolate Preto': 3,
     Bis: 3,
     Charge: 4,
     KitKat: 3.5,
     Laka: 3,
     Stikadinho: 3,
+    Marshmallow: 3,
     'Creme de Avelã': 5.5,
     'Creme de Beijinho': 5.5,
     'Creme de Bombom': 5.5,
@@ -97,12 +75,13 @@ export const ACAI_EXTRA_GROUP = {
     'Diamante Negro': 2,
     "Bib's": 3,
     "M&M's": 2,
-    Batom: 2,
+    'Chocolate Preto': 2,
     Bis: 2,
     Charge: 3,
     KitKat: 2.5,
     Laka: 2,
     Stikadinho: 2,
+    Marshmallow: 3,
     'Creme de Avelã': 4.5,
     'Creme de Beijinho': 4.5,
     'Creme de Bombom': 4.5,
@@ -120,3 +99,15 @@ export const ACAI_EXTRA_GROUP = {
     'Calda de Morango': 2,
   },
 } satisfies Record<string, Record<AcaiExtra, number>>
+
+export const acaiExtraGroup = fromEntries(
+  entries(ACAI_EXTRA_GROUP).map(([name, group]) => [
+    name,
+    fromEntries(
+      entries(group).map(([extra, price]) => [
+        extra,
+        { ...ACAI_EXTRA[extra], price },
+      ])
+    ),
+  ])
+) as Record<AcaiExtraGroup, Record<AcaiExtra, { price: number; img: string }>>

@@ -25,32 +25,47 @@ export function SingleOptionSelector<TName extends string>(
         <p className="text-sm">Escolha uma opção</p>
       </div>
 
-      {ctx.options.map(option => (
-        <div
-          key={option.name}
-          className="flex rounded-sm bg-zinc-100 active:bg-zinc-200"
-        >
-          <button
-            type="button"
-            className="flex h-[3.5rem] grow flex-col justify-center p-3 md:flex-row md:items-center md:justify-between"
-            onClick={() => onSelectionChange(option)}
+      <div className="grid auto-rows-[1fr] grid-cols-1 gap-2">
+        {ctx.options.map(option => (
+          <div
+            key={option.name}
+            className="flex items-center rounded-sm bg-zinc-100 active:bg-zinc-200"
           >
-            <p className="text-left text-base md:text-lg">{option.name}</p>
-            {!!option.price && (
-              <span className="text-left text-[0.8rem] tracking-tight md:text-base">
-                + {formatCurrency(option.price)}
-              </span>
-            )}
-          </button>
+            <button
+              type="button"
+              className="flex grow items-center gap-2 p-3"
+              onClick={() => onSelectionChange(option)}
+            >
+              {!!option.img && (
+                <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
+                  <img
+                    className="min-h-11 min-w-11 object-center"
+                    src={option.img}
+                    alt={option.name}
+                  />
+                </div>
+              )}
+              <div className="flex flex-col text-left">
+                <p className="line-clamp-2 text-base font-medium text-ellipsis md:text-lg">
+                  {option.name}
+                </p>
+                {!!option.price && (
+                  <span className="text-sm font-light tracking-tight whitespace-nowrap md:text-base">
+                    {formatCurrency(option.price)}
+                  </span>
+                )}
+              </div>
+            </button>
 
-          <div className="h-[3.5rem]">
-            <ToggleOptionButton
-              onSelectionChange={onSelectionChange}
-              option={option}
-            />
+            <div className="h-14">
+              <ToggleOptionButton
+                onSelectionChange={onSelectionChange}
+                option={option}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </Container>
   )
 }
