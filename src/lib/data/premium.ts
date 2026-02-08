@@ -10,6 +10,25 @@ export const premiumCategory: Category<Premium> = {
     'Nossos copos premium são criações exclusivas, com ingredientes selecionados e combinações que vão além do comum.',
   products: [
     {
+      img: '/img/tentacao.avif',
+      name: 'Tentação',
+      description: `Descubra o sabor único do nosso copo Sensação, uma experiência irresistível para os amantes de açaí! Combinação perfeita de:
+
+Açaí
+Creme de morango
+Leite condensado
+Leite em pó
+Creme de avelã
+Bombom amor carioca
+Chantilly de morango
+Morangos frescos
+Camadas deliciosas que tornam cada colherada uma verdadeira explosão de sabor. Ideal para quem busca algo além do comum!`,
+      people: 1,
+      fullPrice: 25,
+      price: 23.5,
+      quantity: 440,
+    },
+    {
       img: '/img/finifest.avif',
       name: 'Fini Fest',
       description: `Para quem ama o sabor das balas Fini, preparamos uma versão incrível em copo! Cada copo acompanha:
@@ -25,25 +44,7 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       price: 20,
       quantity: 440,
       complements: ['Fini banana'],
-    },
-    {
-      img: '/img/raffaello.jpg',
-      name: 'Raffaello',
-      description: `Uma combinação leve, deliciosa e sofisticada, perfeita para quem ama a mistura do doce com o frescor da fruta.
-      
-      Açaí
-      Creme de Beijinho
-      Leite em pó
-      Leite condensado
-      Morango
-      Bombom raffaello
-      Coco ralado
-      
-      Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremosidade e o sabor delicioso dessa combinação única!`,
-      people: 1,
-      fullPrice: 38,
-      price: 30,
-      quantity: 440,
+      disabled: true,
     },
     {
       img: '/img/ferrero.jpg',
@@ -65,18 +66,19 @@ Uma combinação doce e divertida que traz o sabor das balas para uma experiênc
       quantity: 440,
     },
     {
-      img: '/img/kinder-ninho.avif',
-      name: 'Kinder Ninho',
-      description: `Delicie-se com o nosso copo exclusivo recheado de sabores irresistíveis. Feito especialmente para os apaixonados por chocolate, ele traz:
-
-Açaí
-Pedaços generosos de Kinder Bueno
-Creme de Ninho
-Leite condensado
-Leite em pó
-Creme de avelã
-Chantilly de chocolate
-Uma combinação perfeita que derrete na boca e transforma cada colherada em um momento único. Experimente e surpreenda-se!`,
+      img: '/img/raffaello.jpg',
+      name: 'Raffaello',
+      description: `Uma combinação leve, deliciosa e sofisticada, perfeita para quem ama a mistura do doce com o frescor da fruta.
+      
+      Açaí
+      Creme de Beijinho
+      Leite em pó
+      Leite condensado
+      Morango
+      Bombom raffaello
+      Coco ralado
+      
+      Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremosidade e o sabor delicioso dessa combinação única!`,
       people: 1,
       fullPrice: 38,
       price: 30,
@@ -100,22 +102,21 @@ Uma mistura irresistível que vai te surpreender a cada colherada. Sinta a cremo
       quantity: 440,
     },
     {
-      img: '/img/tentacao.avif',
-      name: 'Tentação',
-      description: `Descubra o sabor único do nosso copo Sensação, uma experiência irresistível para os amantes de açaí! Combinação perfeita de:
+      img: '/img/kinder-ninho.avif',
+      name: 'Kinder Ninho',
+      description: `Delicie-se com o nosso copo exclusivo recheado de sabores irresistíveis. Feito especialmente para os apaixonados por chocolate, ele traz:
 
 Açaí
-Creme de morango
+Pedaços generosos de Kinder Bueno
+Creme de Ninho
 Leite condensado
 Leite em pó
 Creme de avelã
-Bombom amor carioca
-Chantilly de morango
-Morangos frescos
-Camadas deliciosas que tornam cada colherada uma verdadeira explosão de sabor. Ideal para quem busca algo além do comum!`,
+Chantilly de chocolate
+Uma combinação perfeita que derrete na boca e transforma cada colherada em um momento único. Experimente e surpreenda-se!`,
       people: 1,
-      fullPrice: 25,
-      price: 23.5,
+      fullPrice: 38,
+      price: 30,
       quantity: 440,
     },
     {

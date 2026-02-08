@@ -8,8 +8,8 @@ import { premiumCategory } from './premium'
 import { salgadosCategory } from './salgados'
 
 export const categories = {
-  Premium: premiumCategory,
   Açaí: acaiCategory,
+  Premium: premiumCategory,
   // Paletas: paletaCategory,
   'Copos da Felicidade': felicidadeCategory,
   'Geladinho Gourmet': geladinhoCategory,

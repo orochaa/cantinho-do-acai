@@ -16,6 +16,7 @@ interface Product {
   fullPrice: number
   price: number
   people: number
+  disabled?: boolean
 }
 
 interface Option<TName extends string = string> {
