@@ -7,7 +7,7 @@ export const geladinhoCategory: Category<
     'Geladinhos gourmet, feitos com ingredientes selecionados e nos sabores mais pedidos. Uma explosão de sabor e refrescância a cada mordida.',
   products: [
     {
-      img: '/img/geladinho/Geladinho de Morango com Nutella.jpg',
+      img: '/img/geladinho/geladinho-de-morango-com-nutella.jpg',
       name: 'Geladinho Gourmet',
       fullPrice: 8,
       price: 6,
