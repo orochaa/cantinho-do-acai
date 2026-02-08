@@ -18,7 +18,10 @@ export const categories = {
   Bebidas: bebidaCategory,
 } satisfies Record<string, Category>
 
-export const categoriesList = entries(categories).map(([name, data]) => ({
-  name,
-  ...data,
-}))
+export const categoriesList = entries(categories)
+  .map(([name, data]) => ({
+    ...data,
+    name,
+    products: data.products.filter(({ disabled }) => !disabled),
+  }))
+  .filter(({ disabled }) => !disabled)

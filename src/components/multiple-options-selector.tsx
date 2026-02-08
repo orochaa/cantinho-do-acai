@@ -25,54 +25,56 @@ export function MultipleOptionsSelector<TName extends string>(
         <p className="text-sm">Escolha até {ctx.countLimit} opções</p>
       </div>
 
-      {ctx.options.map(option => (
-        <div
-          key={option.name}
-          className="flex rounded-sm bg-zinc-100 active:bg-zinc-200"
-        >
-          <button
-            type="button"
-            className="flex h-14 grow items-center p-3"
-            onClick={() => dispatchEvent({ type: 'ADD', option })}
+      <div className="grid auto-rows-[1fr] grid-cols-1 gap-2">
+        {ctx.options.map(option => (
+          <div
+            key={option.name}
+            className="flex items-center rounded-sm bg-zinc-100 active:bg-zinc-200"
           >
-            <div className="flex flex-1 items-center gap-2">
+            <button
+              type="button"
+              className="flex grow items-center gap-2 p-3"
+              onClick={() => dispatchEvent({ type: 'ADD', option })}
+            >
               {!!option.img && (
-                <div className="flex size-10 shrink-0 items-center overflow-hidden rounded shadow-2xl">
+                <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
                   <img
-                    className="min-h-10 min-w-10 object-center"
+                    className="min-h-11 min-w-11 object-center"
                     src={option.img}
                     alt={option.name}
                   />
                 </div>
               )}
-              <p className="line-clamp-2 text-left text-base text-ellipsis md:text-lg">
-                {option.name}
-              </p>
-            </div>
-            {!!option.price && (
-              <span className="text-left text-[0.9rem] tracking-tight whitespace-nowrap md:text-base">
-                + {formatCurrency(option.price)}
-              </span>
-            )}
-          </button>
+              <div className="flex flex-col text-left">
+                <p className="line-clamp-2 text-base font-medium text-ellipsis md:text-lg">
+                  {option.name}
+                </p>
+                {!!option.price && (
+                  <span className="text-sm font-light tracking-tight whitespace-nowrap md:text-base">
+                    {formatCurrency(option.price)}
+                  </span>
+                )}
+              </div>
+            </button>
 
-          <div className="h-14">
-            {option.count === 0 ? (
-              <AddOptionButton
-                dispatchEvent={dispatchEvent}
-                option={option}
-                ctx={ctx}
-              />
-            ) : (
-              <QuantitySelector
-                onCountChange={dispatchEvent}
-                item={option}
-                ctx={ctx}
-              />
-            )}
+            <div className="flex h-14 min-w-28.75 items-center justify-end sm:min-w-auto">
+              {option.count === 0 ? (
+                <AddOptionButton
+                  dispatchEvent={dispatchEvent}
+                  option={option}
+                  ctx={ctx}
+                />
+              ) : (
+                <QuantitySelector
+                  onCountChange={dispatchEvent}
+                  item={option}
+                  ctx={ctx}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </Container>
   )
 }
