@@ -37,7 +37,7 @@ export function MultipleOptionsSelector<TName extends string>(
           >
             <p className="text-left text-base md:text-lg">{option.name}</p>
             {!!option.price && (
-              <span className="text-left text-[0.8rem] tracking-tight md:text-base">
+              <span className="text-left text-[0.8rem] tracking-tight whitespace-nowrap md:text-base">
                 + {formatCurrency(option.price)}
               </span>
             )}

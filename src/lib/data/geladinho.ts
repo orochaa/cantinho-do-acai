@@ -19,8 +19,17 @@ export const geladinhoCategory: Category<
     },
   ],
   flavors: [
-    { name: 'Morango com Nutella', price: 6 },
-    { name: 'Ninho com Nutella', price: 6 },
-    { name: 'Oreo', price: 6 },
+    { name: 'Geladinho de Maracujá com Nutella', price: 7 },
+    {
+      name: 'Geladinho de Maracujá com Geleia de Maracujá (pequeno)',
+      price: 5,
+    },
+    { name: 'Geladinho de Maracujá com Nutella (pequeno)', price: 5 },
+    {
+      name: 'Geladinho de Oreo com Creme de Chocolate Branco (pequeno)',
+      price: 5,
+    },
+    { name: 'Geladinho de Ninho com Nutella (pequeno)', price: 5 },
+    { name: '⁠Geladinho de Morango com Nutella (pequeno)', price: 5 },
   ],
 }
