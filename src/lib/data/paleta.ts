@@ -4,6 +4,7 @@ export const paletaCategory: Category<
   Product,
   { flavors: { name: string; price: number }[] }
 > = {
+  disabled: true,
   slang: 'paleta',
   description:
     'Paletas italianas, saborosas e refrescantes, perfeitas para qualquer ocasião.',

@@ -5,6 +5,7 @@ type Category<
   slang: string
   products: TProduct[]
   description: string
+  disabled?: boolean
 } & TExtras
 
 interface Product {

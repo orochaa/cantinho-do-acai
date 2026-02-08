@@ -1,5 +1,6 @@
 import { bebidaCategory } from '@/lib/data/bebida'
 import { geladinhoCategory } from '@/lib/data/geladinho'
+import { paletaCategory } from '@/lib/data/paleta'
 import { entries } from 'remeda'
 import { acaiCategory } from './acai'
 import { felicidadeCategory } from './felicidade'
@@ -10,7 +11,7 @@ import { salgadosCategory } from './salgados'
 export const categories = {
   Açaí: acaiCategory,
   Premium: premiumCategory,
-  // Paletas: paletaCategory,
+  Paletas: paletaCategory,
   'Copos da Felicidade': felicidadeCategory,
   'Geladinho Gourmet': geladinhoCategory,
   Salgados: salgadosCategory,

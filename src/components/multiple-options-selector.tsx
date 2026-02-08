@@ -32,18 +32,31 @@ export function MultipleOptionsSelector<TName extends string>(
         >
           <button
             type="button"
-            className="flex h-[3.5rem] grow flex-col justify-center p-3 md:flex-row md:items-center md:justify-between"
+            className="flex h-14 grow items-center p-3"
             onClick={() => dispatchEvent({ type: 'ADD', option })}
           >
-            <p className="text-left text-base md:text-lg">{option.name}</p>
+            <div className="flex flex-1 items-center gap-2">
+              {!!option.img && (
+                <div className="flex size-10 shrink-0 items-center overflow-hidden rounded shadow-2xl">
+                  <img
+                    className="min-h-10 min-w-10 object-center"
+                    src={option.img}
+                    alt={option.name}
+                  />
+                </div>
+              )}
+              <p className="line-clamp-2 text-left text-base text-ellipsis md:text-lg">
+                {option.name}
+              </p>
+            </div>
             {!!option.price && (
-              <span className="text-left text-[0.8rem] tracking-tight whitespace-nowrap md:text-base">
+              <span className="text-left text-[0.9rem] tracking-tight whitespace-nowrap md:text-base">
                 + {formatCurrency(option.price)}
               </span>
             )}
           </button>
 
-          <div className="h-[3.5rem]">
+          <div className="h-14">
             {option.count === 0 ? (
               <AddOptionButton
                 dispatchEvent={dispatchEvent}
