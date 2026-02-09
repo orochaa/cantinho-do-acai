@@ -4,7 +4,7 @@ export const paletaCategory: Category<
   Product,
   { flavors: { name: string; price: number }[] }
 > = {
-  disabled: true,
+  disabled: false,
   slang: 'paleta',
   description:
     'Paletas italianas, saborosas e refrescantes, perfeitas para qualquer ocasião.',
@@ -20,9 +20,10 @@ export const paletaCategory: Category<
   ].map(p => ({ ...p, slang: slang(p.name), description: '' })),
   flavors: [
     { name: 'Morango com Leite Condensado', price: 10 },
-    { name: 'Açaí com Leite Condensado', price: 10 },
+    // { name: 'Açaí com Leite Condensado', price: 10 },
     { name: 'Chocolate com Leite Condensado', price: 10 },
     { name: 'Maracujá com Leite Condensado', price: 10 },
     { name: 'Ninho com Nutella', price: 10 },
+    { name: 'Ferrero Rochet', price: 10 },
   ],
 }
