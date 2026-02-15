@@ -259,6 +259,11 @@ ${item.observation}`)
     builder.add('')
     builder.add(`Nome: ${clientName}`)
 
+    builder.add('')
+    builder.add(
+      '👆 Por favor, envie-nos esta mensagem agora. Assim que recebermos, estaremos atendendo você.'
+    )
+
     const msg = builder.build()
     const phone = '5554984312998'
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(
