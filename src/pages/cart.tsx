@@ -1,3 +1,4 @@
+/* eslint-disable no-secrets/no-secrets */
 import { Button } from '@/components/button'
 import { Container } from '@/components/container'
 import { QuantitySelector } from '@/components/multiple-options-selector'
@@ -8,12 +9,12 @@ import { useToast } from '@/context/toast-provider'
 import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option'
 import { getCepAddress } from '@/lib/brasil-api'
 import { formatCurrency, parseCurrency } from '@/lib/format'
-import {
-  COMPANY_COORDINATES,
-  calculateDistance,
-  calculateFare,
-  getCoordinates,
-} from '@/lib/geo'
+// import {
+//   COMPANY_COORDINATES,
+//   calculateDistance,
+//   calculateFare,
+//   getCoordinates,
+// } from '@/lib/geo'
 import { ExternalLink, PlusSquare, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -88,10 +89,10 @@ export function CartPage(): React.JSX.Element {
   const [address, setAddress] = useState<CepAddress | null>(null)
   const [addressError, setAddressError] = useState<string | null>(null)
   const [cepLoading, setCepLoading] = useState(false)
-  const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
-  const [distance, setDistance] = useState<number | null>(null)
-  const [fareLoading, setFareLoading] = useState(false)
-  const [fareError, setFareError] = useState<string | null>(null)
+  // const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
+  // const [distance, setDistance] = useState<number | null>(null)
+  // const [fareLoading, setFareLoading] = useState(false)
+  // const [fareError, setFareError] = useState<string | null>(null)
   const [addressNumber, setAddressNumber] = useState('')
   const [addressComplement, setAddressComplement] = useState('')
   const [addressReference, setAddressReference] = useState('')
@@ -107,12 +108,12 @@ export function CartPage(): React.JSX.Element {
       total += item.total
     }
 
-    if (isDelivery && deliveryFare) {
-      total += deliveryFare
-    }
+    // if (isDelivery && deliveryFare) {
+    //   total += deliveryFare
+    // }
 
     return total
-  }, [cart, deliveryFare, isDelivery])
+  }, [cart])
 
   const change = useMemo(() => {
     const cash = parseCurrency(cashValue)
@@ -148,25 +149,26 @@ export function CartPage(): React.JSX.Element {
         setCepLoading(false)
       }
 
-      if (!cepAddress) {
-        return
-      }
+      return
+      // if (!cepAddress) {
+      //   return
+      // }
 
-      try {
-        setFareLoading(true)
-        const userCoords = await getCoordinates(cepAddress)
-        const dist = calculateDistance(COMPANY_COORDINATES, userCoords)
-        setDistance(dist)
-        setDeliveryFare(calculateFare(dist))
-        setFareError(null)
-      } catch (error) {
-        setDistance(null)
-        setDeliveryFare(null)
-        setFareError('Não foi possível calcular a taxa de entrega.')
-        console.error(error)
-      } finally {
-        setFareLoading(false)
-      }
+      // try {
+      //   setFareLoading(true)
+      //   const userCoords = await getCoordinates(cepAddress)
+      //   const dist = calculateDistance(COMPANY_COORDINATES, userCoords)
+      //   setDistance(dist)
+      //   setDeliveryFare(calculateFare(dist))
+      //   setFareError(null)
+      // } catch (error) {
+      //   setDistance(null)
+      //   setDeliveryFare(null)
+      //   setFareError('Não foi possível calcular a taxa de entrega.')
+      //   console.error(error)
+      // } finally {
+      //   setFareLoading(false)
+      // }
     }
   }, [])
 
@@ -218,12 +220,12 @@ ${item.observation}`)
         builder.addConditional(!addressNumber, `- Faltando número`)
       }
 
-      if (deliveryFare) {
-        builder.add(`Taxa de entrega: ${formatCurrency(deliveryFare)}`)
-        total += deliveryFare
-      } else {
-        builder.add(`Taxa de entrega: A calcular`)
-      }
+      // if (deliveryFare) {
+      //   builder.add(`Taxa de entrega: ${formatCurrency(deliveryFare)}`)
+      //   total += deliveryFare
+      // } else {
+      builder.add(`Taxa de entrega: A calcular`)
+      // }
     })
     builder.addConditional(!isDelivery, () => {
       builder.add('Retirada no local')
@@ -273,7 +275,6 @@ ${item.observation}`)
     addressNumber,
     addressComplement,
     addressReference,
-    deliveryFare,
     paymentMethod,
     cashValue,
     change,
@@ -570,7 +571,7 @@ ${item.observation}`)
                     </div>
                   )
                 )}
-                {fareLoading ? (
+                {/* {fareLoading ? (
                   <p>Calculando taxa de entrega...</p>
                 ) : fareError ? (
                   <p className="text-red-500">{fareError}</p>
@@ -593,7 +594,7 @@ ${item.observation}`)
                       </p>
                     </div>
                   )
-                )}
+                )} */}
               </div>
             </Container>
           )}
