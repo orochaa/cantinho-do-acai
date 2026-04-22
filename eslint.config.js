@@ -6,6 +6,7 @@ export default [
   {
     rules: {
       '@typescript-eslint/no-magic-numbers': 'off',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off',
       'react/jsx-no-bind': 'off',
     },
   },
