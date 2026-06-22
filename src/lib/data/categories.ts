@@ -4,11 +4,13 @@ import { paletaCategory } from '@/lib/data/paleta'
 import { entries } from 'remeda'
 import { acaiCategory } from './acai'
 import { felicidadeCategory } from './felicidade'
+import { pastelCategory } from './pastel'
 // import { paletaCategory } from './paleta'
 import { premiumCategory } from './premium'
 import { salgadosCategory } from './salgados'
 
 export const categories = {
+  Pastéis: pastelCategory,
   Açaí: acaiCategory,
   Premium: premiumCategory,
   Paletas: paletaCategory,

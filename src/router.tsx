@@ -11,6 +11,7 @@ import { PaletaPage } from '@/pages/paleta'
 import { PremiumPage } from '@/pages/premium'
 import { SalgadosPage } from '@/pages/salgados'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { PastelPage } from './pages/pastel'
 import { ScrollToTop } from './scrool-to-top'
 
 export function Router(): React.JSX.Element {
@@ -36,6 +37,7 @@ export function Router(): React.JSX.Element {
             <Route path="premium/:slang" element={<PremiumPage />} />
             <Route path="geladinho/:slang" element={<GeladinhoPage />} />
             <Route path="bebidas/:slang" element={<BebidaPage />} />
+            <Route path="pastel/:slang" element={<PastelPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
         </Routes>
