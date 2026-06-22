@@ -8,8 +8,24 @@ export const pastelCategory: Category<
   description: '',
   products: [
     {
+      img: '/img/pastel/pastel-de-frango.avif',
+      name: 'Pastel de Frango',
+      description: '',
+      fullPrice: 15,
+      price: 15,
+      people: 1,
+    },
+    {
       img: '/img/pastel/pastel-de-queijo.jpg',
       name: 'Pastel de Queijo',
+      description: '',
+      fullPrice: 15,
+      price: 15,
+      people: 1,
+    },
+    {
+      img: '/img/pastel/pastel-de-presunto-e-queijo.avif',
+      name: 'Pastel de Presunto e Queijo',
       description: '',
       fullPrice: 15,
       price: 15,
@@ -42,14 +58,6 @@ export const pastelCategory: Category<
     {
       img: '/img/pastel/pastel-de-morango-e-creme-de-avela.avif',
       name: 'Pastel de Morango e Creme de Avelã',
-      description: '',
-      fullPrice: 18,
-      price: 18,
-      people: 1,
-    },
-    {
-      img: '/img/pastel/pastel-de-presunto-e-queijo.avif',
-      name: 'Pastel de Presunto e Queijo',
       description: '',
       fullPrice: 18,
       price: 18,
