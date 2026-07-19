@@ -1,24 +1,24 @@
-import { Banner } from '@/components/banner'
-import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
-import { OrderButton } from '@/components/order-button'
-import { Seo } from '@/components/seo'
-import { useCart } from '@/context/cart-provider'
-import { useMultipleOptions } from '@/hooks/use-multiple-options'
-import { useProduct } from '@/hooks/use-product'
-import { useTotal } from '@/hooks/use-total'
-import { geladinhoCategory } from '@/lib/data/geladinho'
+import { Banner } from '@/components/banner';
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
+import { OrderButton } from '@/components/order-button';
+import { Seo } from '@/components/seo';
+import { useCart } from '@/context/cart-provider';
+import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import { useProduct } from '@/hooks/use-product';
+import { useTotal } from '@/hooks/use-total';
+import { geladinhoCategory } from '@/lib/data/geladinho';
 
 export function GeladinhoPage(): React.JSX.Element {
-  const geladinho = useProduct(geladinhoCategory)
+  const geladinho = useProduct(geladinhoCategory);
 
-  const { addCartEvent } = useCart()
+  const { addCartEvent } = useCart();
 
   const [flavors, addFlavorEvent] = useMultipleOptions(
     geladinhoCategory.flavors,
-    20
-  )
+    20,
+  );
 
-  const total = useTotal(0, flavors.options)
+  const total = useTotal(0, flavors.options);
 
   return (
     <div>
@@ -61,12 +61,12 @@ export function GeladinhoPage(): React.JSX.Element {
           totalPrice={total}
           validate={() => {
             if (flavors.countTotal === 0) {
-              return 'Favor escolher sabores'
+              return 'Favor escolher sabores';
             }
           }}
           order={count =>
             addCartEvent({
-              type: 'ADD',
+              type: 'add',
               item: {
                 product: { ...geladinho, price: 0 },
                 options: flavors.options,
@@ -78,5 +78,5 @@ export function GeladinhoPage(): React.JSX.Element {
       </div>
       <span className="block h-20" />
     </div>
-  )
+  );
 }

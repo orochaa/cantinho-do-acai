@@ -1,42 +1,42 @@
-import { useToast } from '@/context/toast-provider'
-import { formatCurrency } from '@/lib/format'
-import { Minus, Plus } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router'
-import { Button } from './button'
+import { useToast } from '@/context/toast-provider';
+import { formatCurrency } from '@/lib/format';
+import { Minus, Plus } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Button } from './button';
 
 export interface OrderButtonProps {
-  product: Product
-  multiple?: boolean
-  totalPrice: number
+  product: Product;
+  multiple?: boolean;
+  totalPrice: number;
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  validate?: () => string | void
-  order: (count: number) => void
+  validate?: () => string | undefined;
+  order: (count: number) => void;
 }
 
 export function OrderButton(props: OrderButtonProps): React.JSX.Element {
-  const { product, totalPrice, validate, order, multiple } = props
+  const { product, totalPrice, validate, order, multiple } = props;
 
-  const [counter, setCounter] = useState<number>(1)
+  const [counter, setCounter] = useState<number>(1);
 
-  const toast = useToast()
-  const navigate = useNavigate()
+  const toast = useToast();
+  const navigate = useNavigate();
 
   const decrementCounter = useCallback((): void => {
-    setCounter(c => (c > 1 ? c - 1 : 1))
-  }, [setCounter])
+    setCounter(c => (c > 1 ? c - 1 : 1));
+  }, []);
 
   const incrementCounter = useCallback((): void => {
-    setCounter(c => c + 1)
-  }, [setCounter])
+    setCounter(c => c + 1);
+  }, []);
 
   const addOrder = useCallback(() => {
-    const error = validate?.()
+    const error = validate?.();
 
-    if (typeof error === 'string' && !!error.trim()) {
-      toast.error({ description: error })
+    if (typeof error === 'string' && error.trim()) {
+      toast.error({ description: error });
     } else {
-      order(counter)
+      order(counter);
       toast.success({
         title: 'Produto adicionado',
         description: `${product.name} adicionado ao carrinho`,
@@ -44,9 +44,9 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           label: 'Ver carrinho',
           onClick: async () => navigate('/cart'),
         },
-      })
+      });
     }
-  }, [validate, toast, order, counter, product.name, navigate])
+  }, [validate, toast, order, counter, product.name, navigate]);
 
   return (
     <div className="mt-8 flex gap-2">
@@ -57,8 +57,7 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
             className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
             title="Remover"
             onClick={decrementCounter}
-            disabled={counter === 1}
-          >
+            disabled={counter === 1}>
             <Minus className="size-5" />
           </button>
           <span>{counter}</span>
@@ -66,15 +65,17 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
             type="button"
             className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200"
             title="Adicionar"
-            onClick={incrementCounter}
-          >
+            onClick={incrementCounter}>
             <Plus className="size-5" />
           </button>
         </div>
       )}
-      <Button variant="confirm" className="grow" onClick={addOrder}>
+      <Button
+        variant="confirm"
+        className="grow"
+        onClick={addOrder}>
         Adicionar ao Pedido - {formatCurrency(totalPrice * counter)}
       </Button>
     </div>
-  )
+  );
 }

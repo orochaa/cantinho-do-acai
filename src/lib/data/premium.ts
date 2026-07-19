@@ -1,8 +1,8 @@
-import { slang } from '../format'
+import { slang } from '../format';
 
 export type Premium = Product & {
-  complements?: string[]
-}
+  complements?: Array<string>;
+};
 
 export const premiumCategory: Category<Premium> = {
   slang: 'premium',
@@ -138,4 +138,4 @@ Cada ingrediente foi escolhido para criar uma explosão de sabores tropicais que
       quantity: 440,
     },
   ].map(item => ({ ...item, slang: slang(item.name) })),
-}
+};

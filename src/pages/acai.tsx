@@ -1,36 +1,36 @@
-import { Banner } from '@/components/banner'
-import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
-import { OrderButton } from '@/components/order-button'
-import { Seo } from '@/components/seo'
-import { SingleOptionSelector } from '@/components/single-option-selector'
-import { useCart } from '@/context/cart-provider'
-import { useMultipleOptions } from '@/hooks/use-multiple-options'
-import { useProduct } from '@/hooks/use-product'
-import { useSingleOption } from '@/hooks/use-single-option'
-import { useTotal } from '@/hooks/use-total'
-import { acaiCategory } from '@/lib/data/acai'
-import { formatCurrency } from '@/lib/format'
+import { Banner } from '@/components/banner';
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
+import { OrderButton } from '@/components/order-button';
+import { Seo } from '@/components/seo';
+import { SingleOptionSelector } from '@/components/single-option-selector';
+import { useCart } from '@/context/cart-provider';
+import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import { useProduct } from '@/hooks/use-product';
+import { useSingleOption } from '@/hooks/use-single-option';
+import { useTotal } from '@/hooks/use-total';
+import { acaiCategory } from '@/lib/data/acai';
+import { formatCurrency } from '@/lib/format';
 
 export function AcaiPage(): React.JSX.Element {
-  const acai = useProduct(acaiCategory)
+  const acai = useProduct(acaiCategory);
 
-  const { addCartEvent } = useCart()
+  const { addCartEvent } = useCart();
 
   const [acaiTypes, selectAcaiType] = useSingleOption(
-    acai.type.map((type, i) => ({ ...type, isSelected: i === 0 }))
-  )
+    acai.type.map((type, i) => ({ ...type, isSelected: i === 0 })),
+  );
 
   const [complements, addComplementEvent] = useMultipleOptions(
     acai.complements,
-    acai.complementsLimit
-  )
+    acai.complementsLimit,
+  );
 
   const [extras, addExtraEvent] = useMultipleOptions(
     acai.extras,
-    acai.extrasLimit
-  )
+    acai.extrasLimit,
+  );
 
-  const total = useTotal(acai.price, extras.options)
+  const total = useTotal(acai.price, extras.options);
 
   return (
     <div>
@@ -39,7 +39,10 @@ export function AcaiPage(): React.JSX.Element {
         description={acai.description}
         imgUrl={`https://cantinhodoacai.vercel.app${acai.img}`}
       />
-      <Banner img={acai.img} name={acai.name} />
+      <Banner
+        img={acai.img}
+        name={acai.name}
+      />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{acai.name}</h2>
@@ -81,11 +84,11 @@ export function AcaiPage(): React.JSX.Element {
           multiple
           order={count =>
             addCartEvent({
-              type: 'ADD',
+              type: 'add',
               item: {
                 product: acai,
                 options: [acaiTypes, complements, extras].flatMap(
-                  item => item.options
+                  item => item.options,
                 ),
                 count,
               },
@@ -95,5 +98,5 @@ export function AcaiPage(): React.JSX.Element {
       </div>
       <span className="block h-20" />
     </div>
-  )
+  );
 }

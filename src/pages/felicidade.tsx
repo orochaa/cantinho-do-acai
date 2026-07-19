@@ -1,19 +1,19 @@
-import { Banner } from '@/components/banner'
-import { Description } from '@/components/description'
-import { OrderButton } from '@/components/order-button'
-import { Seo } from '@/components/seo'
-import { useCart } from '@/context/cart-provider'
-import { useProduct } from '@/hooks/use-product'
-import { useTotal } from '@/hooks/use-total'
-import { felicidadeCategory } from '@/lib/data/felicidade'
-import { formatCurrency } from '@/lib/format'
+import { Banner } from '@/components/banner';
+import { Description } from '@/components/description';
+import { OrderButton } from '@/components/order-button';
+import { Seo } from '@/components/seo';
+import { useCart } from '@/context/cart-provider';
+import { useProduct } from '@/hooks/use-product';
+import { useTotal } from '@/hooks/use-total';
+import { felicidadeCategory } from '@/lib/data/felicidade';
+import { formatCurrency } from '@/lib/format';
 
 export function FelicidadePage(): React.JSX.Element {
-  const copo = useProduct(felicidadeCategory)
+  const copo = useProduct(felicidadeCategory);
 
-  const { addCartEvent } = useCart()
+  const { addCartEvent } = useCart();
 
-  const total = useTotal(copo.price, [])
+  const total = useTotal(copo.price, []);
 
   return (
     <div>
@@ -22,7 +22,11 @@ export function FelicidadePage(): React.JSX.Element {
         description={copo.description}
         imgUrl={`https://cantinhodoacai.vercel.app${copo.img}`}
       />
-      <Banner img={copo.img} name={copo.name} imgClassName="object-top" />
+      <Banner
+        img={copo.img}
+        name={copo.name}
+        imgClassName="object-top"
+      />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{copo.name}</h2>
@@ -46,7 +50,7 @@ export function FelicidadePage(): React.JSX.Element {
           multiple
           order={count =>
             addCartEvent({
-              type: 'ADD',
+              type: 'add',
               item: {
                 product: copo,
                 options: [],
@@ -58,5 +62,5 @@ export function FelicidadePage(): React.JSX.Element {
       </div>
       <span className="block h-20" />
     </div>
-  )
+  );
 }

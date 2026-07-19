@@ -1,10 +1,10 @@
-import { slang } from '../format'
+import { slang } from '../format';
 
 export type Salgado = Product & {
-  complementsLimit: number
-  complements: string[]
-  sauces: string[]
-}
+  complementsLimit: number;
+  complements: Array<string>;
+  sauces: Array<string>;
+};
 
 export const salgadosCategory: Category<Salgado> = {
   slang: 'salgados',
@@ -53,4 +53,4 @@ export const salgadosCategory: Category<Salgado> = {
     ],
     ...p,
   })),
-}
+};

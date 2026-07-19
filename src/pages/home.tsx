@@ -1,26 +1,26 @@
-import { DesktopNav } from '@/components/desktop-nav'
-import { MobileNav } from '@/components/mobile-nav'
-import { ScrollToTopButton } from '@/components/scroll-to-top-button'
-import { Seo } from '@/components/seo'
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
-import { DESKTOP_BREAKPOINT, useWindowSize } from '@/hooks/use-window-size'
-import { categoriesList } from '@/lib/data/categories'
-import { formatCurrency, slang } from '@/lib/format'
-import { createRef, useMemo } from 'react'
-import { Link } from 'react-router'
+import { DesktopNav } from '@/components/desktop-nav';
+import { MobileNav } from '@/components/mobile-nav';
+import { ScrollToTopButton } from '@/components/scroll-to-top-button';
+import { Seo } from '@/components/seo';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { DESKTOP_BREAKPOINT, useWindowSize } from '@/hooks/use-window-size';
+import { categoriesList } from '@/lib/data/categories';
+import { formatCurrency, slang } from '@/lib/format';
+import { createRef, useMemo } from 'react';
+import { Link } from 'react-router';
 
 export function HomePage(): React.JSX.Element {
-  const { width } = useWindowSize()
-  const isDesktop = width >= DESKTOP_BREAKPOINT
+  const { width } = useWindowSize();
+  const isDesktop = width >= DESKTOP_BREAKPOINT;
 
   const sectionRefs = useMemo(
     () => categoriesList.map(() => createRef<HTMLHeadingElement>()),
-    []
-  )
+    [],
+  );
 
   const activeId = useIntersectionObserver(sectionRefs, {
     rootMargin: '-20% 0px -80% 0px',
-  })
+  });
 
   return (
     <>
@@ -52,8 +52,7 @@ export function HomePage(): React.JSX.Element {
                 <h1
                   id={category.slang}
                   ref={sectionRefs[index]}
-                  className="font-raleway scroll-mt-24 border-b-2 border-amber-600 p-1 text-2xl text-white/90"
-                >
+                  className="font-raleway scroll-mt-24 border-b-2 border-amber-600 p-1 text-2xl text-white/90">
                   {category.name}
                 </h1>
                 <p className="mb-4 text-white/80">{category.description}</p>
@@ -65,8 +64,7 @@ export function HomePage(): React.JSX.Element {
                           key={slang(product.name)}
                           to={`${category.slang}/${product.slang}`}
                           className="h-[350px] rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
-                          title={`Selecionar ${product.name}`}
-                        >
+                          title={`Selecionar ${product.name}`}>
                           <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
                             <img
                               src={product.img}
@@ -92,8 +90,7 @@ export function HomePage(): React.JSX.Element {
                                 {product.fullPrice !== product.price && (
                                   <span
                                     className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap text-zinc-500 line-through"
-                                    style={{ textDecoration: '' }}
-                                  >
+                                    style={{ textDecoration: '' }}>
                                     {formatCurrency(product.fullPrice)}
                                   </span>
                                 )}
@@ -104,7 +101,7 @@ export function HomePage(): React.JSX.Element {
                             </div>
                           </div>
                         </Link>
-                      )
+                      ),
                   )}
                 </div>
               </div>
@@ -115,5 +112,5 @@ export function HomePage(): React.JSX.Element {
         <ScrollToTopButton className="sticky right-4 bottom-4 ml-auto" />
       </div>
     </>
-  )
+  );
 }

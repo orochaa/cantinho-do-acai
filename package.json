@@ -6,11 +6,9 @@
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
-    "lint": "run-s lint:tsc lint:eslint lint:prettier",
-    "lint:eslint": "eslint --fix \"src/**/*.ts{x,}\"",
-    "lint:prettier": "prettier --write .",
-    "lint:tsc": "tsc --noEmit",
     "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "biome check --write",
     "test": "vitest --run",
     "test:ci": "vitest --run --coverage --silent"
   },
@@ -30,6 +28,7 @@
     "ua-parser-js": "^2.0.9"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.4",
     "@tailwindcss/vite": "^4.2.2",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^25.5.0",
@@ -38,11 +37,7 @@
     "@types/ua-parser-js": "^0.7.39",
     "@vitejs/plugin-react": "^5.2.0",
     "@vitest/coverage-v8": "^4.1.1",
-    "eslint": "^9.39.4",
-    "eslint-plugin-mist3rbru": "^0.6.7",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",

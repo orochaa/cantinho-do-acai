@@ -1,4 +1,4 @@
-import { slang } from '../format'
+import { slang } from '../format';
 
 export const felicidadeCategory: Category<Product> = {
   slang: 'felicidade',
@@ -42,4 +42,4 @@ export const felicidadeCategory: Category<Product> = {
       price: 28,
     },
   ].map(p => ({ slang: slang(p.name), ...p })),
-}
+};

@@ -1,8 +1,8 @@
-import { slang } from '../format'
+import { slang } from '../format';
 
 export const pastelCategory: Category<
   Product,
-  { size: { name: string; price: number }[] }
+  { size: Array<{ name: string; price: number }> }
 > = {
   slang: 'pastel',
   description: '',
@@ -78,4 +78,4 @@ export const pastelCategory: Category<
       price: 10,
     },
   ],
-}
+};

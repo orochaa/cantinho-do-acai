@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 export interface ContainerProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function Container(props: ContainerProps): React.JSX.Element {
@@ -9,5 +9,5 @@ export function Container(props: ContainerProps): React.JSX.Element {
     <div className="flex flex-col gap-2 rounded-sm border border-amber-400/90 p-2 even:border-amber-700">
       {props.children}
     </div>
-  )
+  );
 }

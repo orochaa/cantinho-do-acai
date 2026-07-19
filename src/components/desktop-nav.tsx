@@ -1,12 +1,12 @@
-import { categoriesList } from '@/lib/data/categories'
-import { navigateToElement } from '@/lib/navigation'
+import { categoriesList } from '@/lib/data/categories';
+import { navigateToElement } from '@/lib/navigation';
 
 interface DesktopNavProps {
-  activeId: string | null
+  activeId: string | null;
 }
 
 export function DesktopNav(props: DesktopNavProps): React.JSX.Element {
-  const { activeId } = props
+  const { activeId } = props;
 
   return (
     <div className="sticky top-8 left-0">
@@ -22,8 +22,7 @@ export function DesktopNav(props: DesktopNavProps): React.JSX.Element {
                     ? 'bg-amber-500 text-white'
                     : 'text-white/70 hover:bg-zinc-700/50 hover:text-white'
                 }`}
-                onClick={() => navigateToElement(category.slang)}
-              >
+                onClick={() => navigateToElement(category.slang)}>
                 {category.name}
               </button>
             </li>
@@ -31,5 +30,5 @@ export function DesktopNav(props: DesktopNavProps): React.JSX.Element {
         </ul>
       </nav>
     </div>
-  )
+  );
 }

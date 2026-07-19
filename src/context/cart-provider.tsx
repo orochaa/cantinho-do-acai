@@ -1,86 +1,89 @@
-import { exhaustive } from 'exhaustive'
-import { createContext, useContext, useMemo, useReducer } from 'react'
-import type { ReactNode } from 'react'
+import { exhaustive } from 'exhaustive';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useMemo, useReducer } from 'react';
 
 interface CartItem {
-  product: Product
-  options: Option[]
-  count: number
-  observation?: string
-  total: number
+  product: Product;
+  options: Array<Option>;
+  count: number;
+  observation?: string;
+  total: number;
 }
 
 type CartEvent =
   | {
-      type: 'ADD'
-      item: Omit<CartItem, 'total'>
+      type: 'add';
+      item: Omit<CartItem, 'total'>;
     }
   | {
-      type: 'REMOVE'
-      index: number
+      type: 'remove';
+      index: number;
     }
   | {
-      type: 'UPDATE-QUANTITY'
-      index: number
-      count: number
-    }
+      type: 'update-quantity';
+      index: number;
+      count: number;
+    };
 
 interface ICartContext {
-  addCartEvent: (event: CartEvent) => void
-  cart: CartItem[]
+  addCartEvent: (event: CartEvent) => void;
+  cart: Array<CartItem>;
 }
 
 const CartContext = createContext<ICartContext>({
   cart: [],
   addCartEvent() {},
-})
+});
 
-function cartReducer(state: CartItem[], event: CartEvent): CartItem[] {
+function cartReducer(
+  state: Array<CartItem>,
+  event: CartEvent,
+): Array<CartItem> {
   return exhaustive(event, 'type', {
-    ADD: ({ item }) => {
-      let total = item.product.price
-      const options: Option[] = []
+    add: ({ item }) => {
+      let total = item.product.price;
+      const options: Array<Option> = [];
 
       for (const option of item.options) {
         if (option.count > 0) {
-          options.push(option)
-          total += (option.price ?? 0) * option.count
+          options.push(option);
+          total += (option.price ?? 0) * option.count;
         }
       }
 
-      return [...state, { ...item, options, total: total * item.count }]
+      return [...state, { ...item, options, total: total * item.count }];
     },
-    REMOVE: ({ index }) => state.filter((_, i) => i !== index),
-    'UPDATE-QUANTITY': ({ index, count }) => {
-      const updatedCart = [...state]
-      const item = updatedCart[index]
-      let total = item.product.price
+    remove: ({ index }) => state.filter((_, i) => i !== index),
+    'update-quantity': ({ index, count }) => {
+      const updatedCart = [...state];
+      const item = updatedCart[index];
+      let total = item.product.price;
 
       for (const option of item.options) {
-        total += (option.price ?? 0) * option.count
+        total += (option.price ?? 0) * option.count;
       }
 
-      updatedCart[index] = { ...item, count, total: total * count }
+      updatedCart[index] = { ...item, count, total: total * count };
 
-      return updatedCart
+      return updatedCart;
     },
-  })
+  });
 }
 
 export function CartProvider(props: {
-  children: ReactNode
+  children: ReactNode;
 }): React.JSX.Element {
-  const [cart, addCartEvent] = useReducer(cartReducer, [])
+  const [cart, addCartEvent] = useReducer(cartReducer, []);
 
-  const context = useMemo<ICartContext>(() => ({ cart, addCartEvent }), [cart])
+  const context = useMemo<ICartContext>(() => ({ cart, addCartEvent }), [cart]);
 
   return (
     <CartContext.Provider value={context}>
       {props.children}
     </CartContext.Provider>
-  )
+  );
 }
 
 export function useCart(): ICartContext {
-  return useContext(CartContext)
+  return useContext(CartContext);
 }

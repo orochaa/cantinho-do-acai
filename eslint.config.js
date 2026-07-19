@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-mist3rbru'
+import plugin from 'eslint-plugin-mist3rbru';
 
 export default [
   plugin.configs.react,
@@ -16,4 +16,4 @@ export default [
       '@stylistic/padding-line-between-statements': 'off',
     },
   },
-]
+];

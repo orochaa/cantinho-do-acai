@@ -1,155 +1,151 @@
 /* eslint-disable no-secrets/no-secrets */
-import { Button } from '@/components/button'
-import { Container } from '@/components/container'
-import { QuantitySelector } from '@/components/multiple-options-selector'
-import { Seo } from '@/components/seo'
-import { SingleOptionSelector } from '@/components/single-option-selector'
-import { useCart } from '@/context/cart-provider'
-import { useToast } from '@/context/toast-provider'
-import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option'
-import { getCepAddress } from '@/lib/brasil-api'
-import { formatCurrency, parseCurrency } from '@/lib/format'
+import { Button } from '@/components/button';
+import { Container } from '@/components/container';
+import { QuantitySelector } from '@/components/multiple-options-selector';
+import { Seo } from '@/components/seo';
+import { SingleOptionSelector } from '@/components/single-option-selector';
+import { useCart } from '@/context/cart-provider';
+import { useToast } from '@/context/toast-provider';
+import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option';
+import { getCepAddress } from '@/lib/brasil-api';
+import { formatCurrency, parseCurrency } from '@/lib/format';
 // import {
 //   COMPANY_COORDINATES,
 //   calculateDistance,
 //   calculateFare,
 //   getCoordinates,
 // } from '@/lib/geo'
-import { ExternalLink, PlusSquare, X } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { ExternalLink, PlusSquare, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 interface CepAddress {
-  cep: string
-  state: string
-  city: string
-  neighborhood: string
-  street: string
-  service: string
+  cep: string;
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  service: string;
 }
 
-type PaymentMethod = 'PIX' | 'Cartão de Crédito' | 'Dinheiro'
+type PaymentMethod = 'PIX' | 'Cartão de Crédito' | 'Dinheiro';
 
-type SpoonOption = 'Não, obrigado' | 'Sim, por favor'
+type SpoonOption = 'Não, obrigado' | 'Sim, por favor';
 
-type CheckoutOption = 'Retirada no local' | 'Entrega (com taxa de entrega)'
+type CheckoutOption = 'Retirada no local' | 'Entrega (com taxa de entrega)';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const createMessageBuilder = () => {
-  const parts: string[] = []
+  const parts: Array<string> = [];
 
   return {
     add: (text: string): void => {
-      parts.push(text)
+      parts.push(text);
     },
     addConditional: (condition: unknown, text: string | (() => void)): void => {
       if (condition) {
         if (typeof text === 'function') {
-          text()
+          text();
         } else {
-          parts.push(text)
+          parts.push(text);
         }
       }
     },
-    build: (): string => {
-      return parts.join('\n')
-    },
-  }
-}
+    build: (): string => parts.join('\n'),
+  };
+};
 
 export function CartPage(): React.JSX.Element {
-  const { addCartEvent, cart } = useCart()
+  const { addCartEvent, cart } = useCart();
 
   const [paymentMethod, selectPaymentMethod] = useSingleOption<PaymentMethod>([
     { name: 'PIX', isSelected: true },
     { name: 'Cartão de Crédito' },
     { name: 'Dinheiro' },
-  ])
+  ]);
 
   const [spoonOption, selectSpoonOption] = useSingleOption<SpoonOption>([
     { name: 'Não, obrigado', isSelected: true },
     { name: 'Sim, por favor' },
-  ])
+  ]);
   const [checkoutOption, selectCheckoutOption] =
     useSingleOption<CheckoutOption>([
       { name: 'Retirada no local', isSelected: true },
       { name: 'Entrega (com taxa de entrega)' },
-    ])
+    ]);
 
   const isDelivery = isOptionSelected(
     checkoutOption.options,
-    'Entrega (com taxa de entrega)'
-  )
+    'Entrega (com taxa de entrega)',
+  );
 
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const toast = useToast()
+  const toast = useToast();
 
-  const [cep, setCep] = useState('')
-  const [address, setAddress] = useState<CepAddress | null>(null)
-  const [addressError, setAddressError] = useState<string | null>(null)
-  const [cepLoading, setCepLoading] = useState(false)
+  const [cep, setCep] = useState('');
+  const [address, setAddress] = useState<CepAddress | null>(null);
+  const [addressError, setAddressError] = useState<string | null>(null);
+  const [cepLoading, setCepLoading] = useState(false);
   // const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
   // const [distance, setDistance] = useState<number | null>(null)
   // const [fareLoading, setFareLoading] = useState(false)
   // const [fareError, setFareError] = useState<string | null>(null)
-  const [addressNumber, setAddressNumber] = useState('')
-  const [addressComplement, setAddressComplement] = useState('')
-  const [addressReference, setAddressReference] = useState('')
-  const [clientName, setClientName] = useState('')
-  const [cashValue, setCashValue] = useState<string>('')
+  const [addressNumber, setAddressNumber] = useState('');
+  const [addressComplement, setAddressComplement] = useState('');
+  const [addressReference, setAddressReference] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [cashValue, setCashValue] = useState<string>('');
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const totalOrder = useMemo(() => {
-    let total = 0
+    let total = 0;
 
     for (const item of cart) {
-      total += item.total
+      total += item.total;
     }
 
     // if (isDelivery && deliveryFare) {
     //   total += deliveryFare
     // }
 
-    return total
-  }, [cart])
+    return total;
+  }, [cart]);
 
   const change = useMemo(() => {
-    const cash = parseCurrency(cashValue)
+    const cash = parseCurrency(cashValue);
 
     if (
       isOptionSelected(paymentMethod.options, 'Dinheiro') &&
       !Number.isNaN(cash)
     ) {
-      return cash - totalOrder
+      return cash - totalOrder;
     }
 
-    return 0
-  }, [cashValue, paymentMethod, totalOrder])
+    return 0;
+  }, [cashValue, paymentMethod, totalOrder]);
 
   const handleCepChange = useCallback(async (cep: string) => {
-    cep = cep.replaceAll(/\D/g, '')
+    cep = cep.replaceAll(/\D/g, '');
 
-    setCep(cep)
+    setCep(cep);
 
     if (cep.length === 8) {
-      let cepAddress: CepAddress | undefined
+      let cepAddress: CepAddress | undefined;
 
       try {
-        setCepLoading(true)
-        cepAddress = await getCepAddress(cep)
-        setAddress(cepAddress)
-        setAddressError(null)
+        setCepLoading(true);
+        cepAddress = await getCepAddress(cep);
+        setAddress(cepAddress);
+        setAddressError(null);
       } catch (error) {
-        setAddress(null)
-        setAddressError('CEP não encontrado.')
-        console.error(error)
+        setAddress(null);
+        setAddressError('CEP não encontrado.');
+        console.error(error);
       } finally {
-        setCepLoading(false)
+        setCepLoading(false);
       }
-
-      return
       // if (!cepAddress) {
       //   return
       // }
@@ -170,107 +166,108 @@ export function CartPage(): React.JSX.Element {
       //   setFareLoading(false)
       // }
     }
-  }, [])
+  }, []);
 
   const goToWhatsappLink = useMemo((): string => {
-    const builder = createMessageBuilder()
-    let total = 0
+    const builder = createMessageBuilder();
+    let total = 0;
 
-    builder.add('Olá, Cantinho do Açaí!')
-    builder.add('Gostaria de fazer um pedido:')
-    builder.add('')
+    builder.add('Olá, Cantinho do Açaí!');
+    builder.add('Gostaria de fazer um pedido:');
+    builder.add('');
 
     for (const item of cart) {
-      total += item.total
+      total += item.total;
       const itemParts = [
         `*${item.count} - ${item.product.name}* ${
           item.product.price ? `- ${formatCurrency(item.product.price)}` : ''
         }`,
-        ...item.options.map(complement => {
-          return `- ${complement.count} - ${complement.name}${
-            complement.price ? ` - ${formatCurrency(complement.price)}` : ''
-          }`
-        }),
-      ]
-      builder.add(itemParts.filter(Boolean).join('\n'))
+        ...item.options.map(
+          complement =>
+            `- ${complement.count} - ${complement.name}${
+              complement.price ? ` - ${formatCurrency(complement.price)}` : ''
+            }`,
+        ),
+      ];
+      builder.add(itemParts.filter(Boolean).join('\n'));
       builder.addConditional(item.observation, () => {
         builder.add(`*Observação:*
-${item.observation}`)
-      })
+${item.observation}`);
+      });
     }
 
-    builder.add('')
-    builder.add(`*Opção de Entrega*`)
+    builder.add('');
+    builder.add('*Opção de Entrega*');
     builder.addConditional(isDelivery, () => {
-      builder.add('Entrega (com taxa de entrega)')
+      builder.add('Entrega (com taxa de entrega)');
 
       if (address && addressNumber) {
         builder.add(
-          `Endereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
-        )
+          `Endereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`,
+        );
         builder.addConditional(addressComplement, () => {
-          builder.add(`Complemento: ${addressComplement}`)
-        })
+          builder.add(`Complemento: ${addressComplement}`);
+        });
         builder.addConditional(addressReference, () => {
-          builder.add(`Ponto de referência: ${addressReference}`)
-        })
+          builder.add(`Ponto de referência: ${addressReference}`);
+        });
       } else {
-        builder.add(`Endereço: (não informado por completo)`)
-        builder.addConditional(!address, `- Faltando CEP`)
-        builder.addConditional(!addressNumber, `- Faltando número`)
+        builder.add('Endereço: (não informado por completo)');
+        builder.addConditional(!address, '- Faltando CEP');
+        builder.addConditional(!addressNumber, '- Faltando número');
       }
 
       // if (deliveryFare) {
       //   builder.add(`Taxa de entrega: ${formatCurrency(deliveryFare)}`)
       //   total += deliveryFare
       // } else {
-      builder.add(`Taxa de entrega: A calcular`)
+      builder.add('Taxa de entrega: A calcular');
       // }
-    })
+    });
     builder.addConditional(!isDelivery, () => {
-      builder.add('Retirada no local')
-    })
+      builder.add('Retirada no local');
+    });
 
-    builder.add('')
-    builder.add(`*Total:* ${formatCurrency(total)}`)
+    builder.add('');
+    builder.add(`*Total:* ${formatCurrency(total)}`);
 
     builder.addConditional(
       isOptionSelected(spoonOption.options, 'Sim, por favor'),
       () => {
-        builder.add('')
-        builder.add('Incluir talheres, por favor.')
-      }
-    )
+        builder.add('');
+        builder.add('Incluir talheres, por favor.');
+      },
+    );
 
-    builder.add('')
+    builder.add('');
     builder.add(
-      `*Forma de Pagamento:* ${paymentMethod.options.find(option => option.isSelected)?.name}`
-    )
+      `*Forma de Pagamento:* ${paymentMethod.options.find(option => option.isSelected)?.name}`,
+    );
     builder.addConditional(
       isOptionSelected(paymentMethod.options, 'Dinheiro'),
       () => {
         builder.add(
-          `Valor pago em dinheiro: ${formatCurrency(parseCurrency(cashValue))}`
-        )
-        builder.add(`Troco: ${formatCurrency(change)}`)
-      }
-    )
+          `Valor pago em dinheiro: ${formatCurrency(parseCurrency(cashValue))}`,
+        );
+        builder.add(`Troco: ${formatCurrency(change)}`);
+      },
+    );
 
-    builder.add('')
-    builder.add(`Nome: ${clientName}`)
+    builder.add('');
+    builder.add(`Nome: ${clientName}`);
 
-    builder.add('')
+    builder.add('');
     builder.add(
-      '👆 Por favor, envie-nos esta mensagem agora. Assim que recebermos, estaremos atendendo você.'
-    )
+      '👆 Por favor, envie-nos esta mensagem agora. Assim que recebermos, estaremos atendendo você.',
+    );
 
-    const msg = builder.build()
-    const phone = '5554984312998'
+    const msg = builder.build();
+    const phone = '5554984312998';
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(
-      msg
-    )}`
+      msg,
+    )}`;
 
-    return url
+    return url;
   }, [
     isDelivery,
     spoonOption,
@@ -283,49 +280,49 @@ ${item.observation}`)
     paymentMethod,
     cashValue,
     change,
-  ])
+  ]);
 
   const openModal = useCallback(() => {
-    setModalOpen(true)
-  }, [])
+    setModalOpen(true);
+  }, []);
 
   const handleConfirmOrder = useCallback(() => {
     if (!clientName.trim()) {
-      toast.error({ description: 'Por favor, informe o seu nome.' })
+      toast.error({ description: 'Por favor, informe o seu nome.' });
 
-      return
+      return;
     }
 
     if (isDelivery) {
       if (!address) {
-        toast.error({ description: 'Por favor, informe o seu CEP.' })
+        toast.error({ description: 'Por favor, informe o seu CEP.' });
 
-        return
+        return;
       }
 
       if (!addressNumber) {
         toast.error({
           description: 'Por favor, informe o número do seu endereço.',
-        })
+        });
 
-        return
+        return;
       }
     }
 
     if (isOptionSelected(paymentMethod.options, 'Dinheiro')) {
-      const cash = parseCurrency(cashValue)
+      const cash = parseCurrency(cashValue);
 
       if (Number.isNaN(cash) || cash < totalOrder) {
         toast.error({
           description:
             'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
-        })
+        });
 
-        return
+        return;
       }
     }
 
-    openModal()
+    openModal();
   }, [
     clientName,
     isDelivery,
@@ -336,17 +333,17 @@ ${item.observation}`)
     paymentMethod,
     cashValue,
     totalOrder,
-  ])
+  ]);
 
   const closeModal = useCallback(() => {
-    setModalOpen(false)
-  }, [])
+    setModalOpen(false);
+  }, []);
 
   useEffect(() => {
     if (cart.length === 0) {
-      navigate('/')
+      navigate('/');
     }
-  }, [cart, navigate])
+  }, [cart, navigate]);
 
   return (
     <>
@@ -365,10 +362,9 @@ ${item.observation}`)
               {cart.map(
                 ({ product, options, observation, count, total }, i) => (
                   <div
-                    // eslint-disable-next-line react/no-array-index-key
+                    // biome-ignore lint/suspicious/noArrayIndexKey: TODO
                     key={i}
-                    className="relative flex flex-col gap-2 rounded-sm bg-zinc-50 p-2 shadow-sm"
-                  >
+                    className="relative flex flex-col gap-2 rounded-sm bg-zinc-50 p-2 shadow-sm">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">
                         {count} - {product.name}{' '}
@@ -380,25 +376,25 @@ ${item.observation}`)
                           switch (e.type) {
                             case 'ADD':
                               addCartEvent({
-                                type: 'UPDATE-QUANTITY',
+                                type: 'update-quantity',
                                 index: i,
                                 count: count + 1,
-                              })
-                              break
+                              });
+                              break;
                             case 'REMOVE':
                               if (count > 1) {
                                 addCartEvent({
-                                  type: 'UPDATE-QUANTITY',
+                                  type: 'update-quantity',
                                   index: i,
                                   count: count - 1,
-                                })
+                                });
                               } else {
                                 addCartEvent({
-                                  type: 'REMOVE',
+                                  type: 'remove',
                                   index: i,
-                                })
+                                });
                               }
-                              break
+                              break;
                           }
                         }}
                         item={{ name: product.name, count }}
@@ -406,7 +402,7 @@ ${item.observation}`)
                           countLimit: 15,
                           countTotal: cart.reduce(
                             (acc, item) => acc + item.count,
-                            0
+                            0,
                           ),
                         }}
                       />
@@ -415,9 +411,11 @@ ${item.observation}`)
                       {options.map(complement => (
                         <li
                           key={complement.name}
-                          className="flex items-center gap-1"
-                        >
-                          <PlusSquare size={20} className="text-pink-600" />
+                          className="flex items-center gap-1">
+                          <PlusSquare
+                            size={20}
+                            className="text-pink-600"
+                          />
                           {[
                             complement.count,
                             complement.name,
@@ -443,7 +441,7 @@ ${item.observation}`)
                       </p>
                     )}
                   </div>
-                )
+                ),
               )}
             </div>
           </Container>
@@ -452,7 +450,9 @@ ${item.observation}`)
               Identificação do pedido
             </h2>
             <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
-              <label htmlFor="client-name" className="ml-1 leading-3 font-bold">
+              <label
+                htmlFor="client-name"
+                className="ml-1 leading-3 font-bold">
                 Seu nome:
               </label>
               <input
@@ -486,15 +486,16 @@ ${item.observation}`)
               </h2>
               <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="cep" className="ml-1 leading-3 font-bold">
+                  <label
+                    htmlFor="cep"
+                    className="ml-1 leading-3 font-bold">
                     CEP:
                   </label>
                   <a
                     href="https://buscacepinter.correios.com.br/app/endereco/index.php"
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm text-blue-500 hover:underline"
-                  >
+                    className="text-sm text-blue-500 hover:underline">
                     Não sabe seu CEP?
                   </a>
                 </div>
@@ -530,8 +531,7 @@ ${item.observation}`)
 
                       <label
                         htmlFor="address-number"
-                        className="mt-2 ml-1 leading-3 font-bold"
-                      >
+                        className="mt-2 ml-1 leading-3 font-bold">
                         Número:
                       </label>
                       <input
@@ -546,8 +546,7 @@ ${item.observation}`)
 
                       <label
                         htmlFor="address-complement"
-                        className="mt-2 ml-1 leading-3 font-bold"
-                      >
+                        className="mt-2 ml-1 leading-3 font-bold">
                         Complemento (opcional):
                       </label>
                       <input
@@ -561,8 +560,7 @@ ${item.observation}`)
 
                       <label
                         htmlFor="address-reference"
-                        className="mt-2 ml-1 leading-3 font-bold"
-                      >
+                        className="mt-2 ml-1 leading-3 font-bold">
                         Ponto de referência (opcional):
                       </label>
                       <input
@@ -628,8 +626,7 @@ ${item.observation}`)
               <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
                 <label
                   htmlFor="cash-value"
-                  className="ml-1 leading-3 font-bold"
-                >
+                  className="ml-1 leading-3 font-bold">
                   Valor em dinheiro:
                 </label>
                 <div className="flex items-center justify-start gap-3">
@@ -640,14 +637,13 @@ ${item.observation}`)
                       setCashValue(
                         formatCurrency(
                           parseCurrency(cashValue) +
-                            Math.max(totalOrder - parseCurrency(cashValue), 0)
-                        )
+                            Math.max(totalOrder - parseCurrency(cashValue), 0),
+                        ),
                       )
-                    }
-                  >
+                    }>
                     +
                     {formatCurrency(
-                      Math.max(totalOrder - parseCurrency(cashValue), 0)
+                      Math.max(totalOrder - parseCurrency(cashValue), 0),
                     )}
                   </button>
                   <button
@@ -655,10 +651,9 @@ ${item.observation}`)
                     className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
                     onClick={() =>
                       setCashValue(
-                        formatCurrency(parseCurrency(cashValue) + 20)
+                        formatCurrency(parseCurrency(cashValue) + 20),
                       )
-                    }
-                  >
+                    }>
                     +{formatCurrency(20)}
                   </button>
                   <button
@@ -666,10 +661,9 @@ ${item.observation}`)
                     className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
                     onClick={() =>
                       setCashValue(
-                        formatCurrency(parseCurrency(cashValue) + 50)
+                        formatCurrency(parseCurrency(cashValue) + 50),
                       )
-                    }
-                  >
+                    }>
                     +{formatCurrency(50)}
                   </button>
                 </div>
@@ -696,17 +690,23 @@ ${item.observation}`)
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <Button variant="cancel" onClick={async () => navigate('/')}>
+          <Button
+            variant="cancel"
+            onClick={async () => navigate('/')}>
             Continuar Escolhendo
           </Button>
-          <Button variant="confirm" onClick={handleConfirmOrder}>
+          <Button
+            variant="confirm"
+            onClick={handleConfirmOrder}>
             Confirmar Pedido {formatCurrency(totalOrder)}
           </Button>
         </div>
 
         {!!modalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+            {/** biome-ignore lint/a11y/noNoninteractiveElementInteractions: TODO */}
+            {/** biome-ignore lint/a11y/noStaticElementInteractions: TODO */}
+            {/** biome-ignore lint/a11y/useKeyWithClickEvents: TODO */}
             <div
               className="absolute inset-0 bg-black/50"
               onClick={closeModal}
@@ -720,8 +720,7 @@ ${item.observation}`)
                   type="button"
                   className="rounded-sm p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200"
                   title="Fechar modal"
-                  onClick={closeModal}
-                >
+                  onClick={closeModal}>
                   <X className="size-5" />
                 </button>
               </div>
@@ -735,15 +734,13 @@ ${item.observation}`)
                 <Button
                   variant="cancel"
                   className="border-zinc-300 transition hover:border-zinc-500"
-                  onClick={closeModal}
-                >
+                  onClick={closeModal}>
                   Cancelar
                 </Button>
                 <Button
                   variant="confirm"
                   className="items-start border-zinc-300 bg-green-500 hover:border-zinc-500"
-                  onClick={() => window.open(goToWhatsappLink, '_blank')}
-                >
+                  onClick={() => window.open(goToWhatsappLink, '_blank')}>
                   <ExternalLink className="size-5" />
                   Continuar
                 </Button>
@@ -753,5 +750,5 @@ ${item.observation}`)
         )}
       </div>
     </>
-  )
+  );
 }

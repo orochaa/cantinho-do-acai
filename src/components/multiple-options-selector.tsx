@@ -2,21 +2,21 @@
 import type {
   MultipleOptionsEvent,
   MultipleOptionsState,
-} from '@/hooks/use-multiple-options'
-import { formatCurrency } from '@/lib/format'
-import { Minus, Plus, Trash2 } from 'lucide-react'
-import { Container } from './container'
+} from '@/hooks/use-multiple-options';
+import { formatCurrency } from '@/lib/format';
+import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Container } from './container';
 
 export interface MultipleOptionsSelectorProps<TName extends string> {
-  title: string
-  ctx: MultipleOptionsState<TName>
-  dispatchEvent: (event: MultipleOptionsEvent<TName>) => void
+  title: string;
+  ctx: MultipleOptionsState<TName>;
+  dispatchEvent: (event: MultipleOptionsEvent<TName>) => void;
 }
 
 export function MultipleOptionsSelector<TName extends string>(
-  props: MultipleOptionsSelectorProps<TName>
+  props: MultipleOptionsSelectorProps<TName>,
 ): React.JSX.Element {
-  const { title, ctx, dispatchEvent } = props
+  const { title, ctx, dispatchEvent } = props;
 
   return (
     <Container>
@@ -29,13 +29,11 @@ export function MultipleOptionsSelector<TName extends string>(
         {ctx.options.map(option => (
           <div
             key={option.name}
-            className="flex items-center rounded-sm bg-zinc-100 active:bg-zinc-200"
-          >
+            className="flex items-center rounded-sm bg-zinc-100 active:bg-zinc-200">
             <button
               type="button"
               className="flex grow items-center gap-2 p-3"
-              onClick={() => dispatchEvent({ type: 'ADD', option })}
-            >
+              onClick={() => dispatchEvent({ type: 'ADD', option })}>
               {!!option.img && (
                 <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
                   <img
@@ -76,19 +74,19 @@ export function MultipleOptionsSelector<TName extends string>(
         ))}
       </div>
     </Container>
-  )
+  );
 }
 
 interface AddOptionButtonProps<TName extends string> {
-  option: Option<TName>
-  ctx: MultipleOptionsState<TName>
-  dispatchEvent: (event: MultipleOptionsEvent<TName>) => void
+  option: Option<TName>;
+  ctx: MultipleOptionsState<TName>;
+  dispatchEvent: (event: MultipleOptionsEvent<TName>) => void;
 }
 
 function AddOptionButton<TName extends string>(
-  props: AddOptionButtonProps<TName>
+  props: AddOptionButtonProps<TName>,
 ): React.JSX.Element {
-  const { dispatchEvent, option, ctx } = props
+  const { dispatchEvent, option, ctx } = props;
 
   return (
     <button
@@ -96,23 +94,22 @@ function AddOptionButton<TName extends string>(
       className="flex h-full items-center justify-center rounded-xs p-3 pl-0 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
-      onClick={() => dispatchEvent({ type: 'ADD', option })}
-    >
+      onClick={() => dispatchEvent({ type: 'ADD', option })}>
       <Plus className="size-5" />
     </button>
-  )
+  );
 }
 
 interface QuantitySelectorProps<TName extends string> {
-  item: Option<TName>
-  ctx: Pick<MultipleOptionsState<TName>, 'countLimit' | 'countTotal'>
-  onCountChange: (event: MultipleOptionsEvent<TName>) => void
+  item: Option<TName>;
+  ctx: Pick<MultipleOptionsState<TName>, 'countLimit' | 'countTotal'>;
+  onCountChange: (event: MultipleOptionsEvent<TName>) => void;
 }
 
 export function QuantitySelector<TName extends string>(
-  props: QuantitySelectorProps<TName>
+  props: QuantitySelectorProps<TName>,
 ): React.JSX.Element {
-  const { onCountChange, item, ctx } = props
+  const { onCountChange, item, ctx } = props;
 
   return (
     <div className="flex h-full items-center p-3 pl-0">
@@ -121,8 +118,7 @@ export function QuantitySelector<TName extends string>(
           type="button"
           className="rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200"
           title="Remover"
-          onClick={() => onCountChange({ type: 'REMOVE', option: item })}
-        >
+          onClick={() => onCountChange({ type: 'REMOVE', option: item })}>
           {item.count === 1 ? (
             <Trash2 className="size-5 shrink-0" />
           ) : (
@@ -135,11 +131,10 @@ export function QuantitySelector<TName extends string>(
           className="rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
           title="Adicionar"
           disabled={ctx.countTotal >= ctx.countLimit}
-          onClick={() => onCountChange({ type: 'ADD', option: item })}
-        >
+          onClick={() => onCountChange({ type: 'ADD', option: item })}>
           <Plus className="size-5 shrink-0" />
         </button>
       </div>
     </div>
-  )
+  );
 }

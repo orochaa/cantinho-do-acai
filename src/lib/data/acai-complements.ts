@@ -1,4 +1,4 @@
-import { entries } from 'remeda'
+import { entries } from 'remeda';
 
 /* eslint-disable no-secrets/no-secrets */
 export type AcaiComplement =
@@ -11,7 +11,7 @@ export type AcaiComplement =
   | 'Paçoca'
   | 'Ovomaltine'
   | 'Chocoball'
-  | 'Sucrilhos'
+  | 'Sucrilhos';
 
 export const ACAI_COMPLEMENTS: Record<AcaiComplement, { img: string }> = {
   Banana: {
@@ -44,11 +44,11 @@ export const ACAI_COMPLEMENTS: Record<AcaiComplement, { img: string }> = {
   Sucrilhos: {
     img: 'https://static-images.ifood.com.br/pratos/e98d3812-d175-4664-ae77-97f266bc601a/202505201007_8A7Y_i.jpg',
   },
-}
+};
 
 export const acaiComplements = entries(ACAI_COMPLEMENTS).map(
   ([name, data]) => ({
     ...data,
     name,
-  })
-)
+  }),
+);

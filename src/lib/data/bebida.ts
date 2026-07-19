@@ -1,6 +1,6 @@
 export const bebidaCategory: Category<
   Product,
-  { flavors: { name: string; price: number }[] }
+  { flavors: Array<{ name: string; price: number }> }
 > = {
   slang: 'bebidas',
   description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa.',
@@ -21,4 +21,4 @@ export const bebidaCategory: Category<
     { name: 'Guaraná 600ml', price: 10 },
     { name: 'Sprite 600ml', price: 10 },
   ],
-}
+};

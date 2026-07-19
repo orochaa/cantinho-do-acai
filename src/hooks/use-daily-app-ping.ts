@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { useEffect, useRef } from 'react'
-import { UAParser } from 'ua-parser-js'
+import { useEffect, useRef } from 'react';
+import { UAParser } from 'ua-parser-js';
 
-const APP_NAME = 'Cantinho do Açaí'
-const COOKIE_KEY = `${formatScreamingSnakeCase(APP_NAME)}_LAST_ACCESS`
-const LOG_ACCESS_URL = import.meta.env.VITE_LOG_ACCESS_URL
+const APP_NAME = 'Cantinho do Açaí';
+const COOKIE_KEY = `${formatScreamingSnakeCase(APP_NAME)}_LAST_ACCESS`;
+const LOG_ACCESS_URL = import.meta.env.VITE_LOG_ACCESS_URL;
 
 export function useDailyAppPing(): void {
-  const hasPinged = useRef(false)
+  const hasPinged = useRef(false);
 
   useEffect(() => {
     if (!LOG_ACCESS_URL) {
-      console.error('VITE_LOG_ACCESS_URL is not defined.')
+      console.error('VITE_LOG_ACCESS_URL is not defined.');
 
-      return
+      return;
     }
 
     if (hasPinged.current) {
-      return
+      return;
     }
-    hasPinged.current = true
+    hasPinged.current = true;
 
-    const now = new Date()
+    const now = new Date();
     const todayStart = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate()
-    )
+      now.getDate(),
+    );
     const todayEnd = new Date(
       now.getFullYear(),
       now.getMonth(),
@@ -34,14 +34,14 @@ export function useDailyAppPing(): void {
       23,
       59,
       59,
-      999
-    )
+      999,
+    );
 
     const lastAccessCookie = document.cookie
       .split('; ')
       .find(row => row.startsWith(`${COOKIE_KEY}=`))
-      ?.split('=')[1]
-    const lastAccessDate = lastAccessCookie ? new Date(lastAccessCookie) : null
+      ?.split('=')[1];
+    const lastAccessDate = lastAccessCookie ? new Date(lastAccessCookie) : null;
 
     // If the last access date is today or later, do nothing.
     // This prevents multiple pings in the same day and handles potential clock skew.
@@ -50,7 +50,7 @@ export function useDailyAppPing(): void {
       !Number.isNaN(lastAccessDate.getTime()) &&
       lastAccessDate.getTime() > todayStart.getTime()
     ) {
-      return
+      return;
     }
 
     fetch(LOG_ACCESS_URL, {
@@ -62,38 +62,39 @@ export function useDailyAppPing(): void {
       }),
     })
       .then(() => {
-        document.cookie = `${COOKIE_KEY}=${now.toISOString()}; expires=${todayEnd.toUTCString()}; path=/; SameSite=Lax`
+        // biome-ignore lint/suspicious/noDocumentCookie: TODO
+        document.cookie = `${COOKIE_KEY}=${now.toISOString()}; expires=${todayEnd.toUTCString()}; path=/; SameSite=Lax`;
       })
-      .catch(console.error)
-  }, [])
+      .catch(console.error);
+  }, []);
 }
 
 interface ClientInfo {
   browser: {
-    name: string
-    version: string
-  }
+    name: string;
+    version: string;
+  };
   os: {
-    name: string
-    version: string
-  }
+    name: string;
+    version: string;
+  };
   device: {
-    type: string
-    model: string
-  }
-  platform: string
-  userAgent: string
-  screen: { w: number; h: number; dpr: number }
-  locale: string
-  timezone: string
-  referrer: string
-  pageUrl: string
-  clientTime: string // ISO, for drift checks
+    type: string;
+    model: string;
+  };
+  platform: string;
+  userAgent: string;
+  screen: { w: number; h: number; dpr: number };
+  locale: string;
+  timezone: string;
+  referrer: string;
+  pageUrl: string;
+  clientTime: string; // ISO, for drift checks
 }
 
 function collectClientInfo(): ClientInfo {
-  const ua = new UAParser()
-  const meta = ua.getResult()
+  const ua = new UAParser();
+  const meta = ua.getResult();
 
   return {
     browser: {
@@ -121,12 +122,12 @@ function collectClientInfo(): ClientInfo {
     // eslint-disable-next-line @typescript-eslint/no-deprecated
     platform: navigator.platform || 'unknown',
     clientTime: new Date().toISOString(),
-  }
+  };
 }
 
 function formatScreamingSnakeCase(name: string): string {
   return name
     .replaceAll(/\s*([A-Z])/g, '_$1')
     .replaceAll(/\s+/g, '_')
-    .toUpperCase()
+    .toUpperCase();
 }

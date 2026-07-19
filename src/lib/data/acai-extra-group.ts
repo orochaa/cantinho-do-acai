@@ -1,8 +1,8 @@
-import { ACAI_EXTRA } from '@/lib/data/acai-extra'
-import type { AcaiExtra } from '@/lib/data/acai-extra'
-import { entries, fromEntries } from 'remeda'
+import type { AcaiExtra } from '@/lib/data/acai-extra';
+import { ACAI_EXTRA } from '@/lib/data/acai-extra';
+import { entries, fromEntries } from 'remeda';
 
-export type AcaiExtraGroup = keyof typeof ACAI_EXTRA_GROUP
+export type AcaiExtraGroup = keyof typeof ACAI_EXTRA_GROUP;
 
 const ACAI_EXTRA_GROUP = {
   'Marmita Turbinada': {
@@ -98,7 +98,7 @@ const ACAI_EXTRA_GROUP = {
     'Calda de Chocolate': 2,
     'Calda de Morango': 2,
   },
-} satisfies Record<string, Record<AcaiExtra, number>>
+} satisfies Record<string, Record<AcaiExtra, number>>;
 
 export const acaiExtraGroup = fromEntries(
   entries(ACAI_EXTRA_GROUP).map(([name, group]) => [
@@ -107,7 +107,7 @@ export const acaiExtraGroup = fromEntries(
       entries(group).map(([extra, price]) => [
         extra,
         { ...ACAI_EXTRA[extra], price },
-      ])
+      ]),
     ),
-  ])
-) as Record<AcaiExtraGroup, Record<AcaiExtra, { price: number; img: string }>>
+  ]),
+) as Record<AcaiExtraGroup, Record<AcaiExtra, { price: number; img: string }>>;

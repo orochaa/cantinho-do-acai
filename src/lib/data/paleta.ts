@@ -1,8 +1,8 @@
-import { slang } from '../format'
+import { slang } from '../format';
 
 export const paletaCategory: Category<
   Product,
-  { flavors: { name: string; price: number }[] }
+  { flavors: Array<{ name: string; price: number }> }
 > = {
   disabled: false,
   slang: 'paleta',
@@ -26,4 +26,4 @@ export const paletaCategory: Category<
     { name: 'Ninho com Nutella', price: 10 },
     { name: 'Ferrero Rochet', price: 10 },
   ],
-}
+};

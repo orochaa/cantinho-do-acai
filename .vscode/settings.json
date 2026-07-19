@@ -1,7 +1,7 @@
 {
   "files.autoSave": "off",
-  "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.preferences.importModuleSpecifierEnding": "minimal",
+  "js/ts.preferences.importModuleSpecifier": "non-relative",
+  "js/ts.preferences.importModuleSpecifierEnding": "minimal",
   "tailwindCSS.experimental.classRegex": [
     ["(?:cn,clsx,twMerge)\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"],
     ["tv\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"],
@@ -9,5 +9,8 @@
     ["\\w*[cC]lassName\\s*[:=]\\s*[\"'`]([^\"'`]*)[\"'`]"],
     ["\\w*[cC]lassName\\s*[:=]\\s*{([^}]*)}"]
   ],
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit"
+  }
 }

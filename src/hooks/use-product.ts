@@ -1,23 +1,23 @@
-import { useMemo } from 'react'
-import { useParams } from 'react-router'
+import { useMemo } from 'react';
+import { useParams } from 'react-router';
 
 export function useProduct<TProduct extends Product>(
-  category: Category<TProduct>
+  category: Category<TProduct>,
 ): TProduct {
-  const { slang } = useParams()
+  const { slang } = useParams();
 
   return useMemo<TProduct>(() => {
-    const defaultProduct = category.products[0]
+    const defaultProduct = category.products[0];
 
     if (!slang) {
-      return defaultProduct
+      return defaultProduct;
     }
-    const product = category.products.find(p => p.slang === slang)
+    const product = category.products.find(p => p.slang === slang);
 
     if (!product) {
-      return defaultProduct
+      return defaultProduct;
     }
 
-    return product
-  }, [category.products, slang])
+    return product;
+  }, [category.products, slang]);
 }

@@ -1,6 +1,6 @@
-import type { ComponentProps } from 'react'
-import { tv } from 'tailwind-variants'
-import type { VariantProps } from 'tailwind-variants'
+import type { ComponentProps } from 'react';
+import type { VariantProps } from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
 
 const buttonStyles = tv({
   base: 'flex items-center justify-center gap-2 rounded-sm border p-2',
@@ -10,10 +10,11 @@ const buttonStyles = tv({
       cancel: 'border-white bg-zinc-100',
     },
   },
-})
+});
 
 export interface ButtonProps
-  extends VariantProps<typeof buttonStyles>, ComponentProps<'button'> {}
+  extends VariantProps<typeof buttonStyles>,
+    ComponentProps<'button'> {}
 
 export function Button(props: ButtonProps): React.JSX.Element {
   return (
@@ -25,5 +26,5 @@ export function Button(props: ButtonProps): React.JSX.Element {
         className: props.className,
       })}
     />
-  )
+  );
 }

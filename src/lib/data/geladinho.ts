@@ -1,6 +1,6 @@
 export const geladinhoCategory: Category<
   Product,
-  { flavors: { name: string; price: number; img: string }[] }
+  { flavors: Array<{ name: string; price: number; img: string }> }
 > = {
   slang: 'geladinho',
   description:
@@ -50,4 +50,4 @@ export const geladinhoCategory: Category<
       img: '/img/geladinho/geladinho-de-morango-com-nutella.jpg',
     },
   ],
-}
+};

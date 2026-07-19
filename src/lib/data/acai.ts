@@ -1,18 +1,18 @@
-import { acaiComplements } from '@/lib/data/acai-complements'
-import type { AcaiComplement } from '@/lib/data/acai-complements'
-import type { AcaiExtra } from '@/lib/data/acai-extra'
-import { acaiExtraGroup } from '@/lib/data/acai-extra-group'
-import { acaiType } from '@/lib/data/acai-type'
-import { entries } from 'remeda'
-import { slang } from '../format'
+import type { AcaiComplement } from '@/lib/data/acai-complements';
+import { acaiComplements } from '@/lib/data/acai-complements';
+import type { AcaiExtra } from '@/lib/data/acai-extra';
+import { acaiExtraGroup } from '@/lib/data/acai-extra-group';
+import { acaiType } from '@/lib/data/acai-type';
+import { entries } from 'remeda';
+import { slang } from '../format';
 
 export type Acai = Product & {
-  type: { name: string; img: string }[]
-  complementsLimit: number
-  complements: { name: AcaiComplement; img: string }[]
-  extras: { name: AcaiExtra; price: number; img: string }[]
-  extrasLimit: number
-}
+  type: Array<{ name: string; img: string }>;
+  complementsLimit: number;
+  complements: Array<{ name: AcaiComplement; img: string }>;
+  extras: Array<{ name: AcaiExtra; price: number; img: string }>;
+  extrasLimit: number;
+};
 
 export const acaiCategory: Category<Acai> = {
   slang: 'acai',
@@ -105,4 +105,4 @@ export const acaiCategory: Category<Acai> = {
     complements: acaiComplements,
     extras: entries(p.extras).map(([name, data]) => ({ ...data, name })),
   })),
-}
+};

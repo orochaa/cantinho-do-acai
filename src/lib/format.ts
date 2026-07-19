@@ -1,7 +1,7 @@
-import { capitalize } from '@brazilian-utils/brazilian-utils'
-import type { ClassValue } from 'clsx'
-import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { capitalize } from '@brazilian-utils/brazilian-utils';
+import type { ClassValue } from 'clsx';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function slang(data: string): string {
   return encodeURI(
@@ -9,8 +9,8 @@ export function slang(data: string): string {
       .normalize('NFD')
       .replaceAll(/[\u0300-\u036F]/g, '')
       .toLowerCase()
-      .replaceAll(/\s+/g, '-')
-  )
+      .replaceAll(/\s+/g, '-'),
+  );
 }
 
 export function parseSlang(slang: string): string {
@@ -18,23 +18,23 @@ export function parseSlang(slang: string): string {
     slang
       .split('-')
       .map(w => capitalize(w))
-      .join(' ')
-  )
+      .join(' '),
+  );
 }
 
-export function cn(...className: ClassValue[]): string {
-  return twMerge(clsx(...className))
+export function cn(...className: Array<ClassValue>): string {
+  return twMerge(clsx(...className));
 }
 
 export function formatCurrency(value: string | number): string {
   return Number(value).toLocaleString('pt-br', {
     style: 'currency',
     currency: 'BRL',
-  })
+  });
 }
 
 export function parseCurrency(value: string): number {
   return Number.parseFloat(
-    value.replace(',', '.').replaceAll(/[^\d.-]/g, '') || '0'
-  )
+    value.replace(',', '.').replaceAll(/[^\d.-]/g, '') || '0',
+  );
 }

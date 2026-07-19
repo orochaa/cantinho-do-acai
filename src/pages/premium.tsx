@@ -1,25 +1,25 @@
-import { Banner } from '@/components/banner'
-import { Container } from '@/components/container'
-import { OrderButton } from '@/components/order-button'
-import { Seo } from '@/components/seo'
-import { SingleOptionSelector } from '@/components/single-option-selector'
-import { useCart } from '@/context/cart-provider'
-import { useProduct } from '@/hooks/use-product'
-import { useSingleOption } from '@/hooks/use-single-option'
-import { premiumCategory } from '@/lib/data/premium'
-import { formatCurrency } from '@/lib/format'
-import { useState } from 'react'
+import { Banner } from '@/components/banner';
+import { Container } from '@/components/container';
+import { OrderButton } from '@/components/order-button';
+import { Seo } from '@/components/seo';
+import { SingleOptionSelector } from '@/components/single-option-selector';
+import { useCart } from '@/context/cart-provider';
+import { useProduct } from '@/hooks/use-product';
+import { useSingleOption } from '@/hooks/use-single-option';
+import { premiumCategory } from '@/lib/data/premium';
+import { formatCurrency } from '@/lib/format';
+import { useState } from 'react';
 
 export function PremiumPage(): React.JSX.Element {
-  const copo = useProduct(premiumCategory)
+  const copo = useProduct(premiumCategory);
 
-  const [observation, setObservation] = useState<string>('')
+  const [observation, setObservation] = useState<string>('');
 
-  const { addCartEvent } = useCart()
+  const { addCartEvent } = useCart();
 
   const [complements, selectComplement] = useSingleOption(
-    (copo.complements ?? []).map(c => ({ name: c }))
-  )
+    (copo.complements ?? []).map(c => ({ name: c })),
+  );
 
   return (
     <div>
@@ -28,7 +28,11 @@ export function PremiumPage(): React.JSX.Element {
         description={copo.description}
         imgUrl={`https://cantinhodoacai.vercel.app${copo.img}`}
       />
-      <Banner img={copo.img} name={copo.name} imgClassName="object-top" />
+      <Banner
+        img={copo.img}
+        name={copo.name}
+        imgClassName="object-top"
+      />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{copo.name}</h2>
@@ -60,8 +64,7 @@ export function PremiumPage(): React.JSX.Element {
           <Container>
             <label
               htmlFor="observation"
-              className="m-1 text-xl font-bold text-white"
-            >
+              className="m-1 text-xl font-bold text-white">
               Observação
             </label>
             <textarea
@@ -80,13 +83,17 @@ export function PremiumPage(): React.JSX.Element {
           totalPrice={copo.price}
           multiple
           validate={() => {
-            if (copo.complements?.length && !complements.isSelected) {
-              return 'Escolha seu Fini'
+            if (
+              copo.complements &&
+              copo.complements.length > 0 &&
+              !complements.isSelected
+            ) {
+              return 'Escolha seu Fini';
             }
           }}
           order={count =>
             addCartEvent({
-              type: 'ADD',
+              type: 'add',
               item: {
                 product: copo,
                 options: complements.options,
@@ -99,5 +106,5 @@ export function PremiumPage(): React.JSX.Element {
       </div>
       <span className="block h-20" />
     </div>
-  )
+  );
 }

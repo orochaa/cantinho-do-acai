@@ -1,0 +1,204 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "root": true,
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["**", "!**/dist", "!**/package.json", "!**/*.html"]
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "recommended": true,
+        "useSortedAttributes": "off",
+        "useSortedKeys": "off",
+        "useSortedProperties": "on",
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [":ALIAS:", ":PACKAGE:"]
+          }
+        }
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "a11y": "error",
+      "correctness": {
+        "preset": "recommended",
+        "useUniqueElementIds": "off"
+      },
+      "performance": {
+        "preset": "recommended",
+        "noJsxPropsBind": "off"
+      },
+      "security": "error",
+      "suspicious": {
+        "preset": "recommended",
+        "noConsole": "off"
+      },
+      "complexity": {
+        "preset": "recommended",
+        "noExcessiveLinesPerFunction": "off",
+        "noImplicitCoercions": "off"
+      },
+      "style": {
+        "preset": "recommended",
+        "noTernary": "off",
+        "noMagicNumbers": "off",
+        "noNestedTernary": "off",
+        "noProcessEnv": "off",
+        "useExportsLast": "off",
+        "noImplicitBoolean": "off",
+        "noExcessiveLinesPerFile": "off",
+        "noEnum": "error",
+        "useReadonlyClassProperties": "error",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "generic"
+          }
+        },
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "requireAscii": true,
+            "strictCase": true,
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "typeLike"
+                },
+                "match": "[A-Z][a-zA-Z0-9]*(?:_[A-Z][a-zA-Z0-9]*)*",
+                "formats": ["PascalCase"]
+              },
+              {
+                "selector": {
+                  "kind": "const",
+                  "scope": "global"
+                },
+                "match": "[A-Z][a-zA-Z0-9]*(?:_[A-Z][a-zA-Z0-9]*)*|[A-Z][A-Z0-9_]*[A-Z0-9]|[a-z][a-zA-Z0-9]*",
+                "formats": ["PascalCase", "CONSTANT_CASE", "camelCase"]
+              }
+            ]
+          }
+        },
+        "useImportType": {
+          "level": "error",
+          "options": {
+            "style": "separatedType"
+          }
+        }
+      }
+    },
+    "domains": {
+      "react": "all"
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "useEditorconfig": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80,
+    "attributePosition": "multiline",
+    "bracketSpacing": true,
+    "trailingNewline": true
+  },
+  "json": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "all",
+      "semicolons": "always",
+      "arrowParentheses": "asNeeded",
+      "bracketSpacing": true,
+      "bracketSameLine": true,
+      "attributePosition": "multiline"
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "html": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/lib/data/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*-provider.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    }
+  ]
+}

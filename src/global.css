@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --font-lato: Lato, sans-serif;
@@ -21,6 +21,6 @@ button:disabled {
 }
 
 * {
-  -webkit-font-smoothing: antialiased;
   font-family: Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }

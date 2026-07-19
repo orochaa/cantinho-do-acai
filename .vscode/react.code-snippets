@@ -14,8 +14,8 @@
       "    </${2:Main}>",
       "  )",
       "}",
-      "",
-    ],
+      ""
+    ]
   },
   "reactPage": {
     "scope": "typescriptreact",
@@ -28,17 +28,17 @@
       "    </${2:Main}>",
       "  )",
       "}",
-      "",
-    ],
+      ""
+    ]
   },
   "reactState": {
     "scope": "typescript,typescriptreact",
     "prefix": ["stt", "state"],
-    "body": ["const [$1, set$2] = useState<$3>($4)", "$0"],
+    "body": ["const [$1, set$2] = useState<$3>($4)", "$0"]
   },
   "reactHook": {
     "scope": "typescript,typescriptreact",
     "prefix": ["hook", "use"],
-    "body": ["export function use$1($2) {", "  $0", "}", ""],
-  },
+    "body": ["export function use$1($2) {", "  $0", "}", ""]
+  }
 }

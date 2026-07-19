@@ -1,28 +1,28 @@
-import { Banner } from '@/components/banner'
-import { Description } from '@/components/description'
-import { OrderButton } from '@/components/order-button'
-import { Seo } from '@/components/seo'
-import { SingleOptionSelector } from '@/components/single-option-selector'
-import { useCart } from '@/context/cart-provider'
-import { useProduct } from '@/hooks/use-product'
-import { useSingleOption } from '@/hooks/use-single-option'
-import { useTotal } from '@/hooks/use-total'
-import { pastelCategory } from '@/lib/data/pastel'
+import { Banner } from '@/components/banner';
+import { Description } from '@/components/description';
+import { OrderButton } from '@/components/order-button';
+import { Seo } from '@/components/seo';
+import { SingleOptionSelector } from '@/components/single-option-selector';
+import { useCart } from '@/context/cart-provider';
+import { useProduct } from '@/hooks/use-product';
+import { useSingleOption } from '@/hooks/use-single-option';
+import { useTotal } from '@/hooks/use-total';
+import { pastelCategory } from '@/lib/data/pastel';
 
 export function PastelPage(): React.JSX.Element {
-  const pastel = useProduct(pastelCategory)
+  const pastel = useProduct(pastelCategory);
 
-  const { addCartEvent } = useCart()
+  const { addCartEvent } = useCart();
 
   const [size, selectSizeOption] = useSingleOption(
     pastelCategory.size.map((item, i) => ({
       ...item,
       price: pastel.price + item.price,
       isSelected: i === 1,
-    }))
-  )
+    })),
+  );
 
-  const total = useTotal(0, size.options)
+  const total = useTotal(0, size.options);
 
   return (
     <div>
@@ -31,7 +31,11 @@ export function PastelPage(): React.JSX.Element {
         description={pastel.description}
         imgUrl={`https://cantinhodoacai.vercel.app${pastel.img}`}
       />
-      <Banner img={pastel.img} name={pastel.name} imgClassName="object-top" />
+      <Banner
+        img={pastel.img}
+        name={pastel.name}
+        imgClassName="object-top"
+      />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{pastel.name}</h2>
@@ -59,7 +63,7 @@ export function PastelPage(): React.JSX.Element {
           multiple
           order={count =>
             addCartEvent({
-              type: 'ADD',
+              type: 'add',
               item: {
                 product: { ...pastel, price: 0 },
                 options: size.options,
@@ -71,5 +75,5 @@ export function PastelPage(): React.JSX.Element {
       </div>
       <span className="block h-20" />
     </div>
-  )
+  );
 }

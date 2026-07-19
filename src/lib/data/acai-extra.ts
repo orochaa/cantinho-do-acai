@@ -28,12 +28,12 @@ export type AcaiExtra =
   | 'Creme de Cappuccino'
   | 'Creme de Doce de Leite'
   | 'Calda de Chocolate'
-  | 'Calda de Morango'
+  | 'Calda de Morango';
 
 export const ACAI_EXTRA: Record<
   AcaiExtra,
   {
-    img: string
+    img: string;
   }
 > = {
   '5 Star': {
@@ -123,4 +123,4 @@ export const ACAI_EXTRA: Record<
   'Chocolate Preto': {
     img: 'https://static-images.ifood.com.br/pratos/e98d3812-d175-4664-ae77-97f266bc601a/202505201037_4840_i.jpg',
   },
-}
+};

@@ -1,24 +1,24 @@
-import { Banner } from '@/components/banner'
-import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
-import { OrderButton } from '@/components/order-button'
-import { Seo } from '@/components/seo'
-import { useCart } from '@/context/cart-provider'
-import { useMultipleOptions } from '@/hooks/use-multiple-options'
-import { useProduct } from '@/hooks/use-product'
-import { useTotal } from '@/hooks/use-total'
-import { bebidaCategory } from '@/lib/data/bebida'
+import { Banner } from '@/components/banner';
+import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
+import { OrderButton } from '@/components/order-button';
+import { Seo } from '@/components/seo';
+import { useCart } from '@/context/cart-provider';
+import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import { useProduct } from '@/hooks/use-product';
+import { useTotal } from '@/hooks/use-total';
+import { bebidaCategory } from '@/lib/data/bebida';
 
 export function BebidaPage(): React.JSX.Element {
-  const bebida = useProduct(bebidaCategory)
+  const bebida = useProduct(bebidaCategory);
 
-  const { addCartEvent } = useCart()
+  const { addCartEvent } = useCart();
 
   const [flavors, addFlavorEvent] = useMultipleOptions(
     bebidaCategory.flavors,
-    20
-  )
+    20,
+  );
 
-  const total = useTotal(0, flavors.options)
+  const total = useTotal(0, flavors.options);
 
   return (
     <div>
@@ -58,12 +58,12 @@ export function BebidaPage(): React.JSX.Element {
           totalPrice={total}
           validate={() => {
             if (flavors.countTotal === 0) {
-              return 'Favor escolher sabores'
+              return 'Favor escolher sabores';
             }
           }}
           order={count =>
             addCartEvent({
-              type: 'ADD',
+              type: 'add',
               item: {
                 product: { ...bebida, price: 0 },
                 options: flavors.options,
@@ -75,5 +75,5 @@ export function BebidaPage(): React.JSX.Element {
       </div>
       <span className="block h-20" />
     </div>
-  )
+  );
 }
