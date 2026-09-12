@@ -10,7 +10,9 @@ import path from 'node:path';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
+    environment: 'jsdom',
     globals: true,
+    setupFiles: ['./src/test-setup.ts'],
   },
   resolve: {
     alias: {
