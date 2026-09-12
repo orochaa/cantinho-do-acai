@@ -1,21 +1,27 @@
 /* eslint-disable react/no-multi-comp */
-import type {
-  SelectableOption,
-  SingleOptionState,
-} from '@/hooks/use-single-option';
 import { formatCurrency } from '@/lib/format';
-import type { ActionDispatch } from 'react';
 import { Container } from './container';
 
-export interface SingleOptionSelectorProps<TName extends string> {
-  title: string;
-  ctx: SingleOptionState<TName>;
-  onSelectionChange: ActionDispatch<[SelectableOption<TName>]>;
+export interface SelectableOptionLike<TName extends string> {
+  name: TName;
+  isSelected: boolean;
+  price?: number;
+  img?: string;
 }
 
-export function SingleOptionSelector<TName extends string>(
-  props: SingleOptionSelectorProps<TName>,
-): React.JSX.Element {
+export interface SingleOptionSelectorProps<
+  TName extends string,
+  TOption extends SelectableOptionLike<TName> = SelectableOptionLike<TName>,
+> {
+  title: string;
+  ctx: { options: Array<TOption> };
+  onSelectionChange: (option: TOption) => void;
+}
+
+export function SingleOptionSelector<
+  TName extends string,
+  TOption extends SelectableOptionLike<TName>,
+>(props: SingleOptionSelectorProps<TName, TOption>): React.JSX.Element {
   const { title, ctx, onSelectionChange } = props;
 
   return (
@@ -68,14 +74,18 @@ export function SingleOptionSelector<TName extends string>(
   );
 }
 
-interface ToggleOptionButtonProps<TName extends string> {
-  option: SelectableOption<TName>;
-  onSelectionChange: (option: SelectableOption<TName>) => void;
+interface ToggleOptionButtonProps<
+  TName extends string,
+  TOption extends SelectableOptionLike<TName>,
+> {
+  option: TOption;
+  onSelectionChange: (option: TOption) => void;
 }
 
-function ToggleOptionButton<TName extends string>(
-  props: ToggleOptionButtonProps<TName>,
-): React.JSX.Element {
+function ToggleOptionButton<
+  TName extends string,
+  TOption extends SelectableOptionLike<TName>,
+>(props: ToggleOptionButtonProps<TName, TOption>): React.JSX.Element {
   const { option, onSelectionChange } = props;
 
   return (

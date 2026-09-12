@@ -1,7 +1,18 @@
 import type { CartItem } from '@/context/cart-provider';
 import { useToast } from '@/context/toast-provider';
-import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option';
 import { getCepAddress } from '@/lib/brasil-api';
+import type {
+  CheckoutOption,
+  CheckoutOptionGroup,
+  CheckoutSpoonOption,
+} from '@/lib/checkout-state';
+import {
+  CheckoutCutleryEnum,
+  CheckoutFulfillmentEnum,
+  CheckoutPaymentEnum,
+  checkoutOptionsReducer,
+  createCheckoutOptionsState,
+} from '@/lib/checkout-state';
 import type {
   DeliveryAddress,
   FulfillmentMethod,
@@ -14,9 +25,7 @@ import {
   createWhatsAppLink,
   validateOrder,
 } from '@/lib/order';
-import { useCallback, useMemo, useRef, useState } from 'react';
-
-type SpoonOption = 'Não, obrigado' | 'Sim, por favor';
+import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
 export type CheckoutField =
   | 'clientName'
   | 'cep'
@@ -40,31 +49,33 @@ const getValidationField = (input: {
   if (input.isDelivery && !input.addressNumber.trim()) {
     return 'addressNumber';
   }
-  if (input.paymentMethod === 'Dinheiro') {
+  if (input.paymentMethod === CheckoutPaymentEnum.Cash) {
     return 'cashValue';
   }
   return 'paymentMethod';
 };
 
 export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
-  const [paymentMethod, selectPaymentMethod] = useSingleOption<PaymentMethod>([
-    { name: 'PIX', isSelected: true },
-    { name: 'Cartão de Crédito' },
-    { name: 'Dinheiro' },
-  ]);
-  const [spoonOption, selectSpoonOption] = useSingleOption<SpoonOption>([
-    { name: 'Não, obrigado', isSelected: true },
-    { name: 'Sim, por favor' },
-  ]);
-  const [checkoutOption, selectCheckoutOption] =
-    useSingleOption<FulfillmentMethod>([
-      { name: 'Retirada no local', isSelected: true },
-      { name: 'Entrega (com taxa de entrega)' },
-    ]);
-  const isDelivery = isOptionSelected(
-    checkoutOption.options,
-    'Entrega (com taxa de entrega)',
+  const [{ groups }, dispatch] = useReducer(
+    checkoutOptionsReducer,
+    undefined,
+    createCheckoutOptionsState,
   );
+  const {
+    fulfillment: checkoutOption,
+    payment: paymentMethod,
+    cutlery: spoonOption,
+  } = groups;
+  const selectCheckoutOption = (option: CheckoutOption<FulfillmentMethod>) =>
+    dispatch({ type: 'select', group: 'fulfillment', option });
+  const selectPaymentMethod = (option: CheckoutOption<PaymentMethod>) =>
+    dispatch({ type: 'select', group: 'payment', option });
+  const selectSpoonOption = (option: CheckoutOption<CheckoutSpoonOption>) =>
+    dispatch({ type: 'select', group: 'cutlery', option });
+  const isDelivery =
+    checkoutOption.options.find(
+      option => option.name === CheckoutFulfillmentEnum.Delivery,
+    )?.isSelected ?? false;
   const [cep, setCep] = useState('');
   const [address, setAddress] = useState<DeliveryAddress | null>(null);
   const [addressError, setAddressError] = useState<string | null>(null);
@@ -83,7 +94,9 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
   const orderTotal = useMemo(() => calculateOrderTotal(cart), [cart]);
   const change = useMemo(
     () =>
-      isOptionSelected(paymentMethod.options, 'Dinheiro')
+      paymentMethod.options.find(
+        option => option.name === CheckoutPaymentEnum.Cash,
+      )?.isSelected
         ? calculateOrderChange(cashValue, orderTotal)
         : 0,
     [cashValue, orderTotal, paymentMethod],
@@ -125,10 +138,11 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
   }, []);
 
   const fulfillment = isDelivery
-    ? 'Entrega (com taxa de entrega)'
-    : 'Retirada no local';
+    ? CheckoutFulfillmentEnum.Delivery
+    : CheckoutFulfillmentEnum.Pickup;
   const selectedPaymentMethod =
-    paymentMethod.options.find(option => option.isSelected)?.name ?? 'PIX';
+    paymentMethod.options.find(option => option.isSelected)?.name ??
+    CheckoutPaymentEnum.Pix;
   const goToWhatsappLink = useMemo(
     () =>
       createWhatsAppLink({
@@ -141,7 +155,10 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
         addressReference,
         paymentMethod: selectedPaymentMethod,
         cashValue,
-        includeCutlery: isOptionSelected(spoonOption.options, 'Sim, por favor'),
+        includeCutlery:
+          spoonOption.options.find(
+            option => option.name === CheckoutCutleryEnum.Yes,
+          )?.isSelected ?? false,
       }),
     [
       address,
@@ -236,7 +253,7 @@ export interface CartCheckoutState {
   addressReference: string;
   cashValue: string;
   change: number;
-  checkoutOption: ReturnType<typeof useSingleOption<FulfillmentMethod>>[0];
+  checkoutOption: CheckoutOptionGroup<FulfillmentMethod>;
   clientName: string;
   confirmOrder: () => void;
   fulfillment: FulfillmentMethod;
@@ -246,19 +263,17 @@ export interface CartCheckoutState {
   modalOpen: boolean;
   validationErrors?: Partial<Record<CheckoutField, string>>;
   orderTotal: number;
-  paymentMethod: ReturnType<typeof useSingleOption<PaymentMethod>>[0];
-  selectCheckoutOption: ReturnType<
-    typeof useSingleOption<FulfillmentMethod>
-  >[1];
-  selectPaymentMethod: ReturnType<typeof useSingleOption<PaymentMethod>>[1];
-  selectSpoonOption: ReturnType<typeof useSingleOption<SpoonOption>>[1];
+  paymentMethod: CheckoutOptionGroup<PaymentMethod>;
+  selectCheckoutOption: (option: CheckoutOption<FulfillmentMethod>) => void;
+  selectPaymentMethod: (option: CheckoutOption<PaymentMethod>) => void;
+  selectSpoonOption: (option: CheckoutOption<CheckoutSpoonOption>) => void;
   setAddressComplement: (value: string) => void;
   setAddressNumber: (value: string) => void;
   setAddressReference: (value: string) => void;
   setCashValue: (value: string) => void;
   setClientName: (value: string) => void;
   setModalOpen: (value: boolean) => void;
-  spoonOption: ReturnType<typeof useSingleOption<SpoonOption>>[0];
+  spoonOption: CheckoutOptionGroup<CheckoutSpoonOption>;
   cep: string;
   cepLoading: boolean;
 }

@@ -4,6 +4,7 @@ import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { useCartCheckout } from '@/hooks/use-cart-checkout';
+import { CheckoutPaymentEnum } from '@/lib/checkout-state';
 import { formatCurrency } from '@/lib/format';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
@@ -65,7 +66,8 @@ export function CartPage(): React.JSX.Element {
             onSelectionChange={checkout.selectPaymentMethod}
           />
           {checkout.paymentMethod.options.some(
-            option => option.name === 'Dinheiro' && option.isSelected,
+            option =>
+              option.name === CheckoutPaymentEnum.Cash && option.isSelected,
           ) && <CashPayment {...checkout} />}
         </div>
         <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
