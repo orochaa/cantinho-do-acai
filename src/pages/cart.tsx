@@ -26,7 +26,7 @@ import {
 //   getCoordinates,
 // } from '@/lib/geo'
 import { ExternalLink, PlusSquare, X } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 type SpoonOption = 'Não, obrigado' | 'Sim, por favor';
@@ -86,6 +86,7 @@ export function CartPage(): React.JSX.Element {
   const [address, setAddress] = useState<DeliveryAddress | null>(null);
   const [addressError, setAddressError] = useState<string | null>(null);
   const [cepLoading, setCepLoading] = useState(false);
+  const cepRequestRef = useRef(0);
   // const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
   // const [distance, setDistance] = useState<number | null>(null)
   // const [fareLoading, setFareLoading] = useState(false)
@@ -110,22 +111,44 @@ export function CartPage(): React.JSX.Element {
 
   const handleCepChange = useCallback(async (cep: string) => {
     const normalizedCep = cep.replaceAll(/\D/g, '');
+    const requestId = cepRequestRef.current + 1;
+
+    cepRequestRef.current = requestId;
 
     setCep(normalizedCep);
 
-    if (normalizedCep.length === 8) {
-      try {
-        setCepLoading(true);
-        const cepAddress = await getCepAddress(normalizedCep);
-        setAddress(cepAddress);
-        setAddressError(null);
-      } catch (error) {
-        setAddress(null);
-        setAddressError('CEP não encontrado.');
-        console.error(error);
-      } finally {
+    if (normalizedCep.length !== 8) {
+      setAddress(null);
+      setAddressError(null);
+      setCepLoading(false);
+      return;
+    }
+
+    setAddress(null);
+    setAddressError(null);
+    setCepLoading(true);
+
+    try {
+      const cepAddress = await getCepAddress(normalizedCep);
+
+      if (cepRequestRef.current !== requestId) {
+        return;
+      }
+
+      setAddress(cepAddress);
+    } catch (error) {
+      if (cepRequestRef.current !== requestId) {
+        return;
+      }
+
+      setAddress(null);
+      setAddressError('CEP não encontrado.');
+      console.error(error);
+    } finally {
+      if (cepRequestRef.current === requestId) {
         setCepLoading(false);
       }
+    }
       // if (!cepAddress) {
       //   return
       // }
@@ -145,7 +168,6 @@ export function CartPage(): React.JSX.Element {
       // } finally {
       //   setFareLoading(false)
       // }
-    }
   }, []);
 
   const goToWhatsappLink = useMemo((): string => {

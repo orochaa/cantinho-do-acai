@@ -28,24 +28,16 @@ const product: Product = {
   slang: 'produto-de-teste',
 };
 
-const createItem = (
-  overrides: Partial<{
-    count: number;
-    observation: string;
-    options: Array<Option>;
-  }> = {},
-) => ({
+const createItem = () => ({
   count: 1,
   observation: 'Sem gelo',
   options: [
     { name: 'Complemento incluído', count: 2 },
     { name: 'Extra pago', count: 1, price: 3 },
-    { name: 'Opção zerada', count: 0, price: 99 },
     { name: 'Opção grátis', count: 1, price: 0 },
     { name: 'Opção negativa', count: 1, price: -2 },
   ],
   product,
-  ...overrides,
 });
 
 let activeRoot: Root | undefined;
@@ -77,37 +69,6 @@ afterEach(() => {
   navigateMock.mockReset();
   vi.restoreAllMocks();
 });
-
-function renderCartProbe(): ReturnType<typeof useCart> {
-  let currentContext: ReturnType<typeof useCart> | undefined;
-
-  function Probe(): null {
-    currentContext = useCart();
-    return null;
-  }
-
-  const container = document.createElement('div');
-  document.body.append(container);
-  activeRoot = createRoot(container);
-  act(() => {
-    activeRoot?.render(
-      <CartProvider>
-        <Probe />
-      </CartProvider>,
-    );
-  });
-
-  if (!currentContext) {
-    throw new Error('Cart context was not rendered');
-  }
-
-  return {
-    get cart() {
-      return currentContext?.cart ?? [];
-    },
-    addCartEvent: event => currentContext?.addCartEvent(event),
-  };
-}
 
 function findButton(label: string): HTMLButtonElement {
   const button = Array.from(document.querySelectorAll('button')).find(
@@ -182,149 +143,97 @@ function renderCheckout(): void {
   act(() => findButton('Preparar fixture').click());
 }
 
-describe('CartProvider characterization', () => {
-  it('should assign stable ids and use them for item mutations', () => {
-    const context = renderCartProbe();
-
-    act(() => {
-      context.addCartEvent({
-        type: 'add',
-        item: createItem({ observation: 'Primeiro' }),
-      });
-      context.addCartEvent({
-        type: 'add',
-        item: createItem({ observation: 'Segundo' }),
-      });
-    });
-
-    const firstId = context.cart[0]?.id;
-    const secondId = context.cart[1]?.id;
-    expect(firstId).toEqual(expect.any(String));
-    expect(secondId).toEqual(expect.any(String));
-    expect(firstId).not.toBe(secondId);
-
-    act(() => {
-      if (!secondId) {
-        throw new Error('Second cart item has no id');
-      }
-      context.addCartEvent({ type: 'update-quantity', id: secondId, count: 4 });
-      if (!firstId) {
-        throw new Error('First cart item has no id');
-      }
-      context.addCartEvent({ type: 'remove', id: firstId });
-    });
-
-    expect(context.cart).toHaveLength(1);
-    expect(context.cart[0]?.id).toBe(secondId);
-    expect(context.cart[0]?.count).toBe(4);
-  });
-
-  it('should restore a persisted cart after the provider is remounted', () => {
-    const firstContext = renderCartProbe();
-
-    act(() => {
-      firstContext.addCartEvent({ type: 'add', item: createItem() });
-    });
-    const savedId = firstContext.cart[0]?.id;
-    activeRoot?.unmount();
-    activeRoot = undefined;
-
-    const restoredContext = renderCartProbe();
-
-    expect(restoredContext.cart).toHaveLength(1);
-    expect(restoredContext.cart[0]?.id).toBe(savedId);
-    expect(restoredContext.cart[0]?.total).toBe(11);
-  });
-
-  it('should discard malformed and outdated persisted carts', () => {
-    window.localStorage.setItem('cantinho-do-acai-cart', '{malformed');
-    expect(renderCartProbe().cart).toEqual([]);
-    expect(window.localStorage.getItem('cantinho-do-acai-cart')).toBe(
-      JSON.stringify({ version: 1, cart: [] }),
+describe(CartPage.name, () => {
+  it('should show a CEP lookup error when the request fails', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockRejectedValue(new Error('Network error')),
     );
+    renderCheckout();
 
-    activeRoot?.unmount();
-    activeRoot = undefined;
-    window.localStorage.setItem(
-      'cantinho-do-acai-cart',
-      JSON.stringify([{ id: 'old-item' }]),
-    );
+    act(() => findButton('Entrega (com taxa de entrega)').click());
+    const cepInput = document.querySelector<HTMLInputElement>('#cep');
+    if (!cepInput) {
+      throw new Error('CEP input not found');
+    }
 
-    expect(renderCartProbe().cart).toEqual([]);
-    expect(window.localStorage.getItem('cantinho-do-acai-cart')).toBe(
-      JSON.stringify({ version: 1, cart: [] }),
-    );
-  });
-
-  it('should add items with current option pricing and omit zero-count options', () => {
-    const context = renderCartProbe();
-
-    act(() => {
-      context.addCartEvent({ type: 'add', item: createItem() });
+    await act(async () => {
+      setInputValue(cepInput, '95000-000');
+      await Promise.resolve();
     });
 
-    const [item] = context.cart;
-    expect(item.total).toBe(11);
-    expect(item.options.map(option => option.name)).toEqual([
-      'Complemento incluído',
-      'Extra pago',
-      'Opção grátis',
-      'Opção negativa',
-    ]);
-    expect(item.options[0]?.count).toBe(2);
-    expect(item.options[1]?.price).toBe(3);
+    expect(cepInput.value).toBe('95000000');
+    expect(document.body.textContent).toContain('CEP não encontrado.');
   });
 
-  it('should update quantity totals and remove the selected item', () => {
-    const context = renderCartProbe();
-
-    act(() => {
-      context.addCartEvent({
-        type: 'add',
-        item: createItem({ observation: 'Primeiro' }),
+  it('should ignore a stale CEP response after the input changes', async () => {
+    let resolveFirst: ((response: Response) => void) | undefined;
+    let resolveSecond: ((response: Response) => void) | undefined;
+    const fetchMock = vi.fn((url: string) => {
+      const response = new Promise<Response>(resolve => {
+        if (url.endsWith('95000000')) {
+          resolveFirst = resolve;
+        } else {
+          resolveSecond = resolve;
+        }
       });
-      context.addCartEvent({
-        type: 'add',
-        item: createItem({ observation: 'Segundo', count: 2 }),
-      });
+
+      return response;
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    renderCheckout();
+
+    act(() => findButton('Entrega (com taxa de entrega)').click());
+    const cepInput = document.querySelector<HTMLInputElement>('#cep');
+    if (!cepInput) {
+      throw new Error('CEP input not found');
+    }
+
+    act(() => setInputValue(cepInput, '95000000'));
+    act(() => setInputValue(cepInput, '95100000'));
+    expect(document.body.textContent).toContain('Buscando CEP...');
+
+    await act(async () => {
+      resolveSecond?.(
+        new Response(
+          JSON.stringify({
+            cep: '95100000',
+            state: 'RS',
+            city: 'Flores da Cunha',
+            neighborhood: 'Centro',
+            street: 'Rua Nova',
+            service: 'correios',
+          }),
+          { status: 200 },
+        ),
+      );
+      await Promise.resolve();
     });
 
-    act(() => {
-      context.addCartEvent({ type: 'update-quantity', index: 0, count: 3 });
+    expect(document.body.textContent).toContain('Rua Nova');
+    expect(document.body.textContent).toContain('Flores da Cunha');
+
+    await act(async () => {
+      resolveFirst?.(
+        new Response(
+          JSON.stringify({
+            cep: '95000000',
+            state: 'RS',
+            city: 'Caxias do Sul',
+            neighborhood: 'Centro',
+            street: 'Rua Antiga',
+            service: 'correios',
+          }),
+          { status: 200 },
+        ),
+      );
+      await Promise.resolve();
     });
 
-    expect(context.cart[0]?.count).toBe(3);
-    expect(context.cart[0]?.total).toBe(33);
-
-    act(() => {
-      context.addCartEvent({ type: 'remove', index: 0 });
-    });
-
-    expect(context.cart).toHaveLength(1);
-    expect(context.cart[0]?.observation).toBe('Segundo');
+    expect(document.body.textContent).toContain('Rua Nova');
+    expect(document.body.textContent).not.toContain('Rua Antiga');
   });
 
-  it('should preserve zero-price options and apply negative-price options', () => {
-    const context = renderCartProbe();
-
-    act(() => {
-      context.addCartEvent({
-        type: 'add',
-        item: createItem({
-          options: [
-            { name: 'Grátis', count: 1, price: 0 },
-            { name: 'Negativa', count: 1, price: -4 },
-          ],
-        }),
-      });
-    });
-
-    expect(context.cart[0]?.total).toBe(6);
-    expect(context.cart[0]?.options).toHaveLength(2);
-  });
-});
-
-describe('CartPage checkout characterization', () => {
   it('should reject checkout without a name and insufficient cash', () => {
     renderCheckout();
 

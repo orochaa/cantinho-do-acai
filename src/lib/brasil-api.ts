@@ -1,4 +1,4 @@
-interface CepAddress {
+export interface CepAddress {
   cep: string;
   state: string;
   city: string;
@@ -8,15 +8,38 @@ interface CepAddress {
 }
 
 export async function getCepAddress(cep: string): Promise<CepAddress> {
-  return fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`).then(res => {
-    if (!res.ok) {
-      console.error(
-        `Error fetching CEP ${cep}: ${res.status} ${res.statusText}`,
-      );
+  const res = await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`);
 
-      throw new Error('CEP not found');
-    }
+  if (!res.ok) {
+    console.error(
+      `Error fetching CEP ${cep}: ${res.status} ${res.statusText}`,
+    );
 
-    return res.json() as unknown as CepAddress;
-  });
+    throw new Error('CEP not found');
+  }
+
+  const data: unknown = await res.json();
+
+  if (!isCepAddress(data)) {
+    throw new Error('Invalid CEP response');
+  }
+
+  return data;
+}
+
+function isCepAddress(value: unknown): value is CepAddress {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+
+  const address = value as Record<string, unknown>;
+
+  return [
+    'cep',
+    'state',
+    'city',
+    'neighborhood',
+    'street',
+    'service',
+  ].every(key => typeof address[key] === 'string');
 }

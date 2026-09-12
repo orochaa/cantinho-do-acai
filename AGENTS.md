@@ -79,6 +79,10 @@
 - Run the narrowest relevant checks first, then run the full checks for changes
   that affect shared state, routing, configuration, or build output.
 - Tests use Vitest with global APIs. New test case titles start with `should`.
+  Use `function.name` instead of a string literal for test description blocks
+  that identify a function, such as `describe(getCepAddress.name, ...)`.
+  Keep page and component-specific tests in sibling files next to their
+  implementation, such as `cart-provider.tsx` and `cart-provider.test.tsx`.
   There are currently no test files; add focused tests for non-trivial pure
   logic and state transitions when changing them.
 - Do not treat generated `dist` output as source. Keep changes focused and
