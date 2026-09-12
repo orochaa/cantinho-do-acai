@@ -287,7 +287,7 @@ describe(CartPage.name, () => {
     act(() => findExactButton('Continuar').click());
 
     const [url] = openMock.mock.calls[0] ?? [];
-    const message = decodeURI(String(url)).split('text=')[1] ?? '';
+    const message = decodeURIComponent(String(url)).split('text=')[1] ?? '';
     expect(message).toContain('Produto de teste');
     expect(message).toContain('Complemento incluído');
     expect(message).toContain('Extra pago');

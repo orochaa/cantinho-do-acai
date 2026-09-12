@@ -17,6 +17,8 @@ import type {
 import {
   calculateOrderChange,
   calculateOrderTotal,
+  createOrder,
+  createWhatsAppLink,
   validateOrder,
 } from '@/lib/order';
 // import {
@@ -32,27 +34,6 @@ import { useNavigate } from 'react-router';
 type SpoonOption = 'Não, obrigado' | 'Sim, por favor';
 
 type CheckoutOption = FulfillmentMethod;
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const createMessageBuilder = () => {
-  const parts: Array<string> = [];
-
-  return {
-    add: (text: string): void => {
-      parts.push(text);
-    },
-    addConditional: (condition: unknown, text: string | (() => void)): void => {
-      if (condition) {
-        if (typeof text === 'function') {
-          text();
-        } else {
-          parts.push(text);
-        }
-      }
-    },
-    build: (): string => parts.join('\n'),
-  };
-};
 
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart();
@@ -149,138 +130,58 @@ export function CartPage(): React.JSX.Element {
         setCepLoading(false);
       }
     }
-      // if (!cepAddress) {
-      //   return
-      // }
+    // if (!cepAddress) {
+    //   return
+    // }
 
-      // try {
-      //   setFareLoading(true)
-      //   const userCoords = await getCoordinates(cepAddress)
-      //   const dist = calculateDistance(COMPANY_COORDINATES, userCoords)
-      //   setDistance(dist)
-      //   setDeliveryFare(calculateFare(dist))
-      //   setFareError(null)
-      // } catch (error) {
-      //   setDistance(null)
-      //   setDeliveryFare(null)
-      //   setFareError('Não foi possível calcular a taxa de entrega.')
-      //   console.error(error)
-      // } finally {
-      //   setFareLoading(false)
-      // }
+    // try {
+    //   setFareLoading(true)
+    //   const userCoords = await getCoordinates(cepAddress)
+    //   const dist = calculateDistance(COMPANY_COORDINATES, userCoords)
+    //   setDistance(dist)
+    //   setDeliveryFare(calculateFare(dist))
+    //   setFareError(null)
+    // } catch (error) {
+    //   setDistance(null)
+    //   setDeliveryFare(null)
+    //   setFareError('Não foi possível calcular a taxa de entrega.')
+    //   console.error(error)
+    // } finally {
+    //   setFareLoading(false)
+    // }
   }, []);
 
-  const goToWhatsappLink = useMemo((): string => {
-    const builder = createMessageBuilder();
-    builder.add('Olá, Cantinho do Açaí!');
-    builder.add('Gostaria de fazer um pedido:');
-    builder.add('');
-
-    for (const item of cart) {
-      const itemParts = [
-        `*${item.count} - ${item.product.name}* ${
-          item.product.price ? `- ${formatCurrency(item.product.price)}` : ''
-        }`,
-        ...item.options.map(
-          complement =>
-            `- ${complement.count} - ${complement.name}${
-              complement.price ? ` - ${formatCurrency(complement.price)}` : ''
-            }`,
-        ),
-      ];
-      builder.add(itemParts.filter(Boolean).join('\n'));
-      builder.addConditional(item.observation, () => {
-        builder.add(`*Observação:*
-${item.observation}`);
-      });
-    }
-
-    builder.add('');
-    builder.add('*Opção de Entrega*');
-    builder.addConditional(isDelivery, () => {
-      builder.add('Entrega (com taxa de entrega)');
-
-      if (address && addressNumber) {
-        builder.add(
-          `Endereço: ${address.street}, ${addressNumber}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`,
-        );
-        builder.addConditional(addressComplement, () => {
-          builder.add(`Complemento: ${addressComplement}`);
-        });
-        builder.addConditional(addressReference, () => {
-          builder.add(`Ponto de referência: ${addressReference}`);
-        });
-      } else {
-        builder.add('Endereço: (não informado por completo)');
-        builder.addConditional(!address, '- Faltando CEP');
-        builder.addConditional(!addressNumber, '- Faltando número');
-      }
-
-      // if (deliveryFare) {
-      //   builder.add(`Taxa de entrega: ${formatCurrency(deliveryFare)}`)
-      //   total += deliveryFare
-      // } else {
-      builder.add('Taxa de entrega: A calcular');
-      // }
-    });
-    builder.addConditional(!isDelivery, () => {
-      builder.add('Retirada no local');
-    });
-
-    builder.add('');
-    builder.add(`*Total:* ${formatCurrency(orderTotal)}`);
-
-    builder.addConditional(
-      isOptionSelected(spoonOption.options, 'Sim, por favor'),
-      () => {
-        builder.add('');
-        builder.add('Incluir talheres, por favor.');
-      },
-    );
-
-    builder.add('');
-    builder.add(
-      `*Forma de Pagamento:* ${paymentMethod.options.find(option => option.isSelected)?.name}`,
-    );
-    builder.addConditional(
-      isOptionSelected(paymentMethod.options, 'Dinheiro'),
-      () => {
-        builder.add(
-          `Valor pago em dinheiro: ${formatCurrency(parseCurrency(cashValue))}`,
-        );
-        builder.add(`Troco: ${formatCurrency(change)}`);
-      },
-    );
-
-    builder.add('');
-    builder.add(`Nome: ${clientName}`);
-
-    builder.add('');
-    builder.add(
-      '👆 Por favor, envie-nos esta mensagem agora. Assim que recebermos, estaremos atendendo você.',
-    );
-
-    const msg = builder.build();
-    const phone = '5554984312998';
-    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURI(
-      msg,
-    )}`;
-
-    return url;
-  }, [
-    isDelivery,
-    spoonOption,
-    clientName,
-    cart,
-    address,
-    addressNumber,
-    addressComplement,
-    addressReference,
-    paymentMethod,
-    cashValue,
-    change,
-    orderTotal,
-  ]);
+  const goToWhatsappLink = useMemo(
+    () =>
+      createWhatsAppLink({
+        order: createOrder(cart),
+        clientName,
+        fulfillment: isDelivery
+          ? 'Entrega (com taxa de entrega)'
+          : 'Retirada no local',
+        address,
+        addressNumber,
+        addressComplement,
+        addressReference,
+        paymentMethod:
+          paymentMethod.options.find(option => option.isSelected)?.name ??
+          'PIX',
+        cashValue,
+        includeCutlery: isOptionSelected(spoonOption.options, 'Sim, por favor'),
+      }),
+    [
+      isDelivery,
+      spoonOption,
+      clientName,
+      cart,
+      address,
+      addressNumber,
+      addressComplement,
+      addressReference,
+      paymentMethod,
+      cashValue,
+    ],
+  );
 
   const openModal = useCallback(() => {
     setModalOpen(true);
