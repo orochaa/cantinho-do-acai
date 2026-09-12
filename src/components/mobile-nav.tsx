@@ -1,4 +1,4 @@
-import { categoriesList } from '@/lib/data/categories';
+import { visibleMenu } from '@/lib/data/menu';
 import { navigateToElement } from '@/lib/navigation';
 
 interface MobileNavProps {
@@ -20,11 +20,11 @@ export function MobileNav(props: MobileNavProps): React.JSX.Element {
             disabled>
             Navegue pelas categorias
           </option>
-          {categoriesList.map(category => (
+          {visibleMenu.map(entry => (
             <option
-              key={category.slang}
-              value={category.slang}>
-              {category.name}
+              key={entry.route}
+              value={entry.route}>
+              {entry.name}
             </option>
           ))}
         </select>

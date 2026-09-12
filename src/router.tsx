@@ -1,5 +1,6 @@
 import { AppContentShell } from '@/components/app-content-shell';
 import { useDailyAppPing } from '@/hooks/use-daily-app-ping';
+import { visibleMenu } from '@/lib/data/menu';
 import { AcaiPage } from '@/pages/acai';
 import { BebidaPage } from '@/pages/bebida';
 import { CartPage } from '@/pages/cart/cart';
@@ -7,11 +8,22 @@ import { FelicidadePage } from '@/pages/felicidade';
 import { GeladinhoPage } from '@/pages/geladinho';
 import { HomePage } from '@/pages/home';
 import { PaletaPage } from '@/pages/paleta';
+import { PastelPage } from '@/pages/pastel';
 import { PremiumPage } from '@/pages/premium';
 import { SalgadosPage } from '@/pages/salgados';
 import { BrowserRouter, Route, Routes } from 'react-router';
-import { PastelPage } from './pages/pastel';
 import { ScrollToTop } from './scrool-to-top';
+
+const categoryPages: Record<string, React.JSX.Element> = {
+  acai: <AcaiPage />,
+  paleta: <PaletaPage />,
+  salgados: <SalgadosPage />,
+  felicidade: <FelicidadePage />,
+  premium: <PremiumPage />,
+  geladinho: <GeladinhoPage />,
+  bebidas: <BebidaPage />,
+  pastel: <PastelPage />,
+};
 
 export function Router(): React.JSX.Element {
   useDailyAppPing();
@@ -25,38 +37,13 @@ export function Router(): React.JSX.Element {
               path=""
               element={<HomePage />}
             />
-            <Route
-              path="acai/:slang"
-              element={<AcaiPage />}
-            />
-            <Route
-              path="paleta/:slang"
-              element={<PaletaPage />}
-            />
-            <Route
-              path="salgados/:slang"
-              element={<SalgadosPage />}
-            />
-            <Route
-              path="felicidade/:slang"
-              element={<FelicidadePage />}
-            />
-            <Route
-              path="premium/:slang"
-              element={<PremiumPage />}
-            />
-            <Route
-              path="geladinho/:slang"
-              element={<GeladinhoPage />}
-            />
-            <Route
-              path="bebidas/:slang"
-              element={<BebidaPage />}
-            />
-            <Route
-              path="pastel/:slang"
-              element={<PastelPage />}
-            />
+            {visibleMenu.map(entry => (
+              <Route
+                key={entry.route}
+                path={entry.path}
+                element={categoryPages[entry.route]}
+              />
+            ))}
             <Route
               path="cart"
               element={<CartPage />}

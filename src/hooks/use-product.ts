@@ -7,17 +7,22 @@ export function useProduct<TProduct extends Product>(
   const { slang } = useParams();
 
   return useMemo<TProduct>(() => {
-    const defaultProduct = category.products[0];
+    const enabledProducts = category.products.filter(
+      product => !product.disabled,
+    );
+    const products =
+      enabledProducts.length > 0 ? enabledProducts : category.products;
+    const defaultProduct = products[0];
 
     if (!slang) {
       return defaultProduct;
     }
-    const product = category.products.find(p => p.slang === slang);
+    const product = products.find(p => p.slang === slang);
 
     if (!product) {
       return defaultProduct;
     }
 
     return product;
-  }, [category.products, slang]);
+  }, [category, slang]);
 }
