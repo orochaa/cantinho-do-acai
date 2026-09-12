@@ -5,10 +5,19 @@ import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { useProduct } from '@/hooks/use-product';
-import { useSingleOption } from '@/hooks/use-single-option';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
+import type {
+  SelectableOption,
+  SingleOptionState,
+} from '@/hooks/use-single-option';
 import { premiumCategory } from '@/lib/data/premium';
 import { formatCurrency } from '@/lib/format';
+import type { PersonalizationSingleGroup } from '@/lib/product-personalization';
 import { useState } from 'react';
+
+interface PremiumPersonalizationGroups {
+  complements: PersonalizationSingleGroup;
+}
 
 export function PremiumPage(): React.JSX.Element {
   const copo = useProduct(premiumCategory);
@@ -17,9 +26,17 @@ export function PremiumPage(): React.JSX.Element {
 
   const { addCartEvent } = useCart();
 
-  const [complements, selectComplement] = useSingleOption(
-    (copo.complements ?? []).map(c => ({ name: c })),
-  );
+  const personalization =
+    useProductPersonalization<PremiumPersonalizationGroups>(copo, {
+      complements: {
+        type: 'single',
+        options: (copo.complements ?? []).map(name => ({ name })),
+        required:
+          copo.complements !== undefined && copo.complements.length > 0
+            ? 'Escolha seu Fini'
+            : undefined,
+      },
+    });
 
   return (
     <div>
@@ -56,8 +73,14 @@ export function PremiumPage(): React.JSX.Element {
           {!!copo.complements && (
             <SingleOptionSelector
               title="Fini"
-              ctx={complements}
-              onSelectionChange={selectComplement}
+              ctx={personalization.groups.complements as SingleOptionState}
+              onSelectionChange={(option: SelectableOption<string>) =>
+                personalization.dispatch({
+                  type: 'select',
+                  group: 'complements',
+                  option,
+                })
+              }
             />
           )}
 
@@ -80,28 +103,17 @@ export function PremiumPage(): React.JSX.Element {
 
         <OrderButton
           product={copo}
-          totalPrice={copo.price}
+          totalPrice={personalization.total}
           multiple
-          validate={() => {
-            if (
-              copo.complements &&
-              copo.complements.length > 0 &&
-              !complements.isSelected
-            ) {
-              return 'Escolha seu Fini';
-            }
+          validate={personalization.validate}
+          order={count => {
+            const { total: _total, ...item } = personalization.createOrderItem(
+              count,
+              observation,
+            );
+
+            addCartEvent({ type: 'add', item });
           }}
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: copo,
-                options: complements.options,
-                count,
-                observation,
-              },
-            })
-          }
         />
       </div>
       <span className="block h-20" />

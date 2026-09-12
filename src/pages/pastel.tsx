@@ -5,24 +5,37 @@ import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { useProduct } from '@/hooks/use-product';
-import { useSingleOption } from '@/hooks/use-single-option';
-import { useTotal } from '@/hooks/use-total';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
+import type {
+  SelectableOption,
+  SingleOptionState,
+} from '@/hooks/use-single-option';
 import { pastelCategory } from '@/lib/data/pastel';
+import type { PersonalizationSingleGroup } from '@/lib/product-personalization';
+
+interface PastelPersonalizationGroups {
+  size: PersonalizationSingleGroup;
+}
 
 export function PastelPage(): React.JSX.Element {
   const pastel = useProduct(pastelCategory);
 
   const { addCartEvent } = useCart();
 
-  const [size, selectSizeOption] = useSingleOption(
-    pastelCategory.size.map((item, i) => ({
-      ...item,
-      price: pastel.price + item.price,
-      isSelected: i === 1,
-    })),
-  );
-
-  const total = useTotal(0, size.options);
+  const personalization =
+    useProductPersonalization<PastelPersonalizationGroups>(
+      { ...pastel, price: 0 },
+      {
+        size: {
+          type: 'single',
+          options: pastelCategory.size.map((item, i) => ({
+            ...item,
+            price: pastel.price + item.price,
+            isSelected: i === 1,
+          })),
+        },
+      },
+    );
 
   return (
     <div>
@@ -53,24 +66,27 @@ export function PastelPage(): React.JSX.Element {
         </div>
 
         <SingleOptionSelector
-          onSelectionChange={selectSizeOption}
-          ctx={size}
+          onSelectionChange={(option: SelectableOption<string>) =>
+            personalization.dispatch({
+              type: 'select',
+              group: 'size',
+              option,
+            })
+          }
+          ctx={personalization.groups.size as SingleOptionState}
           title="Tamanho:"
         />
         <OrderButton
           product={pastel}
-          totalPrice={total}
+          totalPrice={personalization.total}
+          validate={personalization.validate}
           multiple
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: { ...pastel, price: 0 },
-                options: size.options,
-                count,
-              },
-            })
-          }
+          order={count => {
+            const { total: _total, ...item } =
+              personalization.createOrderItem(count);
+
+            addCartEvent({ type: 'add', item });
+          }}
         />
       </div>
       <span className="block h-20" />

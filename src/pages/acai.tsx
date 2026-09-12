@@ -4,33 +4,57 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
-import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import type {
+  MultipleOptionsEvent,
+  MultipleOptionsState,
+} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
-import { useSingleOption } from '@/hooks/use-single-option';
-import { useTotal } from '@/hooks/use-total';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
+import type {
+  SelectableOption,
+  SingleOptionState,
+} from '@/hooks/use-single-option';
 import { acaiCategory } from '@/lib/data/acai';
 import { formatCurrency } from '@/lib/format';
+import type {
+  PersonalizationMultipleGroup,
+  PersonalizationSingleGroup,
+  ProductPersonalizationEvent,
+} from '@/lib/product-personalization';
+
+interface AcaiPersonalizationGroups {
+  type: PersonalizationSingleGroup;
+  complements: PersonalizationMultipleGroup;
+  extras: PersonalizationMultipleGroup;
+}
 
 export function AcaiPage(): React.JSX.Element {
   const acai = useProduct(acaiCategory);
 
   const { addCartEvent } = useCart();
 
-  const [acaiTypes, selectAcaiType] = useSingleOption(
-    acai.type.map((type, i) => ({ ...type, isSelected: i === 0 })),
+  const personalization = useProductPersonalization<AcaiPersonalizationGroups>(
+    acai,
+    {
+      type: {
+        type: 'single',
+        options: acai.type.map((type, i) => ({
+          ...type,
+          isSelected: i === 0,
+        })),
+      },
+      complements: {
+        type: 'multiple',
+        options: acai.complements,
+        countLimit: acai.complementsLimit,
+      },
+      extras: {
+        type: 'multiple',
+        options: acai.extras,
+        countLimit: acai.extrasLimit,
+      },
+    },
   );
-
-  const [complements, addComplementEvent] = useMultipleOptions(
-    acai.complements,
-    acai.complementsLimit,
-  );
-
-  const [extras, addExtraEvent] = useMultipleOptions(
-    acai.extras,
-    acai.extrasLimit,
-  );
-
-  const total = useTotal(acai.price, extras.options);
 
   return (
     <div>
@@ -63,37 +87,50 @@ export function AcaiPage(): React.JSX.Element {
         </div>
         <div className="flex flex-col gap-8">
           <SingleOptionSelector
-            onSelectionChange={selectAcaiType}
-            ctx={acaiTypes}
+            onSelectionChange={(option: SelectableOption<string>) =>
+              personalization.dispatch({
+                type: 'select',
+                group: 'type',
+                option,
+              })
+            }
+            ctx={personalization.groups.type as SingleOptionState}
             title="Tipo de Açaí:"
           />
           <MultipleOptionsSelector
-            dispatchEvent={addComplementEvent}
-            ctx={complements}
+            dispatchEvent={(event: MultipleOptionsEvent) =>
+              personalization.dispatch({
+                type: event.type === 'ADD' ? 'add' : 'remove',
+                option: event.option,
+                group: 'complements',
+              } as ProductPersonalizationEvent<AcaiPersonalizationGroups>)
+            }
+            ctx={personalization.groups.complements as MultipleOptionsState}
             title="Acompanhamentos:"
           />
           <MultipleOptionsSelector
-            dispatchEvent={addExtraEvent}
-            ctx={extras}
+            dispatchEvent={(event: MultipleOptionsEvent) =>
+              personalization.dispatch({
+                type: event.type === 'ADD' ? 'add' : 'remove',
+                option: event.option,
+                group: 'extras',
+              } as ProductPersonalizationEvent<AcaiPersonalizationGroups>)
+            }
+            ctx={personalization.groups.extras as MultipleOptionsState}
             title="Adicionais:"
           />
         </div>
         <OrderButton
           product={acai}
-          totalPrice={total}
+          totalPrice={personalization.total}
+          validate={personalization.validate}
           multiple
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: acai,
-                options: [acaiTypes, complements, extras].flatMap(
-                  item => item.options,
-                ),
-                count,
-              },
-            })
-          }
+          order={count => {
+            const { total: _total, ...item } =
+              personalization.createOrderItem(count);
+
+            addCartEvent({ type: 'add', item });
+          }}
         />
       </div>
       <span className="block h-20" />

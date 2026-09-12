@@ -4,25 +4,48 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
-import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import type {
+  MultipleOptionsEvent,
+  MultipleOptionsState,
+} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
-import { useSingleOption } from '@/hooks/use-single-option';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
+import type {
+  SelectableOption,
+  SingleOptionState,
+} from '@/hooks/use-single-option';
 import { salgadosCategory } from '@/lib/data/salgados';
 import { formatCurrency } from '@/lib/format';
+import type {
+  PersonalizationMultipleGroup,
+  PersonalizationSingleGroup,
+  ProductPersonalizationEvent,
+} from '@/lib/product-personalization';
+
+interface SalgadosPersonalizationGroups {
+  complements: PersonalizationMultipleGroup;
+  sauces: PersonalizationSingleGroup;
+}
 
 export function SalgadosPage(): React.JSX.Element {
   const salgado = useProduct(salgadosCategory);
 
   const { addCartEvent } = useCart();
 
-  const [complements, addComplementEvent] = useMultipleOptions(
-    salgado.complements.map(name => ({ name })),
-    salgado.complementsLimit,
-  );
-
-  const [sauces, addSauceEvent] = useSingleOption(
-    salgado.sauces.map(name => ({ name })),
-  );
+  const personalization =
+    useProductPersonalization<SalgadosPersonalizationGroups>(salgado, {
+      complements: {
+        type: 'multiple',
+        options: salgado.complements.map(name => ({ name })),
+        countLimit: salgado.complementsLimit,
+        required: 'Favor escolher salgados',
+      },
+      sauces: {
+        type: 'single',
+        options: salgado.sauces.map(name => ({ name })),
+        required: 'Favor escolher molho',
+      },
+    });
 
   return (
     <div>
@@ -57,39 +80,39 @@ export function SalgadosPage(): React.JSX.Element {
         </div>
         <div className="flex flex-col gap-8">
           <MultipleOptionsSelector
-            dispatchEvent={addComplementEvent}
-            ctx={complements}
+            dispatchEvent={(event: MultipleOptionsEvent) =>
+              personalization.dispatch({
+                type: event.type === 'ADD' ? 'add' : 'remove',
+                group: 'complements',
+                option: event.option,
+              } as ProductPersonalizationEvent<SalgadosPersonalizationGroups>)
+            }
+            ctx={personalization.groups.complements as MultipleOptionsState}
             title="Salgados:"
           />
           <SingleOptionSelector
-            onSelectionChange={addSauceEvent}
-            ctx={sauces}
+            onSelectionChange={(option: SelectableOption<string>) =>
+              personalization.dispatch({
+                type: 'select',
+                group: 'sauces',
+                option,
+              } as ProductPersonalizationEvent<SalgadosPersonalizationGroups>)
+            }
+            ctx={personalization.groups.sauces as SingleOptionState}
             title="Molhos:"
           />
         </div>
         <OrderButton
           product={salgado}
-          totalPrice={salgado.price}
+          totalPrice={personalization.total}
           multiple
-          validate={() => {
-            if (complements.countTotal === 0) {
-              return 'Favor escolher salgados';
-            }
+          validate={personalization.validate}
+          order={count => {
+            const { total: _total, ...item } =
+              personalization.createOrderItem(count);
 
-            if (!sauces.isSelected) {
-              return 'Favor escolher molho';
-            }
+            addCartEvent({ type: 'add', item });
           }}
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: salgado,
-                options: [complements, sauces].flatMap(item => item.options),
-                count,
-              },
-            })
-          }
         />
       </div>
       <span className="block h-20" />

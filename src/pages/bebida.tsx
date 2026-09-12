@@ -3,22 +3,47 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
-import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import type {
+  MultipleOptionsEvent,
+  MultipleOptionsState,
+} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
-import { useTotal } from '@/hooks/use-total';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import { bebidaCategory } from '@/lib/data/bebida';
+import type {
+  PersonalizationMultipleGroup,
+  ProductPersonalizationEvent,
+} from '@/lib/product-personalization';
+
+interface BebidaPersonalizationGroups {
+  flavors: PersonalizationMultipleGroup;
+}
 
 export function BebidaPage(): React.JSX.Element {
   const bebida = useProduct(bebidaCategory);
 
   const { addCartEvent } = useCart();
 
-  const [flavors, addFlavorEvent] = useMultipleOptions(
-    bebidaCategory.flavors,
-    20,
-  );
+  const personalization =
+    useProductPersonalization<BebidaPersonalizationGroups>(
+      { ...bebida, price: 0 },
+      {
+        flavors: {
+          type: 'multiple',
+          options: bebidaCategory.flavors,
+          countLimit: 20,
+          required: 'Favor escolher sabores',
+        },
+      },
+    );
 
-  const total = useTotal(0, flavors.options);
+  const dispatchFlavorEvent = (event: MultipleOptionsEvent): void => {
+    personalization.dispatch({
+      type: event.type === 'ADD' ? 'add' : 'remove',
+      group: 'flavors',
+      option: event.option,
+    } as ProductPersonalizationEvent<BebidaPersonalizationGroups>);
+  };
 
   return (
     <div>
@@ -48,29 +73,21 @@ export function BebidaPage(): React.JSX.Element {
         </div>
         <div className="flex flex-col gap-8">
           <MultipleOptionsSelector
-            dispatchEvent={addFlavorEvent}
-            ctx={flavors}
+            dispatchEvent={dispatchFlavorEvent}
+            ctx={personalization.groups.flavors as MultipleOptionsState}
             title="Sabores:"
           />
         </div>
         <OrderButton
           product={bebida}
-          totalPrice={total}
-          validate={() => {
-            if (flavors.countTotal === 0) {
-              return 'Favor escolher sabores';
-            }
+          totalPrice={personalization.total}
+          validate={personalization.validate}
+          order={count => {
+            const { total: _total, ...item } =
+              personalization.createOrderItem(count);
+
+            addCartEvent({ type: 'add', item });
           }}
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: { ...bebida, price: 0 },
-                options: flavors.options,
-                count,
-              },
-            })
-          }
         />
       </div>
       <span className="block h-20" />

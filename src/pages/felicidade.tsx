@@ -4,16 +4,19 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { useProduct } from '@/hooks/use-product';
-import { useTotal } from '@/hooks/use-total';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import { felicidadeCategory } from '@/lib/data/felicidade';
 import { formatCurrency } from '@/lib/format';
+
+type FelicidadePersonalizationGroups = Record<never, never>;
 
 export function FelicidadePage(): React.JSX.Element {
   const copo = useProduct(felicidadeCategory);
 
   const { addCartEvent } = useCart();
 
-  const total = useTotal(copo.price, []);
+  const personalization =
+    useProductPersonalization<FelicidadePersonalizationGroups>(copo, {});
 
   return (
     <div>
@@ -46,18 +49,15 @@ export function FelicidadePage(): React.JSX.Element {
 
         <OrderButton
           product={copo}
-          totalPrice={total}
+          totalPrice={personalization.total}
           multiple
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: copo,
-                options: [],
-                count,
-              },
-            })
-          }
+          validate={personalization.validate}
+          order={count => {
+            const { total: _total, ...item } =
+              personalization.createOrderItem(count);
+
+            addCartEvent({ type: 'add', item });
+          }}
         />
       </div>
       <span className="block h-20" />

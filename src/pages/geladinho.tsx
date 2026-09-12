@@ -3,22 +3,37 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
-import { useMultipleOptions } from '@/hooks/use-multiple-options';
+import type {
+  MultipleOptionsEvent,
+  MultipleOptionsState,
+} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
-import { useTotal } from '@/hooks/use-total';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import { geladinhoCategory } from '@/lib/data/geladinho';
+import type {
+  PersonalizationMultipleGroup,
+  ProductPersonalizationEvent,
+} from '@/lib/product-personalization';
+
+interface GeladinhoPersonalizationGroups {
+  flavors: PersonalizationMultipleGroup;
+}
 
 export function GeladinhoPage(): React.JSX.Element {
   const geladinho = useProduct(geladinhoCategory);
 
   const { addCartEvent } = useCart();
 
-  const [flavors, addFlavorEvent] = useMultipleOptions(
-    geladinhoCategory.flavors,
-    20,
-  );
-
-  const total = useTotal(0, flavors.options);
+  const orderProduct = { ...geladinho, price: 0 };
+  const personalization =
+    useProductPersonalization<GeladinhoPersonalizationGroups>(orderProduct, {
+      flavors: {
+        type: 'multiple',
+        options: geladinhoCategory.flavors,
+        countLimit: 20,
+        required: 'Favor escolher sabores',
+      },
+    });
 
   return (
     <div>
@@ -51,29 +66,27 @@ export function GeladinhoPage(): React.JSX.Element {
         </div>
         <div className="flex flex-col gap-8">
           <MultipleOptionsSelector
-            dispatchEvent={addFlavorEvent}
-            ctx={flavors}
+            dispatchEvent={(event: MultipleOptionsEvent) =>
+              personalization.dispatch({
+                type: event.type === 'ADD' ? 'add' : 'remove',
+                group: 'flavors',
+                option: event.option,
+              } as ProductPersonalizationEvent<GeladinhoPersonalizationGroups>)
+            }
+            ctx={personalization.groups.flavors as MultipleOptionsState}
             title="Sabores:"
           />
         </div>
         <OrderButton
           product={geladinho}
-          totalPrice={total}
-          validate={() => {
-            if (flavors.countTotal === 0) {
-              return 'Favor escolher sabores';
-            }
+          totalPrice={personalization.total}
+          validate={personalization.validate}
+          order={count => {
+            const { total: _total, ...item } =
+              personalization.createOrderItem(count);
+
+            addCartEvent({ type: 'add', item });
           }}
-          order={count =>
-            addCartEvent({
-              type: 'add',
-              item: {
-                product: { ...geladinho, price: 0 },
-                options: flavors.options,
-                count,
-              },
-            })
-          }
         />
       </div>
       <span className="block h-20" />
