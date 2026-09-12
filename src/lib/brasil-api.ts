@@ -11,9 +11,7 @@ export async function getCepAddress(cep: string): Promise<CepAddress> {
   const res = await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`);
 
   if (!res.ok) {
-    console.error(
-      `Error fetching CEP ${cep}: ${res.status} ${res.statusText}`,
-    );
+    console.error(`Error fetching CEP ${cep}: ${res.status} ${res.statusText}`);
 
     throw new Error('CEP not found');
   }
@@ -34,12 +32,7 @@ function isCepAddress(value: unknown): value is CepAddress {
 
   const address = value as Record<string, unknown>;
 
-  return [
-    'cep',
-    'state',
-    'city',
-    'neighborhood',
-    'street',
-    'service',
-  ].every(key => typeof address[key] === 'string');
+  return ['cep', 'state', 'city', 'neighborhood', 'street', 'service'].every(
+    key => typeof address[key] === 'string',
+  );
 }
