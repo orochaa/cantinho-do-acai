@@ -9,7 +9,16 @@ import { useToast } from '@/context/toast-provider';
 import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option';
 import { getCepAddress } from '@/lib/brasil-api';
 import { formatCurrency, parseCurrency } from '@/lib/format';
-import { calculateOrderTotal } from '@/lib/order';
+import type {
+  DeliveryAddress,
+  FulfillmentMethod,
+  PaymentMethod,
+} from '@/lib/order';
+import {
+  calculateOrderChange,
+  calculateOrderTotal,
+  validateOrder,
+} from '@/lib/order';
 // import {
 //   COMPANY_COORDINATES,
 //   calculateDistance,
@@ -20,20 +29,9 @@ import { ExternalLink, PlusSquare, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-interface CepAddress {
-  cep: string;
-  state: string;
-  city: string;
-  neighborhood: string;
-  street: string;
-  service: string;
-}
-
-type PaymentMethod = 'PIX' | 'Cartão de Crédito' | 'Dinheiro';
-
 type SpoonOption = 'Não, obrigado' | 'Sim, por favor';
 
-type CheckoutOption = 'Retirada no local' | 'Entrega (com taxa de entrega)';
+type CheckoutOption = FulfillmentMethod;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const createMessageBuilder = () => {
@@ -54,47 +52,6 @@ const createMessageBuilder = () => {
     },
     build: (): string => parts.join('\n'),
   };
-};
-
-interface OrderValidationOptions {
-  clientName: string;
-  isDelivery: boolean;
-  address: CepAddress | null;
-  addressNumber: string;
-  paymentMethod: ReturnType<typeof useSingleOption<PaymentMethod>>[0];
-  cashValue: string;
-  orderTotal: number;
-  showError: (description: string) => void;
-}
-
-const isOrderValid = (options: OrderValidationOptions): boolean => {
-  if (!options.clientName.trim()) {
-    options.showError('Por favor, informe o seu nome.');
-    return false;
-  }
-
-  if (options.isDelivery && !options.address) {
-    options.showError('Por favor, informe o seu CEP.');
-    return false;
-  }
-
-  if (options.isDelivery && !options.addressNumber) {
-    options.showError('Por favor, informe o número do seu endereço.');
-    return false;
-  }
-
-  if (isOptionSelected(options.paymentMethod.options, 'Dinheiro')) {
-    const cash = parseCurrency(options.cashValue);
-
-    if (Number.isNaN(cash) || cash < options.orderTotal) {
-      options.showError(
-        'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
-      );
-      return false;
-    }
-  }
-
-  return true;
 };
 
 export function CartPage(): React.JSX.Element {
@@ -126,7 +83,7 @@ export function CartPage(): React.JSX.Element {
   const toast = useToast();
 
   const [cep, setCep] = useState('');
-  const [address, setAddress] = useState<CepAddress | null>(null);
+  const [address, setAddress] = useState<DeliveryAddress | null>(null);
   const [addressError, setAddressError] = useState<string | null>(null);
   const [cepLoading, setCepLoading] = useState(false);
   // const [deliveryFare, setDeliveryFare] = useState<number | null>(null)
@@ -143,18 +100,13 @@ export function CartPage(): React.JSX.Element {
 
   const orderTotal = useMemo(() => calculateOrderTotal(cart), [cart]);
 
-  const change = useMemo(() => {
-    const cash = parseCurrency(cashValue);
-
-    if (
-      isOptionSelected(paymentMethod.options, 'Dinheiro') &&
-      !Number.isNaN(cash)
-    ) {
-      return cash - orderTotal;
-    }
-
-    return 0;
-  }, [cashValue, paymentMethod, orderTotal]);
+  const change = useMemo(
+    () =>
+      isOptionSelected(paymentMethod.options, 'Dinheiro')
+        ? calculateOrderChange(cashValue, orderTotal)
+        : 0,
+    [cashValue, paymentMethod, orderTotal],
+  );
 
   const handleCepChange = useCallback(async (cep: string) => {
     const normalizedCep = cep.replaceAll(/\D/g, '');
@@ -162,11 +114,9 @@ export function CartPage(): React.JSX.Element {
     setCep(normalizedCep);
 
     if (normalizedCep.length === 8) {
-      let cepAddress: CepAddress | undefined;
-
       try {
         setCepLoading(true);
-        cepAddress = await getCepAddress(normalizedCep);
+        const cepAddress = await getCepAddress(normalizedCep);
         setAddress(cepAddress);
         setAddressError(null);
       } catch (error) {
@@ -315,18 +265,21 @@ ${item.observation}`);
   }, []);
 
   const handleConfirmOrder = useCallback(() => {
-    if (
-      !isOrderValid({
-        clientName,
-        isDelivery,
-        address,
-        addressNumber,
-        paymentMethod,
-        cashValue,
-        orderTotal,
-        showError: description => toast.error({ description }),
-      })
-    ) {
+    const validationError = validateOrder({
+      clientName,
+      fulfillment: isDelivery
+        ? 'Entrega (com taxa de entrega)'
+        : 'Retirada no local',
+      address,
+      addressNumber,
+      paymentMethod:
+        paymentMethod.options.find(option => option.isSelected)?.name ?? null,
+      cashValue,
+      orderTotal,
+    });
+
+    if (validationError) {
+      toast.error({ description: validationError });
       return;
     }
 

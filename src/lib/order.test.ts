@@ -1,9 +1,11 @@
 import {
+  calculateOrderChange,
   calculateOrderItemTotal,
   calculateOrderTotal,
   createOrder,
   createOrderItem,
   updateOrderItemQuantity,
+  validateOrder,
 } from '@/lib/order';
 import { describe, expect, it } from 'vitest';
 
@@ -72,5 +74,66 @@ describe('Order pricing', () => {
       items: [first, second],
       total: 33,
     });
+  });
+});
+
+describe('Order checkout validation', () => {
+  const validInput = {
+    clientName: 'Maria',
+    fulfillment: 'Retirada no local' as const,
+    address: null,
+    addressNumber: '',
+    paymentMethod: 'PIX' as const,
+    cashValue: '',
+    orderTotal: 11,
+  };
+
+  it('should accept a valid pickup order', () => {
+    expect(validateOrder(validInput)).toBeNull();
+  });
+
+  it('should require complete delivery information', () => {
+    expect(
+      validateOrder({
+        ...validInput,
+        fulfillment: 'Entrega (com taxa de entrega)',
+      }),
+    ).toBe('Por favor, informe o seu CEP.');
+
+    expect(
+      validateOrder({
+        ...validInput,
+        fulfillment: 'Entrega (com taxa de entrega)',
+        address: {
+          cep: '95000000',
+          state: 'RS',
+          city: 'Caxias do Sul',
+          neighborhood: 'Centro',
+          street: 'Rua Teste',
+        },
+        addressNumber: ' ',
+      }),
+    ).toBe('Por favor, informe o número do seu endereço.');
+  });
+
+  it('should reject missing payment methods and insufficient cash', () => {
+    expect(validateOrder({ ...validInput, paymentMethod: null })).toBe(
+      'Por favor, selecione uma forma de pagamento.',
+    );
+    expect(
+      validateOrder({
+        ...validInput,
+        paymentMethod: 'Dinheiro',
+        cashValue: 'R$ 5,00',
+      }),
+    ).toBe(
+      'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
+    );
+  });
+
+  it('should calculate non-negative change from cash paid', () => {
+    expect(calculateOrderChange('R$ 20,00', 11)).toBe(9);
+    expect(calculateOrderChange('R$ 5,00', 11)).toBe(0);
+    expect(calculateOrderChange('', 11)).toBe(0);
   });
 });
