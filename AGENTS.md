@@ -37,6 +37,8 @@
 - Follow the existing Biome configuration for formatting, import ordering,
   naming, and linting. Keep agent-facing Markdown lines at 80 characters or
   fewer.
+- Write source code, identifiers, types, and test descriptions in English.
+  Keep Portuguese only for customer-visible copy and visual test assertions.
 
 ## React and styling
 

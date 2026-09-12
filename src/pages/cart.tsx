@@ -9,6 +9,7 @@ import { useToast } from '@/context/toast-provider';
 import { isOptionSelected, useSingleOption } from '@/hooks/use-single-option';
 import { getCepAddress } from '@/lib/brasil-api';
 import { formatCurrency, parseCurrency } from '@/lib/format';
+import { calculateOrderTotal } from '@/lib/order';
 // import {
 //   COMPANY_COORDINATES,
 //   calculateDistance,
@@ -62,7 +63,7 @@ interface OrderValidationOptions {
   addressNumber: string;
   paymentMethod: ReturnType<typeof useSingleOption<PaymentMethod>>[0];
   cashValue: string;
-  totalOrder: number;
+  orderTotal: number;
   showError: (description: string) => void;
 }
 
@@ -85,7 +86,7 @@ const isOrderValid = (options: OrderValidationOptions): boolean => {
   if (isOptionSelected(options.paymentMethod.options, 'Dinheiro')) {
     const cash = parseCurrency(options.cashValue);
 
-    if (Number.isNaN(cash) || cash < options.totalOrder) {
+    if (Number.isNaN(cash) || cash < options.orderTotal) {
       options.showError(
         'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
       );
@@ -140,19 +141,7 @@ export function CartPage(): React.JSX.Element {
 
   const navigate = useNavigate();
 
-  const totalOrder = useMemo(() => {
-    let total = 0;
-
-    for (const item of cart) {
-      total += item.total;
-    }
-
-    // if (isDelivery && deliveryFare) {
-    //   total += deliveryFare
-    // }
-
-    return total;
-  }, [cart]);
+  const orderTotal = useMemo(() => calculateOrderTotal(cart), [cart]);
 
   const change = useMemo(() => {
     const cash = parseCurrency(cashValue);
@@ -161,11 +150,11 @@ export function CartPage(): React.JSX.Element {
       isOptionSelected(paymentMethod.options, 'Dinheiro') &&
       !Number.isNaN(cash)
     ) {
-      return cash - totalOrder;
+      return cash - orderTotal;
     }
 
     return 0;
-  }, [cashValue, paymentMethod, totalOrder]);
+  }, [cashValue, paymentMethod, orderTotal]);
 
   const handleCepChange = useCallback(async (cep: string) => {
     const normalizedCep = cep.replaceAll(/\D/g, '');
@@ -211,14 +200,11 @@ export function CartPage(): React.JSX.Element {
 
   const goToWhatsappLink = useMemo((): string => {
     const builder = createMessageBuilder();
-    let total = 0;
-
     builder.add('Olá, Cantinho do Açaí!');
     builder.add('Gostaria de fazer um pedido:');
     builder.add('');
 
     for (const item of cart) {
-      total += item.total;
       const itemParts = [
         `*${item.count} - ${item.product.name}* ${
           item.product.price ? `- ${formatCurrency(item.product.price)}` : ''
@@ -270,7 +256,7 @@ ${item.observation}`);
     });
 
     builder.add('');
-    builder.add(`*Total:* ${formatCurrency(total)}`);
+    builder.add(`*Total:* ${formatCurrency(orderTotal)}`);
 
     builder.addConditional(
       isOptionSelected(spoonOption.options, 'Sim, por favor'),
@@ -321,6 +307,7 @@ ${item.observation}`);
     paymentMethod,
     cashValue,
     change,
+    orderTotal,
   ]);
 
   const openModal = useCallback(() => {
@@ -336,7 +323,7 @@ ${item.observation}`);
         addressNumber,
         paymentMethod,
         cashValue,
-        totalOrder,
+        orderTotal,
         showError: description => toast.error({ description }),
       })
     ) {
@@ -353,7 +340,7 @@ ${item.observation}`);
     addressNumber,
     paymentMethod,
     cashValue,
-    totalOrder,
+    orderTotal,
   ]);
 
   const closeModal = useCallback(() => {
@@ -377,7 +364,7 @@ ${item.observation}`);
         <div className="flex flex-col gap-8">
           <Container>
             <h2 className="ml-1 text-xl font-bold text-white">
-              Pedido: {formatCurrency(totalOrder)}
+              Pedido: {formatCurrency(orderTotal)}
             </h2>
             <div className="flex flex-col gap-2">
               {cart.map(
@@ -659,13 +646,13 @@ ${item.observation}`);
                       setCashValue(
                         formatCurrency(
                           parseCurrency(cashValue) +
-                            Math.max(totalOrder - parseCurrency(cashValue), 0),
+                            Math.max(orderTotal - parseCurrency(cashValue), 0),
                         ),
                       )
                     }>
                     +
                     {formatCurrency(
-                      Math.max(totalOrder - parseCurrency(cashValue), 0),
+                      Math.max(orderTotal - parseCurrency(cashValue), 0),
                     )}
                   </button>
                   <button
@@ -720,7 +707,7 @@ ${item.observation}`);
           <Button
             variant="confirm"
             onClick={handleConfirmOrder}>
-            Confirmar Pedido {formatCurrency(totalOrder)}
+            Confirmar Pedido {formatCurrency(orderTotal)}
           </Button>
         </div>
 

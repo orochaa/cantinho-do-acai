@@ -1,3 +1,5 @@
+import type { OrderItem } from '@/lib/order';
+import { createOrderItem, updateOrderItemQuantity } from '@/lib/order';
 import { exhaustive } from 'exhaustive';
 import type { ReactNode } from 'react';
 import {
@@ -8,13 +10,8 @@ import {
   useReducer,
 } from 'react';
 
-export interface CartItem {
+export interface CartItem extends OrderItem {
   id: string;
-  product: Product;
-  options: Array<Option>;
-  count: number;
-  observation?: string;
-  total: number;
 }
 
 type CartEvent =
@@ -136,18 +133,9 @@ function cartReducer(
 ): Array<CartItem> {
   return exhaustive(event, 'type', {
     add: ({ item }) => {
-      let total = item.product.price;
-      const options: Array<Option> = [];
-      for (const option of item.options) {
-        if (option.count > 0) {
-          options.push(option);
-          total += (option.price ?? 0) * option.count;
-        }
-      }
-      return [
-        ...state,
-        { ...item, id: createCartItemId(), options, total: total * item.count },
-      ];
+      const orderItem = createOrderItem(item);
+
+      return [...state, { ...orderItem, id: createCartItemId() }];
     },
     remove: event => {
       const index = findItemIndex(state, event);
@@ -159,15 +147,10 @@ function cartReducer(
       if (!(item && Number.isInteger(event.count)) || event.count < 1) {
         return state;
       }
-      let total = item.product.price;
-      for (const option of item.options) {
-        total += (option.price ?? 0) * option.count;
-      }
       const updatedCart = [...state];
       updatedCart[index] = {
-        ...item,
-        count: event.count,
-        total: total * event.count,
+        ...updateOrderItemQuantity(item, event.count),
+        id: item.id,
       };
       return updatedCart;
     },
