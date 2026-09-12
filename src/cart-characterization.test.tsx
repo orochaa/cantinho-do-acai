@@ -5,7 +5,7 @@ import { act } from 'react';
 import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const navigateMock = vi.hoisted(() => vi.fn());
 
@@ -50,10 +50,30 @@ const createItem = (
 
 let activeRoot: Root | undefined;
 
+const storage = new Map<string, string>();
+const localStorageMock: Storage = {
+  get length() {
+    return storage.size;
+  },
+  clear: () => storage.clear(),
+  getItem: key => storage.get(key) ?? null,
+  key: index => Array.from(storage.keys())[index] ?? null,
+  removeItem: key => storage.delete(key),
+  setItem: (key, value) => storage.set(key, value),
+};
+
+beforeEach(() => {
+  Object.defineProperty(window, 'localStorage', {
+    configurable: true,
+    value: localStorageMock,
+  });
+});
+
 afterEach(() => {
   activeRoot?.unmount();
   activeRoot = undefined;
   document.body.innerHTML = '';
+  window.localStorage.clear();
   navigateMock.mockReset();
   vi.restoreAllMocks();
 });
@@ -163,6 +183,75 @@ function renderCheckout(): void {
 }
 
 describe('CartProvider characterization', () => {
+  it('should assign stable ids and use them for item mutations', () => {
+    const context = renderCartProbe();
+
+    act(() => {
+      context.addCartEvent({
+        type: 'add',
+        item: createItem({ observation: 'Primeiro' }),
+      });
+      context.addCartEvent({
+        type: 'add',
+        item: createItem({ observation: 'Segundo' }),
+      });
+    });
+
+    const firstId = context.cart[0]?.id;
+    const secondId = context.cart[1]?.id;
+    expect(firstId).toEqual(expect.any(String));
+    expect(secondId).toEqual(expect.any(String));
+    expect(firstId).not.toBe(secondId);
+
+    act(() => {
+      if (!secondId) throw new Error('Second cart item has no id');
+      context.addCartEvent({ type: 'update-quantity', id: secondId, count: 4 });
+      if (!firstId) throw new Error('First cart item has no id');
+      context.addCartEvent({ type: 'remove', id: firstId });
+    });
+
+    expect(context.cart).toHaveLength(1);
+    expect(context.cart[0]?.id).toBe(secondId);
+    expect(context.cart[0]?.count).toBe(4);
+  });
+
+  it('should restore a persisted cart after the provider is remounted', () => {
+    const firstContext = renderCartProbe();
+
+    act(() => {
+      firstContext.addCartEvent({ type: 'add', item: createItem() });
+    });
+    const savedId = firstContext.cart[0]?.id;
+    activeRoot?.unmount();
+    activeRoot = undefined;
+
+    const restoredContext = renderCartProbe();
+
+    expect(restoredContext.cart).toHaveLength(1);
+    expect(restoredContext.cart[0]?.id).toBe(savedId);
+    expect(restoredContext.cart[0]?.total).toBe(11);
+  });
+
+  it('should discard malformed and outdated persisted carts', () => {
+    window.localStorage.setItem('cantinho-do-acai-cart', '{malformed');
+    expect(renderCartProbe().cart).toEqual([]);
+    expect(window.localStorage.getItem('cantinho-do-acai-cart')).toBe(
+      JSON.stringify({ version: 1, cart: [] }),
+    );
+
+    activeRoot?.unmount();
+    activeRoot = undefined;
+    window.localStorage.setItem(
+      'cantinho-do-acai-cart',
+      JSON.stringify([{ id: 'old-item' }]),
+    );
+
+    expect(renderCartProbe().cart).toEqual([]);
+    expect(window.localStorage.getItem('cantinho-do-acai-cart')).toBe(
+      JSON.stringify({ version: 1, cart: [] }),
+    );
+  });
+
   it('should add items with current option pricing and omit zero-count options', () => {
     const context = renderCartProbe();
 

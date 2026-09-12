@@ -360,10 +360,9 @@ ${item.observation}`);
             </h2>
             <div className="flex flex-col gap-2">
               {cart.map(
-                ({ product, options, observation, count, total }, i) => (
+                ({ id, product, options, observation, count, total }) => (
                   <div
-                    // biome-ignore lint/suspicious/noArrayIndexKey: TODO
-                    key={i}
+                    key={id}
                     className="relative flex flex-col gap-2 rounded-sm bg-zinc-50 p-2 shadow-sm">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">
@@ -377,7 +376,7 @@ ${item.observation}`);
                             case 'ADD':
                               addCartEvent({
                                 type: 'update-quantity',
-                                index: i,
+                                id,
                                 count: count + 1,
                               });
                               break;
@@ -385,13 +384,13 @@ ${item.observation}`);
                               if (count > 1) {
                                 addCartEvent({
                                   type: 'update-quantity',
-                                  index: i,
+                                  id,
                                   count: count - 1,
                                 });
                               } else {
                                 addCartEvent({
                                   type: 'remove',
-                                  index: i,
+                                  id,
                                 });
                               }
                               break;
