@@ -21,3 +21,28 @@ Este projeto foi desenvolvido utilizando:
 - 🛒 **Resumo do pedido** com preços atualizados em tempo real
 - 💬 **Finalização do pedido via WhatsApp**, com envio automático da descrição dos itens
 - 📱 **Design responsivo**, adaptado para dispositivos móveis
+
+## Desenvolvimento
+
+Inicie a aplicação com:
+
+```sh
+pnpm dev
+```
+
+Execute o Storybook para inspecionar os controles reutilizáveis isoladamente:
+
+```sh
+pnpm storybook
+```
+
+Gere uma versão estática para verificação ou hospedagem com:
+
+```sh
+pnpm build-storybook
+```
+
+O Storybook é configurado separadamente da entrada Vite de produção. A
+pré-visualização importa o stylesheet Tailwind da aplicação, e
+`.storybook/main.ts` fornece suporte ao React, Tailwind e ao alias de caminho
+`@/` para as stories.

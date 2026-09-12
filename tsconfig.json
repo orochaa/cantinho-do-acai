@@ -22,6 +22,8 @@
 
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vitest/globals"]
-  }
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/**/*.test.*", "src/**/*.stories.*", "src/test-setup.ts"]
 }
