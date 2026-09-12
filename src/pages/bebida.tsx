@@ -3,14 +3,11 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
-import type {
-  MultipleOptionsEvent,
-  MultipleOptionsState,
-} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import { bebidaCategory } from '@/lib/data/bebida';
 import type {
+  MultipleOptionsEvent,
   PersonalizationMultipleGroup,
   ProductPersonalizationEvent,
 } from '@/lib/product-personalization';
@@ -39,7 +36,7 @@ export function BebidaPage(): React.JSX.Element {
 
   const dispatchFlavorEvent = (event: MultipleOptionsEvent): void => {
     personalization.dispatch({
-      type: event.type === 'ADD' ? 'add' : 'remove',
+      type: event.type,
       group: 'flavors',
       option: event.option,
     } as ProductPersonalizationEvent<BebidaPersonalizationGroups>);
@@ -74,7 +71,7 @@ export function BebidaPage(): React.JSX.Element {
         <div className="flex flex-col gap-8">
           <MultipleOptionsSelector
             dispatchEvent={dispatchFlavorEvent}
-            ctx={personalization.groups.flavors as MultipleOptionsState}
+            ctx={personalization.groups.flavors}
             title="Sabores:"
           />
         </div>

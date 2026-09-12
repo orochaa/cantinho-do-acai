@@ -1,9 +1,9 @@
 /* eslint-disable react/no-multi-comp */
+import { formatCurrency } from '@/lib/format';
 import type {
   MultipleOptionsEvent,
   MultipleOptionsState,
-} from '@/hooks/use-multiple-options';
-import { formatCurrency } from '@/lib/format';
+} from '@/lib/product-personalization';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { Container } from './container';
 
@@ -33,7 +33,7 @@ export function MultipleOptionsSelector<TName extends string>(
             <button
               type="button"
               className="flex grow items-center gap-2 p-3"
-              onClick={() => dispatchEvent({ type: 'ADD', option })}>
+              onClick={() => dispatchEvent({ type: 'add', option })}>
               {!!option.img && (
                 <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
                   <img
@@ -95,7 +95,7 @@ function AddOptionButton<TName extends string>(
       aria-label={`Adicionar ${option.name}`}
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
-      onClick={() => dispatchEvent({ type: 'ADD', option })}>
+      onClick={() => dispatchEvent({ type: 'add', option })}>
       <Plus className="size-5" />
     </button>
   );
@@ -120,7 +120,7 @@ export function QuantitySelector<TName extends string>(
           className="min-h-11 min-w-11 rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200"
           aria-label={`${item.count === 1 ? 'Remover' : 'Diminuir'} ${item.name}`}
           title={item.count === 1 ? 'Remover' : 'Diminuir'}
-          onClick={() => onCountChange({ type: 'REMOVE', option: item })}>
+          onClick={() => onCountChange({ type: 'remove', option: item })}>
           {item.count === 1 ? (
             <Trash2 className="size-5 shrink-0" />
           ) : (
@@ -134,7 +134,7 @@ export function QuantitySelector<TName extends string>(
           aria-label={`Adicionar ${item.name}`}
           title="Adicionar"
           disabled={ctx.countTotal >= ctx.countLimit}
-          onClick={() => onCountChange({ type: 'ADD', option: item })}>
+          onClick={() => onCountChange({ type: 'add', option: item })}>
           <Plus className="size-5 shrink-0" />
         </button>
       </div>

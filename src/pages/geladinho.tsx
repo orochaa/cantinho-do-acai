@@ -3,14 +3,11 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
-import type {
-  MultipleOptionsEvent,
-  MultipleOptionsState,
-} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import { geladinhoCategory } from '@/lib/data/geladinho';
 import type {
+  MultipleOptionsEvent,
   PersonalizationMultipleGroup,
   ProductPersonalizationEvent,
 } from '@/lib/product-personalization';
@@ -68,12 +65,12 @@ export function GeladinhoPage(): React.JSX.Element {
           <MultipleOptionsSelector
             dispatchEvent={(event: MultipleOptionsEvent) =>
               personalization.dispatch({
-                type: event.type === 'ADD' ? 'add' : 'remove',
+                type: event.type,
                 group: 'flavors',
                 option: event.option,
               } as ProductPersonalizationEvent<GeladinhoPersonalizationGroups>)
             }
-            ctx={personalization.groups.flavors as MultipleOptionsState}
+            ctx={personalization.groups.flavors}
             title="Sabores:"
           />
         </div>

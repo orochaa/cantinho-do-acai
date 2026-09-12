@@ -2,7 +2,6 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
-import type { MultipleOptionsState } from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import { paletaCategory } from '@/lib/data/paleta';
@@ -32,7 +31,7 @@ export function PaletaPage(): React.JSX.Element {
         },
       },
     );
-  const flavors = personalization.groups.flavors as MultipleOptionsState;
+  const flavors = personalization.groups.flavors;
 
   return (
     <>
@@ -45,7 +44,7 @@ export function PaletaPage(): React.JSX.Element {
         <MultipleOptionsSelector
           dispatchEvent={event =>
             personalization.dispatch({
-              type: event.type === 'ADD' ? 'add' : 'remove',
+              type: event.type,
               group: 'flavors',
               option: event.option,
             } as ProductPersonalizationEvent<PaletaPersonalizationGroups>)

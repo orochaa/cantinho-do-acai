@@ -22,7 +22,7 @@ export function CartItems(props: {
             </h3>
             <QuantitySelector
               onCountChange={event => {
-                if (event.type === 'ADD') {
+                if (event.type === 'add') {
                   props.onQuantityChange(item, item.count + 1);
                 } else if (item.count > 1) {
                   props.onQuantityChange(item, item.count - 1);

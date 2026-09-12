@@ -87,6 +87,23 @@ describe('product personalization', () => {
     expect(blocked).toEqual(selected);
   });
 
+  it('should preserve discriminated multiple option names', () => {
+    const groups: {
+      flavors: PersonalizationMultipleGroup<'A' | 'B'>;
+    } = {
+      flavors: {
+        type: 'multiple',
+        options: [{ name: 'A' }, { name: 'B' }],
+        countLimit: 2,
+      },
+    };
+
+    const state = createProductPersonalizationState(groups);
+    const optionName: 'A' | 'B' = state.groups.flavors.options[0].name;
+
+    expect(optionName).toBe('A');
+  });
+
   it('should enforce the limit for repeated events with a stale option count', () => {
     const groups = {
       complements: {
@@ -168,6 +185,42 @@ describe('product personalization', () => {
       countTotal: 1,
       options: [{ name: 'Banana', count: 1 }],
     });
+  });
+
+  it('should ignore removing a multiple option that is not selected', () => {
+    const state = createProductPersonalizationState({
+      extras: {
+        type: 'multiple',
+        options: [{ name: 'Granola' }],
+        countLimit: 2,
+      },
+    });
+
+    const result = productPersonalizationReducer(state, {
+      type: 'remove',
+      group: 'extras',
+      option: { name: 'Granola', count: 0 },
+    });
+
+    expect(result).toBe(state);
+  });
+
+  it('should ignore removing an unknown multiple option', () => {
+    const state = createProductPersonalizationState({
+      extras: {
+        type: 'multiple',
+        options: [{ name: 'Granola' }],
+        countLimit: 2,
+      },
+    });
+
+    const result = productPersonalizationReducer(state, {
+      type: 'remove',
+      group: 'extras',
+      option: { name: 'Paçoca', count: 1 },
+    });
+
+    expect(result).toBe(state);
   });
 
   it('should calculate option pricing and omit zero-count options', () => {

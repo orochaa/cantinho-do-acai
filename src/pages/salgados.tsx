@@ -4,10 +4,6 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
-import type {
-  MultipleOptionsEvent,
-  MultipleOptionsState,
-} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import type {
@@ -17,6 +13,7 @@ import type {
 import { salgadosCategory } from '@/lib/data/salgados';
 import { formatCurrency } from '@/lib/format';
 import type {
+  MultipleOptionsEvent,
   PersonalizationMultipleGroup,
   PersonalizationSingleGroup,
   ProductPersonalizationEvent,
@@ -82,12 +79,12 @@ export function SalgadosPage(): React.JSX.Element {
           <MultipleOptionsSelector
             dispatchEvent={(event: MultipleOptionsEvent) =>
               personalization.dispatch({
-                type: event.type === 'ADD' ? 'add' : 'remove',
+                type: event.type,
                 group: 'complements',
                 option: event.option,
               } as ProductPersonalizationEvent<SalgadosPersonalizationGroups>)
             }
-            ctx={personalization.groups.complements as MultipleOptionsState}
+            ctx={personalization.groups.complements}
             title="Salgados:"
           />
           <SingleOptionSelector

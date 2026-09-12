@@ -11,9 +11,9 @@ export interface PersonalizationSingleGroup {
   required?: string;
 }
 
-export interface PersonalizationMultipleGroup {
+export interface PersonalizationMultipleGroup<TName extends string = string> {
   type: 'multiple';
-  options: Array<Optional<Option, 'count'>>;
+  options: Array<Optional<Option<TName>, 'count'>>;
   countLimit: number;
   required?: string;
 }
@@ -31,23 +31,41 @@ export interface PersonalizationSingleGroupState {
   required?: string;
 }
 
-export interface PersonalizationMultipleGroupState {
+export interface PersonalizationMultipleGroupState<
+  TName extends string = string,
+> {
   type: 'multiple';
-  options: Array<Option>;
+  options: Array<Option<TName>>;
   countLimit: number;
   countTotal: number;
   required?: string;
+}
+
+export type MultipleOptionsState<TName extends string = string> =
+  PersonalizationMultipleGroupState<TName>;
+
+export interface MultipleOptionsEvent<TName extends string = string> {
+  type: 'add' | 'remove';
+  option: Option<TName>;
 }
 
 export type PersonalizationGroupState =
   | PersonalizationSingleGroupState
   | PersonalizationMultipleGroupState;
 
+type PersonalizationGroupStateFor<Group> = Group extends {
+  type: 'single';
+}
+  ? PersonalizationSingleGroupState
+  : Group extends PersonalizationMultipleGroup<infer TName>
+    ? PersonalizationMultipleGroupState<TName>
+    : PersonalizationMultipleGroupState;
+
 export interface ProductPersonalizationState<
   Groups extends PersonalizationGroups = PersonalizationGroups,
 > {
   groups: {
-    [K in keyof Groups]: PersonalizationGroupState;
+    [K in keyof Groups]: PersonalizationGroupStateFor<Groups[K]>;
   };
 }
 
@@ -56,7 +74,9 @@ export type ProductPersonalizationEvent<
 > = {
   [K in keyof TGroups]: TGroups[K] extends { type: 'single' }
     ? { type: 'select'; group: K; option: SelectableOption<string> }
-    : { type: 'add' | 'remove'; group: K; option: Option };
+    : TGroups[K] extends PersonalizationMultipleGroup<infer TName>
+      ? { type: 'add' | 'remove'; group: K; option: Option<TName> }
+      : { type: 'add' | 'remove'; group: K; option: Option };
 }[keyof TGroups];
 
 export const createProductPersonalizationState = <
@@ -181,7 +201,11 @@ export const removePersonalizationOption = <
 ): ProductPersonalizationState<Groups> => {
   const group = state.groups[event.group];
 
-  if (group?.type !== 'multiple' || event.option.count === 0) {
+  const currentOption = group?.options.find(
+    option => option.name === event.option.name,
+  );
+
+  if (group?.type !== 'multiple' || !currentOption?.count) {
     return state;
   }
 
@@ -195,7 +219,7 @@ export const removePersonalizationOption = <
               countTotal: currentGroup.countTotal - 1,
               options: currentGroup.options.map(option =>
                 option.name === event.option.name
-                  ? { ...option, count: option.count - 1 }
+                  ? { ...option, count: currentOption.count - 1 }
                   : option,
               ),
             }

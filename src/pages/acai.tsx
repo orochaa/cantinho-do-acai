@@ -4,10 +4,6 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
-import type {
-  MultipleOptionsEvent,
-  MultipleOptionsState,
-} from '@/hooks/use-multiple-options';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import type {
@@ -17,6 +13,7 @@ import type {
 import { acaiCategory } from '@/lib/data/acai';
 import { formatCurrency } from '@/lib/format';
 import type {
+  MultipleOptionsEvent,
   PersonalizationMultipleGroup,
   PersonalizationSingleGroup,
   ProductPersonalizationEvent,
@@ -100,23 +97,23 @@ export function AcaiPage(): React.JSX.Element {
           <MultipleOptionsSelector
             dispatchEvent={(event: MultipleOptionsEvent) =>
               personalization.dispatch({
-                type: event.type === 'ADD' ? 'add' : 'remove',
+                type: event.type,
                 option: event.option,
                 group: 'complements',
               } as ProductPersonalizationEvent<AcaiPersonalizationGroups>)
             }
-            ctx={personalization.groups.complements as MultipleOptionsState}
+            ctx={personalization.groups.complements}
             title="Acompanhamentos:"
           />
           <MultipleOptionsSelector
             dispatchEvent={(event: MultipleOptionsEvent) =>
               personalization.dispatch({
-                type: event.type === 'ADD' ? 'add' : 'remove',
+                type: event.type,
                 option: event.option,
                 group: 'extras',
               } as ProductPersonalizationEvent<AcaiPersonalizationGroups>)
             }
-            ctx={personalization.groups.extras as MultipleOptionsState}
+            ctx={personalization.groups.extras}
             title="Adicionais:"
           />
         </div>
