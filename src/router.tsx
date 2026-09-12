@@ -1,9 +1,8 @@
-import { Background } from '@/components/background';
-import { CartProvider } from '@/context/cart-provider';
+import { AppContentShell } from '@/components/app-content-shell';
 import { useDailyAppPing } from '@/hooks/use-daily-app-ping';
 import { AcaiPage } from '@/pages/acai';
 import { BebidaPage } from '@/pages/bebida';
-import { CartPage } from '@/pages/cart';
+import { CartPage } from '@/pages/cart/cart';
 import { FelicidadePage } from '@/pages/felicidade';
 import { GeladinhoPage } from '@/pages/geladinho';
 import { HomePage } from '@/pages/home';
@@ -19,15 +18,9 @@ export function Router(): React.JSX.Element {
 
   return (
     <BrowserRouter>
-      <ScrollToTop>
-        <Routes>
-          <Route
-            path=""
-            element={
-              <CartProvider>
-                <Background />
-              </CartProvider>
-            }>
+      <AppContentShell>
+        <ScrollToTop>
+          <Routes>
             <Route
               path=""
               element={<HomePage />}
@@ -68,9 +61,9 @@ export function Router(): React.JSX.Element {
               path="cart"
               element={<CartPage />}
             />
-          </Route>
-        </Routes>
-      </ScrollToTop>
+          </Routes>
+        </ScrollToTop>
+      </AppContentShell>
     </BrowserRouter>
   );
 }

@@ -1,6 +1,6 @@
 import { CartProvider, useCart } from '@/context/cart-provider';
 import { ToastProvider } from '@/context/toast-provider';
-import { CartPage } from '@/pages/cart';
+import { CartPage } from '@/pages/cart/cart';
 import { act } from 'react';
 import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
@@ -296,5 +296,10 @@ describe(CartPage.name, () => {
     expect(message).toContain('*Forma de Pagamento:* PIX');
     expect(message).toContain('Nome: Maria');
     expect(message).toContain('*Total:* R$\u00a011,00');
+    expect(openMock).toHaveBeenCalledWith(
+      expect.any(String),
+      '_blank',
+      'noopener,noreferrer',
+    );
   });
 });
