@@ -54,7 +54,8 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
         <div className="flex items-center gap-3 rounded-xs border border-zinc-300 bg-zinc-100 p-1.5 shadow-sm">
           <button
             type="button"
-            className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+            className="min-h-11 min-w-11 rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+            aria-label={`Remover ${product.name}`}
             title="Remover"
             onClick={decrementCounter}
             disabled={counter === 1}>
@@ -63,7 +64,8 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
           <span>{counter}</span>
           <button
             type="button"
-            className="rounded-xs p-0.5 text-red-500 active:bg-zinc-200"
+            className="min-h-11 min-w-11 rounded-xs p-0.5 text-red-500 active:bg-zinc-200"
+            aria-label={`Adicionar ${product.name}`}
             title="Adicionar"
             onClick={incrementCounter}>
             <Plus className="size-5" />

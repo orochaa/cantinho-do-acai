@@ -5,7 +5,7 @@ import { formatCurrency, parseCurrency } from '@/lib/format';
 export function CashPayment(
   props: Pick<
     CartCheckoutState,
-    'cashValue' | 'change' | 'orderTotal' | 'setCashValue'
+    'cashValue' | 'change' | 'orderTotal' | 'setCashValue' | 'validationErrors'
   >,
 ): React.JSX.Element {
   const amounts = [
@@ -30,7 +30,7 @@ export function CashPayment(
             <button
               key={amount}
               type="button"
-              className="rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
+              className="min-h-11 min-w-11 rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
               onClick={() =>
                 props.setCashValue(
                   formatCurrency(parseCurrency(props.cashValue) + amount),
@@ -47,13 +47,27 @@ export function CashPayment(
           placeholder="Digite outro valor que você irá pagar em dinheiro"
           className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
           value={props.cashValue}
+          aria-describedby="cash-value-help cash-value-error"
+          aria-invalid={!!props.validationErrors?.cashValue}
           onChange={event => props.setCashValue(event.target.value)}
         />
-        <p className="text-sm text-zinc-600">
+        <p
+          id="cash-value-help"
+          className="text-sm text-zinc-600">
           Informe o valor que você irá pagar em dinheiro, para que possamos
           providenciar o troco.
         </p>
-        <p className="text-sm text-zinc-600">
+        {!!props.validationErrors?.cashValue && (
+          <p
+            id="cash-value-error"
+            role="alert"
+            className="text-red-500">
+            {props.validationErrors.cashValue}
+          </p>
+        )}
+        <p
+          className="text-sm text-zinc-600"
+          aria-live="polite">
           <span className="font-semibold">Troco:</span>{' '}
           {formatCurrency(props.change)}
         </p>

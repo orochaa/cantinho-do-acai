@@ -17,6 +17,34 @@ import {
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 type SpoonOption = 'Não, obrigado' | 'Sim, por favor';
+export type CheckoutField =
+  | 'clientName'
+  | 'cep'
+  | 'addressNumber'
+  | 'paymentMethod'
+  | 'cashValue';
+
+const getValidationField = (input: {
+  clientName: string;
+  isDelivery: boolean;
+  address: DeliveryAddress | null;
+  addressNumber: string;
+  paymentMethod: PaymentMethod | null;
+}): CheckoutField => {
+  if (!input.clientName.trim()) {
+    return 'clientName';
+  }
+  if (input.isDelivery && !input.address?.street.trim()) {
+    return 'cep';
+  }
+  if (input.isDelivery && !input.addressNumber.trim()) {
+    return 'addressNumber';
+  }
+  if (input.paymentMethod === 'Dinheiro') {
+    return 'cashValue';
+  }
+  return 'paymentMethod';
+};
 
 export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
   const [paymentMethod, selectPaymentMethod] = useSingleOption<PaymentMethod>([
@@ -48,6 +76,9 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
   const [clientName, setClientName] = useState('');
   const [cashValue, setCashValue] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<
+    Partial<Record<CheckoutField, string>>
+  >({});
   const toast = useToast();
   const orderTotal = useMemo(() => calculateOrderTotal(cart), [cart]);
   const change = useMemo(
@@ -137,9 +168,19 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
       orderTotal,
     });
     if (validationError) {
+      const field = getValidationField({
+        clientName,
+        isDelivery,
+        address,
+        addressNumber,
+        paymentMethod:
+          paymentMethod.options.find(option => option.isSelected)?.name ?? null,
+      });
+      setValidationErrors({ [field]: validationError });
       toast.error({ description: validationError });
       return;
     }
+    setValidationErrors({});
     setModalOpen(true);
   }, [
     address,
@@ -150,6 +191,7 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
     orderTotal,
     paymentMethod,
     toast,
+    isDelivery,
   ]);
 
   return {
@@ -179,6 +221,7 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
     setCashValue,
     setClientName,
     setModalOpen,
+    validationErrors,
     spoonOption,
     cep,
     cepLoading,
@@ -201,6 +244,7 @@ export interface CartCheckoutState {
   handleCepChange: (value: string) => Promise<void>;
   isDelivery: boolean;
   modalOpen: boolean;
+  validationErrors?: Partial<Record<CheckoutField, string>>;
   orderTotal: number;
   paymentMethod: ReturnType<typeof useSingleOption<PaymentMethod>>[0];
   selectCheckoutOption: ReturnType<

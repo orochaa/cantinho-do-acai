@@ -91,7 +91,8 @@ function AddOptionButton<TName extends string>(
   return (
     <button
       type="button"
-      className="flex h-full items-center justify-center rounded-xs p-3 pl-0 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+      className="flex min-h-11 min-w-11 h-full items-center justify-center rounded-xs p-3 pl-0 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+      aria-label={`Adicionar ${option.name}`}
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
       onClick={() => dispatchEvent({ type: 'ADD', option })}>
@@ -116,8 +117,9 @@ export function QuantitySelector<TName extends string>(
       <div className="flex items-center rounded-xs border border-zinc-300 bg-zinc-100 p-0.5 shadow-sm">
         <button
           type="button"
-          className="rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200"
-          title="Remover"
+          className="min-h-11 min-w-11 rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200"
+          aria-label={`${item.count === 1 ? 'Remover' : 'Diminuir'} ${item.name}`}
+          title={item.count === 1 ? 'Remover' : 'Diminuir'}
           onClick={() => onCountChange({ type: 'REMOVE', option: item })}>
           {item.count === 1 ? (
             <Trash2 className="size-5 shrink-0" />
@@ -128,7 +130,8 @@ export function QuantitySelector<TName extends string>(
         <span className="px-2 py-1.5">{item.count}</span>
         <button
           type="button"
-          className="rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+          className="min-h-11 min-w-11 rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+          aria-label={`Adicionar ${item.name}`}
           title="Adicionar"
           disabled={ctx.countTotal >= ctx.countLimit}
           onClick={() => onCountChange({ type: 'ADD', option: item })}>

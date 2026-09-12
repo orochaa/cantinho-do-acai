@@ -81,8 +81,10 @@ function ToggleOptionButton<TName extends string>(
   return (
     <button
       type="button"
-      title="Selecionar"
-      className="flex h-full items-center justify-center p-3 pl-0"
+      aria-label={`${option.isSelected ? 'Selecionado' : 'Selecionar'} ${option.name}`}
+      aria-pressed={option.isSelected}
+      title={`${option.isSelected ? 'Selecionado' : 'Selecionar'}`}
+      className="flex min-h-11 min-w-11 h-full items-center justify-center p-3 pl-0"
       disabled={option.isSelected}
       onClick={() => onSelectionChange(option)}>
       <span

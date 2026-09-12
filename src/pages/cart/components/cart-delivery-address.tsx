@@ -15,6 +15,7 @@ export function CartDeliveryAddress(
     | 'setAddressComplement'
     | 'setAddressNumber'
     | 'setAddressReference'
+    | 'validationErrors'
   >,
 ): React.JSX.Element {
   return (
@@ -42,15 +43,32 @@ export function CartDeliveryAddress(
           placeholder="Digite o CEP do seu endereço"
           className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
           value={props.cep}
+          aria-invalid={!!(props.addressError || props.validationErrors?.cep)}
+          aria-describedby={
+            props.addressError || props.validationErrors?.cep
+              ? 'cep-error'
+              : undefined
+          }
+          aria-required="true"
           onChange={async event => {
             await props.handleCepChange(event.target.value);
           }}
           maxLength={9}
         />
         {props.cepLoading ? (
-          <p>Buscando CEP...</p>
+          <p
+            id="cep-status"
+            role="status"
+            aria-live="polite">
+            Buscando CEP...
+          </p>
         ) : props.addressError ? (
-          <p className="text-red-500">{props.addressError}</p>
+          <p
+            id="cep-error"
+            className="text-red-500"
+            role="alert">
+            {props.addressError ?? props.validationErrors?.cep}
+          </p>
         ) : props.address ? (
           <div className="flex flex-col gap-1">
             <p>
@@ -77,8 +95,19 @@ export function CartDeliveryAddress(
               placeholder="Digite o número do seu endereço"
               className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
               value={props.addressNumber}
+              aria-required="true"
+              aria-invalid={!!props.validationErrors?.addressNumber}
+              aria-describedby="address-number-error"
               onChange={event => props.setAddressNumber(event.target.value)}
             />
+            {!!props.validationErrors?.addressNumber && (
+              <p
+                id="address-number-error"
+                role="alert"
+                className="text-red-500">
+                {props.validationErrors.addressNumber}
+              </p>
+            )}
             <label
               htmlFor="address-complement"
               className="mt-2 ml-1 leading-3 font-bold">
