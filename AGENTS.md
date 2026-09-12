@@ -82,6 +82,13 @@
 - Do not treat generated `dist` output as source. Keep changes focused and
   inspect `git diff` before handing work back.
 
+## Commit
+
+- Use Conventional Commit style guide
+- Do not include scope
+- Start the message in capital case
+- Final format example: `feat: Add ...`
+
 ## Agent documents
 
 - For local issue files under `.scratch/`, read `docs/agents/issue-tracker.md`.
