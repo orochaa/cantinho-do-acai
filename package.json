@@ -9,8 +9,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "type-check": "tsc --noEmit",
-    "type-check:all": "tsc --noEmit -p tsconfig.test.json",
+    "type-check": "tsc --noEmit -p tsconfig.test.json",
     "lint": "biome check --write",
     "test": "vitest --run",
     "test:ci": "vitest --run --coverage --silent"
@@ -31,7 +30,7 @@
     "ua-parser-js": "^2.0.10"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.4",
+    "@biomejs/biome": "^2.5.9",
     "@storybook/react-vite": "^10.6.0",
     "@tailwindcss/vite": "^4.3.3",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",

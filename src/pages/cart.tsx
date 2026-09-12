@@ -55,6 +55,47 @@ const createMessageBuilder = () => {
   };
 };
 
+interface OrderValidationOptions {
+  clientName: string;
+  isDelivery: boolean;
+  address: CepAddress | null;
+  addressNumber: string;
+  paymentMethod: ReturnType<typeof useSingleOption<PaymentMethod>>[0];
+  cashValue: string;
+  totalOrder: number;
+  showError: (description: string) => void;
+}
+
+const isOrderValid = (options: OrderValidationOptions): boolean => {
+  if (!options.clientName.trim()) {
+    options.showError('Por favor, informe o seu nome.');
+    return false;
+  }
+
+  if (options.isDelivery && !options.address) {
+    options.showError('Por favor, informe o seu CEP.');
+    return false;
+  }
+
+  if (options.isDelivery && !options.addressNumber) {
+    options.showError('Por favor, informe o número do seu endereço.');
+    return false;
+  }
+
+  if (isOptionSelected(options.paymentMethod.options, 'Dinheiro')) {
+    const cash = parseCurrency(options.cashValue);
+
+    if (Number.isNaN(cash) || cash < options.totalOrder) {
+      options.showError(
+        'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
+      );
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart();
 
@@ -127,16 +168,16 @@ export function CartPage(): React.JSX.Element {
   }, [cashValue, paymentMethod, totalOrder]);
 
   const handleCepChange = useCallback(async (cep: string) => {
-    cep = cep.replaceAll(/\D/g, '');
+    const normalizedCep = cep.replaceAll(/\D/g, '');
 
-    setCep(cep);
+    setCep(normalizedCep);
 
-    if (cep.length === 8) {
+    if (normalizedCep.length === 8) {
       let cepAddress: CepAddress | undefined;
 
       try {
         setCepLoading(true);
-        cepAddress = await getCepAddress(cep);
+        cepAddress = await getCepAddress(normalizedCep);
         setAddress(cepAddress);
         setAddressError(null);
       } catch (error) {
@@ -287,39 +328,19 @@ ${item.observation}`);
   }, []);
 
   const handleConfirmOrder = useCallback(() => {
-    if (!clientName.trim()) {
-      toast.error({ description: 'Por favor, informe o seu nome.' });
-
+    if (
+      !isOrderValid({
+        clientName,
+        isDelivery,
+        address,
+        addressNumber,
+        paymentMethod,
+        cashValue,
+        totalOrder,
+        showError: description => toast.error({ description }),
+      })
+    ) {
       return;
-    }
-
-    if (isDelivery) {
-      if (!address) {
-        toast.error({ description: 'Por favor, informe o seu CEP.' });
-
-        return;
-      }
-
-      if (!addressNumber) {
-        toast.error({
-          description: 'Por favor, informe o número do seu endereço.',
-        });
-
-        return;
-      }
-    }
-
-    if (isOptionSelected(paymentMethod.options, 'Dinheiro')) {
-      const cash = parseCurrency(cashValue);
-
-      if (Number.isNaN(cash) || cash < totalOrder) {
-        toast.error({
-          description:
-            'Por favor, informe um valor em dinheiro igual ou superior ao total do pedido.',
-        });
-
-        return;
-      }
     }
 
     openModal();
@@ -393,6 +414,8 @@ ${item.observation}`);
                                   id,
                                 });
                               }
+                              break;
+                            default:
                               break;
                           }
                         }}

@@ -204,9 +204,13 @@ describe('CartProvider characterization', () => {
     expect(firstId).not.toBe(secondId);
 
     act(() => {
-      if (!secondId) throw new Error('Second cart item has no id');
+      if (!secondId) {
+        throw new Error('Second cart item has no id');
+      }
       context.addCartEvent({ type: 'update-quantity', id: secondId, count: 4 });
-      if (!firstId) throw new Error('First cart item has no id');
+      if (!firstId) {
+        throw new Error('First cart item has no id');
+      }
       context.addCartEvent({ type: 'remove', id: firstId });
     });
 

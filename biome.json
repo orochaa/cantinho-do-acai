@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.9/schema.json",
   "root": true,
   "vcs": {
     "enabled": true,
@@ -8,13 +8,13 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!**/dist", "!**/package.json", "!**/*.html"]
+    "includes": ["**", "!**/dist", "!**/node_modules"]
   },
   "assist": {
     "enabled": true,
     "actions": {
       "source": {
-        "recommended": true,
+        "preset": "recommended",
         "useSortedAttributes": "off",
         "useSortedKeys": "off",
         "useSortedProperties": "on",
@@ -31,40 +31,83 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
-      "a11y": "error",
+      "a11y": {
+        "preset": "all",
+        "noSvgWithoutTitle": "off"
+      },
       "correctness": {
-        "preset": "recommended",
+        "preset": "all",
+        "noUnresolvedImports": "off",
+        "noPrivateImports": "off",
+        "noNodejsModules": "off",
+        "useHookAtTopLevel": "off",
+        "useJsonImportAttributes": "off",
+        "useQwikValidLexicalScope": "off",
+        "useImportExtensions": "off",
+        "useImageSize": "off",
+        "noSolidDestructuredProps": "off",
         "useUniqueElementIds": "off"
       },
       "performance": {
-        "preset": "recommended",
-        "noJsxPropsBind": "off"
+        "preset": "all",
+        "noJsxPropsBind": "off",
+        "noImgElement": "off",
+        "useSolidForComponent": "off"
       },
-      "security": "error",
+      "security": {
+        "preset": "all",
+        "noSecrets": "off"
+      },
       "suspicious": {
-        "preset": "recommended",
-        "noConsole": "off"
+        "preset": "all",
+        "noReactSpecificProps": "off",
+        "noDeprecatedImports": "off",
+        "noEmptyBlockStatements": "off",
+        "noEqualsToNull": "off",
+        "noForIn": "off",
+        "noImportCycles": "warn",
+        "noNestedPromises": "off",
+        "noShadow": "off",
+        "noUnnecessaryConditions": "warn",
+        "noConsole": "off",
+        "useAwait": "off"
       },
       "complexity": {
-        "preset": "recommended",
+        "preset": "all",
         "noExcessiveLinesPerFunction": "off",
+        "noUselessReturn": "off",
         "noImplicitCoercions": "off"
       },
       "style": {
-        "preset": "recommended",
+        "preset": "all",
         "noTernary": "off",
         "noMagicNumbers": "off",
         "noNestedTernary": "off",
         "noProcessEnv": "off",
         "useExportsLast": "off",
         "noImplicitBoolean": "off",
+        "noContinue": "off",
+        "noExcessiveClassesPerFile": "off",
         "noExcessiveLinesPerFile": "off",
         "noEnum": "error",
+        "noHexColors": "off",
+        "noIncrementDecrement": "off",
+        "noDefaultExport": "off",
+        "noJsxLiterals": "off",
+        "useDestructuring": "off",
+        "useErrorCause": "off",
+        "useGlobalThis": "off",
         "useReadonlyClassProperties": "error",
         "useConsistentArrayType": {
           "level": "error",
           "options": {
             "syntax": "generic"
+          }
+        },
+        "useConsistentMethodSignatures": {
+          "level": "on",
+          "options": {
+            "style": "property"
           }
         },
         "useNamingConvention": {
@@ -166,6 +209,22 @@
         "rules": {
           "correctness": {
             "noNodejsModules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/*.test.js"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          },
+          "correctness": {
+            "noNodejsModules": "off"
+          },
+          "security": {
+            "noSecrets": "off"
           }
         }
       }

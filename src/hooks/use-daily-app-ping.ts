@@ -7,7 +7,7 @@ const COOKIE_KEY = `${formatScreamingSnakeCase(APP_NAME)}_LAST_ACCESS`;
 const LOG_ACCESS_URL = import.meta.env.VITE_LOG_ACCESS_URL;
 
 export function useDailyAppPing(): void {
-  const hasPinged = useRef(false);
+  const hasPinged = useRef<boolean>(false);
 
   useEffect(() => {
     if (!LOG_ACCESS_URL) {
@@ -16,6 +16,7 @@ export function useDailyAppPing(): void {
       return;
     }
 
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: TODO
     if (hasPinged.current) {
       return;
     }

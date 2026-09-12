@@ -51,7 +51,7 @@ export function ToastProvider(props: ToastProviderProps): React.JSX.Element {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showToast = useCallback((options: ToastOptions) => {
-    if (timeoutRef.current) {
+    if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
     }
     setToast(options);
@@ -62,7 +62,7 @@ export function ToastProvider(props: ToastProviderProps): React.JSX.Element {
   }, []);
 
   const handleClose = (): void => {
-    if (timeoutRef.current) {
+    if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }

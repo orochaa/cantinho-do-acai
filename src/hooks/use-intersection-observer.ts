@@ -30,12 +30,16 @@ export function useIntersectionObserver(
     const currentRefs = elementRefs.map(ref => ref.current).filter(Boolean);
 
     for (const ref of currentRefs) {
-      ref && observer.observe(ref);
+      if (ref) {
+        observer.observe(ref);
+      }
     }
 
     return (): void => {
       for (const ref of currentRefs) {
-        ref && observer.unobserve(ref);
+        if (ref) {
+          observer.unobserve(ref);
+        }
       }
     };
   }, [elementRefs, options]);

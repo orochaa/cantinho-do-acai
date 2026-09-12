@@ -46,7 +46,9 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
 const isValidOption = (value: unknown): value is Option => {
-  if (!isRecord(value)) return false;
+  if (!isRecord(value)) {
+    return false;
+  }
   return (
     typeof value.name === 'string' &&
     typeof value.count === 'number' &&
@@ -58,7 +60,9 @@ const isValidOption = (value: unknown): value is Option => {
 };
 
 const isValidCartItem = (value: unknown): value is CartItem => {
-  if (!isRecord(value) || !isRecord(value.product)) return false;
+  if (!(isRecord(value) && isRecord(value.product))) {
+    return false;
+  }
   return (
     typeof value.id === 'string' &&
     value.id.length > 0 &&
@@ -78,9 +82,13 @@ const isValidCartItem = (value: unknown): value is CartItem => {
 
 function readStoredCart(): Array<CartItem> {
   try {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === 'undefined') {
+      return [];
+    }
     const saved = window.localStorage.getItem(CART_STORAGE_KEY);
-    if (!saved) return [];
+    if (!saved) {
+      return [];
+    }
     const parsed: unknown = JSON.parse(saved);
     if (
       !isRecord(parsed) ||
@@ -116,8 +124,9 @@ function findItemIndex(
   state: Array<CartItem>,
   event: { id?: string; index?: number },
 ): number {
-  if (event.id !== undefined)
+  if (event.id !== undefined) {
     return state.findIndex(item => item.id === event.id);
+  }
   return event.index ?? -1;
 }
 
@@ -147,11 +156,13 @@ function cartReducer(
     'update-quantity': event => {
       const index = findItemIndex(state, event);
       const item = state[index];
-      if (!item || !Number.isInteger(event.count) || event.count < 1)
+      if (!(item && Number.isInteger(event.count)) || event.count < 1) {
         return state;
+      }
       let total = item.product.price;
-      for (const option of item.options)
+      for (const option of item.options) {
         total += (option.price ?? 0) * option.count;
+      }
       const updatedCart = [...state];
       updatedCart[index] = {
         ...item,
