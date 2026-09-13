@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { formatCurrency } from '@/lib/format';
+import { formatCurrency } from '@/domain/format';
 import { Container } from './container';
 
 export interface SelectableOptionLike<TName extends string> {

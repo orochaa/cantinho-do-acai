@@ -1,5 +1,6 @@
-import type { AcaiExtra } from '@/lib/data/acai-extra';
-import { ACAI_EXTRA } from '@/lib/data/acai-extra';
+/** biome-ignore-all lint/style/useNamingConvention: Catalog names are customer-facing. */
+import type { AcaiExtra } from '@/domain/categories/acai-extra';
+import { ACAI_EXTRA } from '@/domain/categories/acai-extra';
 import { entries, fromEntries } from 'remeda';
 
 export type AcaiExtraGroup = keyof typeof ACAI_EXTRA_GROUP;

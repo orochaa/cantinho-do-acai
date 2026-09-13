@@ -1,10 +1,10 @@
-import type { AcaiComplement } from '@/lib/data/acai-complements';
-import { acaiComplements } from '@/lib/data/acai-complements';
-import type { AcaiExtra } from '@/lib/data/acai-extra';
-import { acaiExtraGroup } from '@/lib/data/acai-extra-group';
-import { acaiType } from '@/lib/data/acai-type';
+import type { AcaiComplement } from '@/domain/categories/acai-complements';
+import { acaiComplements } from '@/domain/categories/acai-complements';
+import type { AcaiExtra } from '@/domain/categories/acai-extra';
+import { acaiExtraGroup } from '@/domain/categories/acai-extra-group';
+import { acaiType } from '@/domain/categories/acai-type';
+import { slang } from '@/domain/format';
 import { entries } from 'remeda';
-import { slang } from '../format';
 
 export type Acai = Product & {
   type: Array<{ name: string; img: string }>;

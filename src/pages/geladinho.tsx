@@ -3,6 +3,7 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
+import { geladinhoCategory } from '@/domain/categories/geladinho';
 import type {
   MultipleOptionsEvent,
   PersonalizationMultipleGroup,
@@ -10,7 +11,6 @@ import type {
 } from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-import { geladinhoCategory } from '@/lib/data/geladinho';
 
 interface GeladinhoPersonalizationGroups {
   flavors: PersonalizationMultipleGroup;

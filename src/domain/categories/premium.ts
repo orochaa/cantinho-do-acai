@@ -1,4 +1,4 @@
-import { slang } from '../format';
+import { slang } from '@/domain/format';
 
 export type Premium = Product & {
   complements?: Array<string>;

@@ -1,11 +1,11 @@
-import { acaiCategory } from '@/lib/data/acai';
-import { bebidaCategory } from '@/lib/data/bebida';
-import { felicidadeCategory } from '@/lib/data/felicidade';
-import { geladinhoCategory } from '@/lib/data/geladinho';
-import { paletaCategory } from '@/lib/data/paleta';
-import { pastelCategory } from '@/lib/data/pastel';
-import { premiumCategory } from '@/lib/data/premium';
-import { salgadosCategory } from '@/lib/data/salgados';
+import { acaiCategory } from '@/domain/categories/acai';
+import { bebidaCategory } from '@/domain/categories/bebida';
+import { felicidadeCategory } from '@/domain/categories/felicidade';
+import { geladinhoCategory } from '@/domain/categories/geladinho';
+import { paletaCategory } from '@/domain/categories/paleta';
+import { pastelCategory } from '@/domain/categories/pastel';
+import { premiumCategory } from '@/domain/categories/premium';
+import { salgadosCategory } from '@/domain/categories/salgados';
 
 export interface MenuEntry<TProduct extends Product = Product> {
   readonly name: string;

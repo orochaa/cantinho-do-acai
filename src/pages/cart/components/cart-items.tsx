@@ -1,6 +1,6 @@
 import { QuantitySelector } from '@/components/multiple-options-selector';
 import type { CartItem } from '@/context/cart-provider';
-import { formatCurrency } from '@/lib/format';
+import { formatCurrency } from '@/domain/format';
 import { PlusSquare } from 'lucide-react';
 
 export function CartItems(props: {

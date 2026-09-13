@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/format';
+import { formatCurrency } from '@/domain/format';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 

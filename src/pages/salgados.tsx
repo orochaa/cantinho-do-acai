@@ -4,6 +4,8 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
+import { salgadosCategory } from '@/domain/categories/salgados';
+import { formatCurrency } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
   PersonalizationMultipleGroup,
@@ -16,8 +18,6 @@ import type {
   SelectableOption,
   SingleOptionState,
 } from '@/hooks/use-single-option';
-import { salgadosCategory } from '@/lib/data/salgados';
-import { formatCurrency } from '@/lib/format';
 
 interface SalgadosPersonalizationGroups {
   complements: PersonalizationMultipleGroup;

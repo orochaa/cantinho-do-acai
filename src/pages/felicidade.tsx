@@ -3,10 +3,10 @@ import { Description } from '@/components/description';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
+import { felicidadeCategory } from '@/domain/categories/felicidade';
+import { formatCurrency } from '@/domain/format';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-import { felicidadeCategory } from '@/lib/data/felicidade';
-import { formatCurrency } from '@/lib/format';
 
 type FelicidadePersonalizationGroups = Record<never, never>;
 

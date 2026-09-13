@@ -4,6 +4,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
+import { pastelCategory } from '@/domain/categories/pastel';
 import type { PersonalizationSingleGroup } from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
@@ -11,7 +12,6 @@ import type {
   SelectableOption,
   SingleOptionState,
 } from '@/hooks/use-single-option';
-import { pastelCategory } from '@/lib/data/pastel';
 
 interface PastelPersonalizationGroups {
   size: PersonalizationSingleGroup;

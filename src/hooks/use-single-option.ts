@@ -1,14 +1,14 @@
+import type {
+  InitialSelectableOption,
+  SelectableOption,
+} from '@/domain/options';
 import type { ActionDispatch } from 'react';
 import { useReducer } from 'react';
 
-export type SelectableOption<TName extends string> = Option<TName> & {
-  isSelected: boolean;
-};
-
-export type InitialSelectableOption<TName extends string> = Optional<
-  Omit<SelectableOption<TName>, 'count'>,
-  'isSelected'
->;
+export type {
+  InitialSelectableOption,
+  SelectableOption,
+} from '@/domain/options';
 
 export interface SingleOptionState<TName extends string = string> {
   options: Array<SelectableOption<TName>>;

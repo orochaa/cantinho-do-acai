@@ -230,7 +230,7 @@
       }
     },
     {
-      "includes": ["src/lib/data/**"],
+      "includes": ["src/domain/categories/**"],
       "linter": {
         "rules": {
           "style": {

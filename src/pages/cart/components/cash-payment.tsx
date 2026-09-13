@@ -1,6 +1,6 @@
 import { Container } from '@/components/container';
+import { formatCurrency, parseCurrency } from '@/domain/format';
 import type { CartCheckoutState } from '@/hooks/use-cart-checkout';
-import { formatCurrency, parseCurrency } from '@/lib/format';
 
 export function CashPayment(
   props: Pick<

@@ -1,3 +1,5 @@
+import { companyInfo } from '@/domain/company';
+import { formatCurrency, parseCurrency } from '@/domain/format';
 import type {
   DeliveryAddress,
   FulfillmentMethod,
@@ -6,7 +8,6 @@ import type {
   PaymentMethod,
 } from '@/domain/order';
 import { calculateOrderChange } from '@/domain/order';
-import { formatCurrency, parseCurrency } from '@/lib/format';
 
 export interface WhatsAppOrderInput {
   order: Order;
@@ -112,7 +113,7 @@ const createOrderCheckoutWhatsAppMessage = (
   input: WhatsAppOrderInput,
 ): string => {
   const parts: Array<string> = [
-    'Olá, Cantinho do Açaí!',
+    `Olá, ${companyInfo.name}!`,
     'Gostaria de fazer um pedido:',
     '',
   ];
@@ -138,12 +139,12 @@ const createOrderCheckoutWhatsAppMessage = (
 
 export const createWhatsAppLink = (
   message: string,
-  phone = '5554984312998',
+  phone = companyInfo.whatsappPhone,
 ): string =>
   `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
 
 export const createOrderCheckoutWhatsAppLink = (
   input: WhatsAppOrderInput,
-  phone = '5554984312998',
+  phone = companyInfo.whatsappPhone,
 ): string =>
   createWhatsAppLink(createOrderCheckoutWhatsAppMessage(input), phone);

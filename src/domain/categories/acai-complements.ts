@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Catalog names are customer-facing. */
 import { entries } from 'remeda';
 
 /* eslint-disable no-secrets/no-secrets */

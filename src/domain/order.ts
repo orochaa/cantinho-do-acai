@@ -1,4 +1,4 @@
-import { parseCurrency } from '@/lib/format';
+import { parseCurrency } from '@/domain/format';
 
 export interface OrderItemInput {
   product: Product;

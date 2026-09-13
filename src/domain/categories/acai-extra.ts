@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: Catalog names are customer-facing. */
 /* eslint-disable no-secrets/no-secrets */
 export type AcaiExtra =
   | 'KitKat'

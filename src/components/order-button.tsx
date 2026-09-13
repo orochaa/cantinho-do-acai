@@ -1,5 +1,5 @@
 import { useToast } from '@/context/toast-provider';
-import { formatCurrency } from '@/lib/format';
+import { formatCurrency } from '@/domain/format';
 import { Minus, Plus } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';

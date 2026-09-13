@@ -2,10 +2,10 @@ import { DesktopNav } from '@/components/desktop-nav';
 import { MobileNav } from '@/components/mobile-nav';
 import { ScrollToTopButton } from '@/components/scroll-to-top-button';
 import { Seo } from '@/components/seo';
+import { formatCurrency } from '@/domain/format';
 import { visibleMenu } from '@/domain/menu';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { DESKTOP_BREAKPOINT, useWindowSize } from '@/hooks/use-window-size';
-import { formatCurrency } from '@/lib/format';
 import { createRef, useMemo } from 'react';
 import { Link } from 'react-router';
 

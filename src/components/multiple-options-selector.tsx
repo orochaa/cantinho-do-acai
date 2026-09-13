@@ -1,10 +1,10 @@
 /* eslint-disable react/no-multi-comp */
 
+import { formatCurrency } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
   MultipleOptionsState,
 } from '@/domain/product-personalization';
-import { formatCurrency } from '@/lib/format';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { Container } from './container';
 

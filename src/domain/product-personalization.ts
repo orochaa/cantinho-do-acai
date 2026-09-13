@@ -1,9 +1,9 @@
-import type { OrderItem } from '@/domain/order';
-import { createOrderItem } from '@/domain/order';
 import type {
   InitialSelectableOption,
   SelectableOption,
-} from '@/hooks/use-single-option';
+} from '@/domain/options';
+import type { OrderItem } from '@/domain/order';
+import { createOrderItem } from '@/domain/order';
 
 export interface PersonalizationSingleGroup {
   type: 'single';

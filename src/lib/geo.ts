@@ -1,12 +1,10 @@
-export interface Coordinates {
-  lat: number;
-  lon: number;
-}
+import type { CompanyCoordinates } from '@/domain/company';
+import { companyInfo } from '@/domain/company';
 
-export const COMPANY_COORDINATES: Coordinates = {
-  lat: -29.190_012_3,
-  lon: -51.213_029_1,
-};
+export type { CompanyCoordinates as Coordinates } from '@/domain/company';
+
+type Coordinates = CompanyCoordinates;
+export const COMPANY_COORDINATES = { ...companyInfo.coordinates };
 
 export async function getCoordinates(address: {
   street: string;

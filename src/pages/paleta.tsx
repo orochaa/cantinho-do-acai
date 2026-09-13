@@ -2,13 +2,13 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
+import { paletaCategory } from '@/domain/categories/paleta';
 import type {
   PersonalizationMultipleGroup,
   ProductPersonalizationEvent,
 } from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-import { paletaCategory } from '@/lib/data/paleta';
 
 interface PaletaPersonalizationGroups {
   flavors: PersonalizationMultipleGroup;

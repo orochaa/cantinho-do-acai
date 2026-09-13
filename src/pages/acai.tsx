@@ -4,6 +4,8 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
+import { acaiCategory } from '@/domain/categories/acai';
+import { formatCurrency } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
   PersonalizationMultipleGroup,
@@ -16,8 +18,6 @@ import type {
   SelectableOption,
   SingleOptionState,
 } from '@/hooks/use-single-option';
-import { acaiCategory } from '@/lib/data/acai';
-import { formatCurrency } from '@/lib/format';
 
 interface AcaiPersonalizationGroups {
   type: PersonalizationSingleGroup;
