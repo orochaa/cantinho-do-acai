@@ -27,7 +27,7 @@ const isCashPayment = (paymentMethod: PaymentMethod): boolean =>
 
 const appendOrderItems = (
   parts: Array<string>,
-  items: Array<OrderItem>,
+  items: ReadonlyArray<OrderItem>,
 ): void => {
   for (const item of items) {
     const itemParts = [

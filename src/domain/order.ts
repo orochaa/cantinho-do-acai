@@ -12,7 +12,7 @@ export interface OrderItem extends OrderItemInput {
 }
 
 export interface Order {
-  items: Array<OrderItem>;
+  items: ReadonlyArray<OrderItem>;
   total: number;
 }
 
@@ -118,10 +118,10 @@ export function updateOrderItemQuantity(
   return createOrderItem({ ...item, count });
 }
 
-export function calculateOrderTotal(items: Array<OrderItem>): number {
+export function calculateOrderTotal(items: ReadonlyArray<OrderItem>): number {
   return items.reduce((total, item) => total + item.total, 0);
 }
 
-export function createOrder(items: Array<OrderItem>): Order {
+export function createOrder(items: ReadonlyArray<OrderItem>): Order {
   return { items, total: calculateOrderTotal(items) };
 }

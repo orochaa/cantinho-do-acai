@@ -1,10 +1,10 @@
 import { QuantitySelector } from '@/components/multiple-options-selector';
-import type { CartItem } from '@/context/cart-provider';
+import type { CartItem } from '@/domain/cart';
 import { formatCurrency } from '@/domain/format';
 import { PlusSquare } from 'lucide-react';
 
 export function CartItems(props: {
-  cart: Array<CartItem>;
+  cart: ReadonlyArray<CartItem>;
   onQuantityChange: (item: CartItem, count: number) => void;
   onRemove: (item: CartItem) => void;
 }): React.JSX.Element {

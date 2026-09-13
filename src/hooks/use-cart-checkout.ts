@@ -1,5 +1,5 @@
-import type { CartItem } from '@/context/cart-provider';
 import { useToast } from '@/context/toast-provider';
+import type { CartItem } from '@/domain/cart';
 import type {
   CheckoutOption,
   CheckoutOptionGroup,
@@ -55,7 +55,9 @@ const getValidationField = (input: {
   return 'paymentMethod';
 };
 
-export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
+export function useCartCheckout(
+  cart: ReadonlyArray<CartItem>,
+): CartCheckoutState {
   const [{ groups }, dispatch] = useReducer(
     checkoutOptionsReducer,
     undefined,

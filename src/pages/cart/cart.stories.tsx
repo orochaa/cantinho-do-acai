@@ -1,5 +1,5 @@
-import type { CartItem } from '@/context/cart-provider';
 import { useCart } from '@/context/cart-provider';
+import type { CartItem } from '@/domain/cart';
 import { CartPage } from '@/pages/cart/cart';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect } from 'react';
