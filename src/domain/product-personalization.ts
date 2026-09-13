@@ -5,9 +5,14 @@ import type {
 import type { OrderItem } from '@/domain/order';
 import { createOrderItem } from '@/domain/order';
 
-export interface PersonalizationSingleGroup {
+export type {
+  InitialSelectableOption,
+  SelectableOption,
+} from '@/domain/options';
+
+export interface PersonalizationSingleGroup<TName extends string = string> {
   type: 'single';
-  options: Array<InitialSelectableOption<string>>;
+  options: Array<InitialSelectableOption<TName>>;
   required?: string;
 }
 
@@ -24,9 +29,11 @@ export type PersonalizationGroup =
 
 export type PersonalizationGroups = object;
 
-export interface PersonalizationSingleGroupState {
+export interface PersonalizationSingleGroupState<
+  TName extends string = string,
+> {
   type: 'single';
-  options: Array<SelectableOption<string>>;
+  options: Array<SelectableOption<TName>>;
   isSelected: boolean;
   required?: string;
 }
@@ -44,6 +51,12 @@ export interface PersonalizationMultipleGroupState<
 export type MultipleOptionsState<TName extends string = string> =
   PersonalizationMultipleGroupState<TName>;
 
+/** State contract consumed by the single-option selector adapter. */
+export interface SingleOptionState<TName extends string = string> {
+  options: Array<SelectableOption<TName>>;
+  isSelected: boolean;
+}
+
 export interface MultipleOptionsEvent<TName extends string = string> {
   type: 'add' | 'remove';
   option: Option<TName>;
@@ -56,7 +69,9 @@ export type PersonalizationGroupState =
 type PersonalizationGroupStateFor<Group> = Group extends {
   type: 'single';
 }
-  ? PersonalizationSingleGroupState
+  ? Group extends PersonalizationSingleGroup<infer TName>
+    ? PersonalizationSingleGroupState<TName>
+    : PersonalizationSingleGroupState
   : Group extends PersonalizationMultipleGroup<infer TName>
     ? PersonalizationMultipleGroupState<TName>
     : PersonalizationMultipleGroupState;
@@ -73,7 +88,9 @@ export type ProductPersonalizationEvent<
   TGroups extends PersonalizationGroups = PersonalizationGroups,
 > = {
   [K in keyof TGroups]: TGroups[K] extends { type: 'single' }
-    ? { type: 'select'; group: K; option: SelectableOption<string> }
+    ? TGroups[K] extends PersonalizationSingleGroup<infer TName>
+      ? { type: 'select'; group: K; option: SelectableOption<TName> }
+      : { type: 'select'; group: K; option: SelectableOption<string> }
     : TGroups[K] extends PersonalizationMultipleGroup<infer TName>
       ? { type: 'add' | 'remove'; group: K; option: Option<TName> }
       : { type: 'add' | 'remove'; group: K; option: Option };

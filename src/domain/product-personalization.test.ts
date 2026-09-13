@@ -1,6 +1,7 @@
 import type {
   PersonalizationMultipleGroup,
   PersonalizationSingleGroup,
+  SelectableOption,
 } from '@/domain/product-personalization';
 import {
   createPersonalizedOrderItem,
@@ -102,6 +103,36 @@ describe('product personalization', () => {
     const optionName: 'A' | 'B' = state.groups.flavors.options[0].name;
 
     expect(optionName).toBe('A');
+  });
+
+  it('should preserve discriminated single option names', () => {
+    const groups: {
+      type: PersonalizationSingleGroup<'A' | 'B'>;
+    } = {
+      type: {
+        type: 'single',
+        options: [{ name: 'A' }, { name: 'B' }],
+      },
+    };
+
+    const state = createProductPersonalizationState(groups);
+    const optionName: 'A' | 'B' = state.groups.type.options[0].name;
+    const option: SelectableOption<'A' | 'B'> = {
+      name: 'B',
+      isSelected: false,
+      count: 0,
+    };
+    const selected = productPersonalizationReducer(state, {
+      type: 'select',
+      group: 'type',
+      option,
+    });
+
+    expect(optionName).toBe('A');
+    expect(selected.groups.type.options).toEqual([
+      { name: 'A', isSelected: false, count: 0 },
+      { name: 'B', isSelected: true, count: 1 },
+    ]);
   });
 
   it('should enforce the limit for repeated events with a stale option count', () => {

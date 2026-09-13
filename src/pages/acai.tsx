@@ -11,13 +11,11 @@ import type {
   PersonalizationMultipleGroup,
   PersonalizationSingleGroup,
   ProductPersonalizationEvent,
+  SelectableOption,
+  SingleOptionState,
 } from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-import type {
-  SelectableOption,
-  SingleOptionState,
-} from '@/hooks/use-single-option';
 
 interface AcaiPersonalizationGroups {
   type: PersonalizationSingleGroup;

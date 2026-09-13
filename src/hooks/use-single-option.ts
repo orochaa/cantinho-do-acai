@@ -2,6 +2,7 @@ import type {
   InitialSelectableOption,
   SelectableOption,
 } from '@/domain/options';
+import type { SingleOptionState } from '@/domain/product-personalization';
 import type { ActionDispatch } from 'react';
 import { useReducer } from 'react';
 
@@ -9,11 +10,7 @@ export type {
   InitialSelectableOption,
   SelectableOption,
 } from '@/domain/options';
-
-export interface SingleOptionState<TName extends string = string> {
-  options: Array<SelectableOption<TName>>;
-  isSelected: boolean;
-}
+export type { SingleOptionState } from '@/domain/product-personalization';
 
 const singleOptionReducer = <TName extends string>(
   state: SingleOptionState<TName>,
