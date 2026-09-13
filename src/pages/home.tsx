@@ -1,7 +1,10 @@
+import { CategoryCard } from '@/components/category-card';
 import { Seo } from '@/components/seo';
-import { formatCurrency } from '@/domain/format';
+import { companyInfo } from '@/domain/company';
 import { visibleMenu } from '@/domain/menu';
-import { Link } from 'react-router';
+
+const socialLinkClassName =
+  'grid size-11 place-items-center rounded-xl border border-white/35 bg-white/10 text-white transition hover:border-amber-300 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300';
 
 export function HomePage(): React.JSX.Element {
   return (
@@ -11,72 +14,83 @@ export function HomePage(): React.JSX.Element {
         description="Peça já o seu açaí, salgados, paletas e muito mais no Cantinho do Açaí! O melhor açaí da região, com ingredientes frescos e de qualidade. Monte o seu açaí do seu jeito, com diversos acompanhamentos e cremes. Temos também salgados deliciosos, paletas refrescantes e copos da felicidade para adoçar o seu dia. Faça o seu pedido online."
         imgUrl="https://cantinhodoacai.vercel.app/img/novo-logo.png"
       />
-      <div className="mx-auto w-11/12 py-20">
+      <div className="mx-auto w-11/12 max-w-5xl py-12 sm:py-9.5">
         <img
           src="/img/novo-logo.png"
-          alt="logo cantinho do açaí"
-          className="mx-auto mb-8 h-64 sm:h-72"
+          alt="Logo Cantinho do Açaí"
+          className="mx-auto mb-6 h-48 sm:h-64"
         />
-        <p className="mb-8 text-center text-lg text-white/90">
-          Clique em um produto para começar a montar o seu pedido.
+        <p className="mx-auto mb-10 max-w-xl text-center text-lg text-white/90">
+          Escolha uma categoria para começar a montar o seu pedido.
         </p>
+        <nav
+          aria-label="Redes sociais e localização"
+          className="mb-10 flex justify-center gap-3">
+          <a
+            aria-label="Instagram"
+            className={socialLinkClassName}
+            href={companyInfo.instagramUrl}
+            rel="noreferrer"
+            target="_blank"
+            title="Instagram">
+            <img
+              alt=""
+              aria-hidden="true"
+              className="size-5 brightness-0 invert"
+              src="/svg/instagram.svg"
+            />
+            <span className="sr-only">Instagram</span>
+          </a>
+          <a
+            aria-label="WhatsApp"
+            className={socialLinkClassName}
+            href={`https://wa.me/${companyInfo.whatsappPhone}`}
+            rel="noreferrer"
+            target="_blank"
+            title="WhatsApp">
+            <img
+              alt=""
+              aria-hidden="true"
+              className="size-5 brightness-0 invert"
+              src="/svg/whatsapp.svg"
+            />
+            <span className="sr-only">WhatsApp</span>
+          </a>
+          <a
+            aria-label="Localização no Google Maps"
+            className={socialLinkClassName}
+            href={companyInfo.googleMapsUrl}
+            rel="noreferrer"
+            target="_blank"
+            title="Localização no Google Maps">
+            <img
+              alt=""
+              aria-hidden="true"
+              className="size-5 brightness-0 invert"
+              src="/svg/maps.svg"
+            />
+            <span className="sr-only">Localização no Google Maps</span>
+          </a>
+        </nav>
 
-        <main className="flex w-full flex-col gap-10">
-          {visibleMenu.map(entry => (
-            <div key={entry.route}>
-              <h1
-                id={entry.route}
-                className="font-raleway scroll-mt-24 border-b-2 border-amber-600 p-1 text-2xl text-white/90">
-                {entry.name}
-              </h1>
-              <p className="mb-4 text-white/80">{entry.category.description}</p>
-              <div className="gap grid grid-cols-1 gap-4 md:grid-cols-2">
-                {entry.products.map(product => (
-                  <Link
-                    key={product.slang}
-                    to={`${entry.route}/${product.slang}`}
-                    className="h-87.5 rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
-                    title={`Selecionar ${product.name}`}>
-                    <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
-                      <img
-                        src={product.img}
-                        alt={`Imagem ${product.name}`}
-                        className="h-full w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/30" />
-                      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-zinc-50/80 p-6">
-                        <div>
-                          <h2 className="text-xl font-bold text-black">
-                            {product.name}
-                          </h2>
-                          <p className="text-sm md:text-base">
-                            {product.people === 1
-                              ? 'Serve uma pessoa'
-                              : `Serve até ${product.people} pessoas`}
-                            .{' '}
-                            {!!product.quantity &&
-                              `(aprox.${product.quantity}g)`}
-                          </p>
-                        </div>
-                        <div>
-                          {product.fullPrice !== product.price && (
-                            <span
-                              className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap text-zinc-500 line-through"
-                              style={{ textDecoration: '' }}>
-                              {formatCurrency(product.fullPrice)}
-                            </span>
-                          )}
-                          <span className="font-poppins block text-xl font-semibold tracking-tighter whitespace-nowrap">
-                            {formatCurrency(product.price)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+        <main>
+          <h1 className="mb-5 text-center text-2xl font-bold text-white sm:text-3xl">
+            O que você deseja hoje?
+          </h1>
+          <div className="grid grid-cols-2  gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {visibleMenu.map((entry, index) => {
+              const product = entry.products[0];
+              return product ? (
+                <CategoryCard
+                  href={`/${entry.route}`}
+                  image={product.img}
+                  key={entry.route}
+                  loading={index < 4 ? 'eager' : 'lazy'}
+                  name={entry.name}
+                />
+              ) : null;
+            })}
+          </div>
         </main>
       </div>
     </>

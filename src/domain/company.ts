@@ -13,6 +13,8 @@ export interface CompanyAddress {
 
 export interface CompanyInfo {
   readonly name: string;
+  readonly instagramUrl: string;
+  readonly googleMapsUrl: string;
   readonly whatsappPhone: string;
   readonly address: CompanyAddress;
   readonly coordinates: CompanyCoordinates;
@@ -20,6 +22,9 @@ export interface CompanyInfo {
 
 export const companyInfo: CompanyInfo = {
   name: 'Cantinho do Açaí',
+  instagramUrl:
+    'https://www.instagram.com/cantinho_do_acaiiii?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==',
+  googleMapsUrl: 'https://maps.app.goo.gl/53GFMESGFz57tt9w9',
   whatsappPhone: '5554984312998',
   address: {
     street: 'Rua Claudino Cirilo Zeni',

@@ -4,6 +4,7 @@ import { useDailyAppPing } from '@/hooks/use-daily-app-ping';
 import { AcaiPage } from '@/pages/acai';
 import { BebidaPage } from '@/pages/bebida';
 import { CartPage } from '@/pages/cart/cart';
+import { CategoryPage } from '@/pages/category';
 import { FelicidadePage } from '@/pages/felicidade';
 import { GeladinhoPage } from '@/pages/geladinho';
 import { HomePage } from '@/pages/home';
@@ -36,6 +37,10 @@ export function Router(): React.JSX.Element {
             <Route
               path=""
               element={<HomePage />}
+            />
+            <Route
+              path=":category"
+              element={<CategoryPage />}
             />
             {visibleMenu.map(entry => (
               <Route

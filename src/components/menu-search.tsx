@@ -1,5 +1,6 @@
 import { formatCurrency } from '@/domain/format';
 import { visibleMenu } from '@/domain/menu';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { DialogHeader } from './dialog-header';
@@ -23,21 +24,10 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
   const resultsViewportRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isDesktop = useMediaQuery('(min-width: 700px)');
   const navigate = useNavigate();
   const drawerCloseRef = useRef<(() => void) | null>(null);
   const wasOpenRef = useRef(false);
-
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') {
-      return;
-    }
-    const media = window.matchMedia('(min-width: 700px)');
-    const update = (): void => setIsDesktop(media.matches);
-    update();
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
-  }, []);
 
   useEffect(() => {
     if (!props.isOpen) {
@@ -223,7 +213,9 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
             if (event.key === 'ArrowDown') {
               event.preventDefault();
               moveResultFocus(
-                activeResultIndex < 0 ? 0 : activeResultIndex + 1,
+                activeResultIndex < 0
+                  ? displayResults.length - 1
+                  : activeResultIndex + 1,
               );
             } else if (event.key === 'ArrowUp') {
               event.preventDefault();

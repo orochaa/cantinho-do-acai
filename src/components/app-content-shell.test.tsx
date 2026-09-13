@@ -165,22 +165,15 @@ describe(AppContentShell.name, () => {
     expect(
       navigation?.querySelector('a[aria-current="page"]')?.textContent,
     ).toContain('Açaí');
-    expect(navigation?.querySelector('a[href="/#acai"]')).not.toBeNull();
+    expect(navigation?.querySelector('a[href="/acai"]')).not.toBeNull();
   });
 
-  it('should scroll to a category section when its desktop link is selected', () => {
+  it('should navigate to a category when its desktop link is selected', () => {
     renderShell('/');
-    const section = document.createElement('h1');
-    section.id = 'acai';
-    section.scrollIntoView = vi.fn();
-    document.body.append(section);
     act(() => {
-      document.querySelector<HTMLAnchorElement>('a[href="/#acai"]')?.click();
+      document.querySelector<HTMLAnchorElement>('a[href="/acai"]')?.click();
     });
-    expect(section.scrollIntoView).toHaveBeenCalledWith({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    expect(document.querySelector('output')?.textContent).toBe('/acai');
   });
 
   it('should keep desktop category navigation separate from mobile navigation', () => {

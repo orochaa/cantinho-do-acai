@@ -29,7 +29,7 @@ export function CartSummary(props: {
   const total = props.cart.reduce((sum, item) => sum + item.total, 0);
 
   useEffect(() => {
-    if (props.revision === 0) {
+    if (props.revision === 0 || props.cart.length === 0) {
       return;
     }
 
@@ -72,7 +72,7 @@ export function CartSummary(props: {
         window.clearTimeout(dismissTimer.current);
       }
     };
-  }, [props.revision]);
+  }, [props.revision, props.cart.length]);
 
   if (location.pathname === '/cart' || phase === 'hidden') {
     return null;

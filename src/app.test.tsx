@@ -15,7 +15,7 @@ afterEach(() => {
 });
 
 describe(App.name, () => {
-  it('should render the home route through the production shell', () => {
+  it('should render the home route through the production shell', async () => {
     vi.stubGlobal(
       'IntersectionObserver',
       class {
@@ -33,16 +33,21 @@ describe(App.name, () => {
     });
 
     expect(container.textContent).toContain(
-      'Clique em um produto para começar a montar o seu pedido.',
+      'Escolha uma categoria para começar a montar o seu pedido.',
     );
+    const categoryLink =
+      container.querySelector<HTMLAnchorElement>('a[href="/acai"]');
+    expect(categoryLink).not.toBeNull();
+
+    await act(async () => {
+      categoryLink?.click();
+    });
+
     const productLink =
       container.querySelector<HTMLAnchorElement>('a[href^="/acai/"]');
     expect(productLink).not.toBeNull();
 
-    act(() => {
-      productLink?.click();
-    });
-
+    act(() => productLink?.click());
     expect(container.textContent).toContain('Tipo de Açaí:');
   });
 });

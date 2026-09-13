@@ -1,7 +1,6 @@
 import { visibleMenu } from '@/domain/menu';
 import { ChevronRight, Home, Search, ShoppingCart } from 'lucide-react';
 import type { MouseEvent } from 'react';
-import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 
 export interface DesktopNavigationProps {
@@ -18,64 +17,16 @@ export function DesktopNavigation(
 ): React.JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const [observedRoute, setObservedRoute] = useState<string | null>(null);
   const routeFromPath = location.pathname.split('/')[1] ?? '';
-  const activeRoute =
-    routeFromPath || observedRoute || visibleMenu[0]?.route || '';
-
-  useEffect(() => {
-    if (
-      location.pathname !== '/' ||
-      typeof IntersectionObserver === 'undefined'
-    ) {
-      return;
-    }
-    const observer = new IntersectionObserver(
-      entries => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setObservedRoute(entry.target.id);
-          }
-        }
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    );
-    for (const entry of visibleMenu) {
-      const heading = document.getElementById(entry.route);
-      if (heading) {
-        observer.observe(heading);
-      }
-    }
-    return () => observer.disconnect();
-  }, [location.pathname]);
+  const activeRoute = routeFromPath;
 
   const selectCategory = (route: string): void => {
-    const scrollToCategory = (): void => {
-      document.getElementById(route)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    };
-
-    if (location.pathname !== '/') {
-      navigate('/');
-      window.setTimeout(() => {
-        window.history.replaceState(null, '', `/#${route}`);
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(scrollToCategory);
-        });
-      }, 0);
-      return;
-    }
-    // Keep the hash in the address bar without notifying the router. A router
-    // navigation would invoke the global ScrollToTop effect and cancel the
-    // smooth section scroll with an immediate jump to the page top.
-    window.history.replaceState(null, '', `/#${route}`);
-    scrollToCategory();
+    navigate(`/${route}`);
   };
 
   return (
-    <aside className="hidden pt-96 lg:block">
+    <aside
+      className={`hidden lg:block ${routeFromPath === '' ? 'pt-96' : 'pt-14'}`}>
       <nav
         aria-label="Categorias do cardápio"
         className="sticky top-8 px-1 text-white">
@@ -127,7 +78,7 @@ export function DesktopNavigation(
                 <Link
                   aria-current={isActive ? 'page' : undefined}
                   className={`flex min-h-11 items-center justify-between rounded-md px-4 py-2 text-sm font-medium transition-[background-color,color,transform] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none ${isActive ? 'translate-x-1 bg-amber-500 text-white' : 'text-white/70 hover:bg-zinc-700/50 hover:text-white'}`}
-                  to={`/#${entry.route}`}
+                  to={`/${entry.route}`}
                   onClick={event => {
                     event.preventDefault();
                     selectCategory(entry.route);

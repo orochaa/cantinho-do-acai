@@ -17,6 +17,9 @@ describe('menu registry', () => {
 
   it('should hide disabled categories and products from the visible menu', () => {
     expect(visibleMenu.every(entry => !entry.category.disabled)).toBe(true);
+    expect(
+      visibleMenu.every(entry => entry.category.description.trim().length > 0),
+    ).toBe(true);
 
     const premium = visibleMenu.find(entry => entry.route === 'premium');
     expect(

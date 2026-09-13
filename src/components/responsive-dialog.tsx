@@ -1,5 +1,5 @@
+import { useMediaQuery } from '@/hooks/use-media-query';
 import type { ReactNode, RefObject } from 'react';
-import { useEffect, useState } from 'react';
 import { Drawer } from './drawer';
 import { Modal } from './modal';
 
@@ -15,19 +15,8 @@ export interface ResponsiveDialogProps {
 export function ResponsiveDialog(
   props: ResponsiveDialogProps,
 ): React.JSX.Element | null {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') {
-      return;
-    }
-    // Handoff when the drawer reaches its max-w-2xl width (about 700px).
-    const media = window.matchMedia('(min-width: 700px)');
-    const update = (): void => setIsDesktop(media.matches);
-    update();
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
-  }, []);
+  // Handoff when the drawer reaches its max-w-2xl width (about 700px).
+  const isDesktop = useMediaQuery('(min-width: 700px)');
 
   if (isDesktop) {
     return (

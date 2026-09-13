@@ -25,12 +25,12 @@ const createEntry = <TProduct extends Product>(
 });
 
 export const menu = [
-  createEntry('Pastéis', pastelCategory),
   createEntry('Açaí', acaiCategory),
   createEntry('Premium', premiumCategory),
   createEntry('Paletas', paletaCategory),
   createEntry('Copos da Felicidade', felicidadeCategory),
   createEntry('Geladinho Gourmet', geladinhoCategory),
+  createEntry('Pastéis', pastelCategory),
   createEntry('Salgados', salgadosCategory),
   createEntry('Bebidas', bebidaCategory),
 ] as const;
