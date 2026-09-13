@@ -21,10 +21,10 @@ import {
   calculateOrderChange,
   calculateOrderTotal,
   createOrder,
-  createWhatsAppLink,
   validateOrder,
 } from '@/domain/order';
 import { getCepAddress } from '@/lib/brasil-api';
+import { createOrderCheckoutWhatsAppLink } from '@/lib/whatsapp';
 import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
 export type CheckoutField =
   | 'clientName'
@@ -145,7 +145,7 @@ export function useCartCheckout(cart: Array<CartItem>): CartCheckoutState {
     CheckoutPaymentEnum.Pix;
   const goToWhatsappLink = useMemo(
     () =>
-      createWhatsAppLink({
+      createOrderCheckoutWhatsAppLink({
         order: createOrder(cart),
         clientName,
         fulfillment,
