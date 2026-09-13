@@ -3,14 +3,14 @@ import { MultipleOptionsSelector } from '@/components/multiple-options-selector'
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
-import { useProduct } from '@/hooks/use-product';
-import { useProductPersonalization } from '@/hooks/use-product-personalization';
-import { bebidaCategory } from '@/lib/data/bebida';
 import type {
   MultipleOptionsEvent,
   PersonalizationMultipleGroup,
   ProductPersonalizationEvent,
-} from '@/lib/product-personalization';
+} from '@/domain/product-personalization';
+import { useProduct } from '@/hooks/use-product';
+import { useProductPersonalization } from '@/hooks/use-product-personalization';
+import { bebidaCategory } from '@/lib/data/bebida';
 
 interface BebidaPersonalizationGroups {
   flavors: PersonalizationMultipleGroup;

@@ -1,11 +1,11 @@
-import type { CheckoutOptionsEvent } from '@/lib/checkout-state';
+import type { CheckoutOptionsEvent } from '@/domain/checkout-state';
 import {
   CheckoutCutleryEnum,
   CheckoutFulfillmentEnum,
   CheckoutPaymentEnum,
   checkoutOptionsReducer,
   createCheckoutOptionsState,
-} from '@/lib/checkout-state';
+} from '@/domain/checkout-state';
 import { describe, expect, it } from 'vitest';
 
 describe(checkoutOptionsReducer.name, () => {

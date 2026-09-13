@@ -1,4 +1,4 @@
-import { getMenuEntry, getProduct, menu, visibleMenu } from '@/lib/data/menu';
+import { getMenuEntry, getProduct, menu, visibleMenu } from '@/domain/menu';
 
 describe('menu registry', () => {
   it('should expose route metadata for every category', () => {

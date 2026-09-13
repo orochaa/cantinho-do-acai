@@ -1,6 +1,6 @@
 import { AppContentShell } from '@/components/app-content-shell';
+import { visibleMenu } from '@/domain/menu';
 import { useDailyAppPing } from '@/hooks/use-daily-app-ping';
-import { visibleMenu } from '@/lib/data/menu';
 import { AcaiPage } from '@/pages/acai';
 import { BebidaPage } from '@/pages/bebida';
 import { CartPage } from '@/pages/cart/cart';

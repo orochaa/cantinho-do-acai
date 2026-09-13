@@ -1,30 +1,30 @@
 import type { CartItem } from '@/context/cart-provider';
 import { useToast } from '@/context/toast-provider';
-import { getCepAddress } from '@/lib/brasil-api';
 import type {
   CheckoutOption,
   CheckoutOptionGroup,
   CheckoutSpoonOption,
-} from '@/lib/checkout-state';
+} from '@/domain/checkout-state';
 import {
   CheckoutCutleryEnum,
   CheckoutFulfillmentEnum,
   CheckoutPaymentEnum,
   checkoutOptionsReducer,
   createCheckoutOptionsState,
-} from '@/lib/checkout-state';
+} from '@/domain/checkout-state';
 import type {
   DeliveryAddress,
   FulfillmentMethod,
   PaymentMethod,
-} from '@/lib/order';
+} from '@/domain/order';
 import {
   calculateOrderChange,
   calculateOrderTotal,
   createOrder,
   createWhatsAppLink,
   validateOrder,
-} from '@/lib/order';
+} from '@/domain/order';
+import { getCepAddress } from '@/lib/brasil-api';
 import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
 export type CheckoutField =
   | 'clientName'

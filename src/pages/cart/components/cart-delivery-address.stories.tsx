@@ -1,4 +1,4 @@
-import type { DeliveryAddress } from '@/lib/order';
+import type { DeliveryAddress } from '@/domain/order';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CartDeliveryAddress } from './cart-delivery-address';
 

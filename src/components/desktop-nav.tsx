@@ -1,4 +1,4 @@
-import { visibleMenu } from '@/lib/data/menu';
+import { visibleMenu } from '@/domain/menu';
 import { navigateToElement } from '@/lib/navigation';
 
 interface DesktopNavProps {

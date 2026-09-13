@@ -1,14 +1,14 @@
 import type {
   PersonalizationMultipleGroup,
   PersonalizationSingleGroup,
-} from '@/lib/product-personalization';
+} from '@/domain/product-personalization';
 import {
   createPersonalizedOrderItem,
   createProductPersonalizationState,
   getPersonalizationTotal,
   productPersonalizationReducer,
   validateProductPersonalization,
-} from '@/lib/product-personalization';
+} from '@/domain/product-personalization';
 
 const product: Product = {
   img: '/product.png',

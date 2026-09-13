@@ -4,6 +4,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
+import type { PersonalizationSingleGroup } from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import type {
@@ -12,7 +13,6 @@ import type {
 } from '@/hooks/use-single-option';
 import { premiumCategory } from '@/lib/data/premium';
 import { formatCurrency } from '@/lib/format';
-import type { PersonalizationSingleGroup } from '@/lib/product-personalization';
 import { useState } from 'react';
 
 interface PremiumPersonalizationGroups {

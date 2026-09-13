@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/style/useNamingConvention: TODO */
-import type { FulfillmentMethod, PaymentMethod } from '@/lib/order';
+import type { FulfillmentMethod, PaymentMethod } from '@/domain/order';
 
 export type CheckoutSpoonOption = 'Não, obrigado' | 'Sim, por favor';
 

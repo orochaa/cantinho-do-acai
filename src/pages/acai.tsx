@@ -4,6 +4,12 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
+import type {
+  MultipleOptionsEvent,
+  PersonalizationMultipleGroup,
+  PersonalizationSingleGroup,
+  ProductPersonalizationEvent,
+} from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 import type {
@@ -12,12 +18,6 @@ import type {
 } from '@/hooks/use-single-option';
 import { acaiCategory } from '@/lib/data/acai';
 import { formatCurrency } from '@/lib/format';
-import type {
-  MultipleOptionsEvent,
-  PersonalizationMultipleGroup,
-  PersonalizationSingleGroup,
-  ProductPersonalizationEvent,
-} from '@/lib/product-personalization';
 
 interface AcaiPersonalizationGroups {
   type: PersonalizationSingleGroup;

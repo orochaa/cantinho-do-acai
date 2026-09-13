@@ -1,16 +1,16 @@
-import type { OrderItem } from '@/lib/order';
+import type { OrderItem } from '@/domain/order';
 import type {
   PersonalizationGroups,
   ProductPersonalizationEvent,
   ProductPersonalizationState,
-} from '@/lib/product-personalization';
+} from '@/domain/product-personalization';
 import {
   createPersonalizedOrderItem,
   createProductPersonalizationState,
   getPersonalizationTotal,
   productPersonalizationReducer,
   validateProductPersonalization,
-} from '@/lib/product-personalization';
+} from '@/domain/product-personalization';
 import { useCallback, useReducer } from 'react';
 
 export function useProductPersonalization<Groups extends PersonalizationGroups>(

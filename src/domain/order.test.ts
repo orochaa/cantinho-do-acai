@@ -8,7 +8,7 @@ import {
   createWhatsAppMessage,
   updateOrderItemQuantity,
   validateOrder,
-} from '@/lib/order';
+} from '@/domain/order';
 import { describe, expect, it } from 'vitest';
 
 const product: Product = {

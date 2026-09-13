@@ -1,5 +1,5 @@
-import type { OrderItem } from '@/lib/order';
-import { createOrderItem, updateOrderItemQuantity } from '@/lib/order';
+import type { OrderItem } from '@/domain/order';
+import { createOrderItem, updateOrderItemQuantity } from '@/domain/order';
 import { exhaustive } from 'exhaustive';
 import type { ReactNode } from 'react';
 import {
