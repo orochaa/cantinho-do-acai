@@ -214,11 +214,17 @@
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/*.test.js"],
+      "includes": [
+        "**/*.test.*",
+        "**/*.spec.*",
+        "**/.storybook/**/*",
+        "**/*.stories.*"
+      ],
       "linter": {
         "rules": {
           "complexity": {
-            "noExcessiveLinesPerFunction": "off"
+            "noExcessiveLinesPerFunction": "off",
+            "noExcessiveCognitiveComplexity": "off"
           },
           "correctness": {
             "noNodejsModules": "off"
