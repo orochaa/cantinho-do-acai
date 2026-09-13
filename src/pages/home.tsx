@@ -1,4 +1,3 @@
-import { ScrollToTopButton } from '@/components/scroll-to-top-button';
 import { Seo } from '@/components/seo';
 import { formatCurrency } from '@/domain/format';
 import { visibleMenu } from '@/domain/menu';
@@ -36,7 +35,7 @@ export function HomePage(): React.JSX.Element {
                   <Link
                     key={product.slang}
                     to={`${entry.route}/${product.slang}`}
-                    className="h-[350px] rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
+                    className="h-87.5 rounded-xl border-2 border-violet-500/90 p-2 transition hover:-translate-y-1 hover:border-amber-400"
                     title={`Selecionar ${product.name}`}>
                     <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
                       <img
@@ -50,7 +49,7 @@ export function HomePage(): React.JSX.Element {
                           <h2 className="text-xl font-bold text-black">
                             {product.name}
                           </h2>
-                          <p className="text md:text-base">
+                          <p className="text-sm md:text-base">
                             {product.people === 1
                               ? 'Serve uma pessoa'
                               : `Serve até ${product.people} pessoas`}
@@ -79,8 +78,6 @@ export function HomePage(): React.JSX.Element {
             </div>
           ))}
         </main>
-
-        <ScrollToTopButton className="sticky right-4 bottom-4 ml-auto" />
       </div>
     </>
   );

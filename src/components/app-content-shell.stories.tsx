@@ -1,4 +1,3 @@
-import { AppContentShell } from '@/components/app-content-shell';
 import { useCart } from '@/context/cart-provider';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect } from 'react';
@@ -38,28 +37,37 @@ export function NavigationStory(props: {
     if (!['search', 'matching', 'no-results'].includes(props.scenario)) {
       return;
     }
+    let inputTimer: number | undefined;
     const timer = window.setTimeout(() => {
       document
         .querySelector<HTMLButtonElement>('button[aria-label="Buscar"]')
         ?.click();
       if (props.scenario !== 'search') {
-        const input =
-          document.querySelector<HTMLInputElement>('#menu-search-input');
-        const setter = Object.getOwnPropertyDescriptor(
-          HTMLInputElement.prototype,
-          'value',
-        )?.set;
-        setter?.call(input, props.scenario === 'matching' ? 'pastéis' : 'xyz');
-        input?.dispatchEvent(new Event('input', { bubbles: true }));
+        inputTimer = window.setTimeout(() => {
+          const input =
+            document.querySelector<HTMLInputElement>('#menu-search-input');
+          const setter = Object.getOwnPropertyDescriptor(
+            HTMLInputElement.prototype,
+            'value',
+          )?.set;
+          setter?.call(
+            input,
+            props.scenario === 'matching' ? 'pastéis' : 'xyz',
+          );
+          input?.dispatchEvent(new Event('input', { bubbles: true }));
+        }, 0);
       }
     }, 100);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      if (inputTimer !== undefined) {
+        window.clearTimeout(inputTimer);
+      }
+    };
   }, [props.scenario]);
 
   return (
-    <AppContentShell>
-      <div className="min-h-screen p-8 text-white">Conteúdo do cardápio</div>
-    </AppContentShell>
+    <div className="min-h-screen p-8 text-white">Conteúdo do cardápio</div>
   );
 }
 
@@ -69,17 +77,11 @@ const meta = {
   parameters: { layout: 'fullscreen' },
 } satisfies Meta<typeof NavigationStory>;
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook metadata export.
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook story export.
 export const Empty: Story = { args: { scenario: 'empty' } };
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook story export.
 export const Populated: Story = { args: { scenario: 'populated' } };
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook story export.
 export const SearchInitial: Story = { args: { scenario: 'search' } };
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook story export.
 export const SearchMatching: Story = { args: { scenario: 'matching' } };
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook story export.
 export const SearchNoResults: Story = { args: { scenario: 'no-results' } };

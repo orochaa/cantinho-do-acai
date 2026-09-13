@@ -80,6 +80,8 @@
 
 - Use the package scripts as the source of truth: `pnpm type-check`,
   `pnpm lint`, `pnpm test`, and `pnpm build`.
+- Before handoff, always run `pnpm exec biome check`, `pnpm type-check`, and
+  every test affected by the change. Report any check that could not run.
 - Run the narrowest relevant checks first, then run the full checks for changes
   that affect shared state, routing, configuration, or build output.
 - Tests use Vitest with global APIs. New test case titles start with `should`.

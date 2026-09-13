@@ -3,7 +3,7 @@ import { visibleMenu } from '@/domain/menu';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { DialogHeader } from './dialog-header';
-import { Drawer } from './drawer';
+import { ResponsiveDialog } from './responsive-dialog';
 
 interface MenuSearchProps {
   isOpen: boolean;
@@ -20,49 +20,121 @@ const commonSearches = ['Açaí', 'Copo', 'Pastel', 'Bebida'];
 
 export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
   const inputRef = useRef<HTMLInputElement>(null);
+  const resultsViewportRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
+  const [activeResultIndex, setActiveResultIndex] = useState(-1);
+  const [isDesktop, setIsDesktop] = useState(false);
   const navigate = useNavigate();
   const drawerCloseRef = useRef<(() => void) | null>(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
-    if (props.isOpen) {
+    if (typeof window.matchMedia !== 'function') {
+      return;
+    }
+    const media = window.matchMedia('(min-width: 700px)');
+    const update = (): void => setIsDesktop(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (!props.isOpen) {
+      wasOpenRef.current = false;
+      setQuery('');
+      setActiveResultIndex(-1);
+      return;
+    }
+    if (!wasOpenRef.current || isDesktop) {
+      wasOpenRef.current = true;
       inputRef.current?.focus();
     }
-  }, [props.isOpen]);
+  }, [isDesktop, props.isOpen]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!props.isOpen) {
+      return;
+    }
+    window.requestAnimationFrame(() => {
+      if (resultsViewportRef.current) {
+        resultsViewportRef.current.scrollTop =
+          resultsViewportRef.current.scrollHeight;
+      }
+    });
+  }, [props.isOpen, query]);
 
   if (!props.isOpen) {
     return null;
   }
 
   const normalizedQuery = normalize(query.trim());
-  const results = visibleMenu.flatMap(entry => {
-    const categoryMatches = normalize(entry.name).includes(normalizedQuery);
-    return entry.products
+  const results = visibleMenu.flatMap(entry =>
+    entry.products
+      .map(product => {
+        const categoryName = normalize(entry.name);
+        const productName = normalize(product.name);
+        const productMatch = productName.includes(normalizedQuery);
+        const categoryMatch = categoryName.includes(normalizedQuery);
+        if (!(productMatch || categoryMatch)) {
+          return null;
+        }
+        const score =
+          productName === normalizedQuery
+            ? 300
+            : productName.startsWith(normalizedQuery)
+              ? 200
+              : productMatch
+                ? 100
+                : 10;
+        return { entry, product, score };
+      })
       .filter(
-        product =>
-          categoryMatches || normalize(product.name).includes(normalizedQuery),
-      )
-      .map(product => ({ entry, product }));
-  });
+        (result): result is NonNullable<typeof result> => result !== null,
+      ),
+  );
+  const rankedResults = results.toSorted((a, b) => b.score - a.score);
+  const displayResults = rankedResults.toReversed();
+  const selectedResultIndex =
+    activeResultIndex >= 0
+      ? activeResultIndex
+      : isDesktop && normalizedQuery.length > 0 && displayResults.length > 0
+        ? displayResults.length - 1
+        : -1;
 
   const selectResult = (path: string): void => {
     drawerCloseRef.current?.();
     navigate(path);
   };
 
-  return (
-    <Drawer
-      closeRef={drawerCloseRef}
-      labelledBy="menu-search-title"
-      open={props.isOpen}
-      onClose={props.onClose}>
+  const moveResultFocus = (index: number): void => {
+    if (displayResults.length === 0) {
+      return;
+    }
+    const nextIndex = (index + displayResults.length) % displayResults.length;
+    setActiveResultIndex(nextIndex);
+    window.requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>(
+        `[data-search-result-index="${nextIndex}"]`,
+      );
+      target?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+    });
+  };
+
+  const content = (
+    <>
       <DialogHeader
         title="Buscar no cardápio"
         titleId="menu-search-title"
         closeLabel="Fechar busca"
-        onClose={() => drawerCloseRef.current?.()}
+        onClose={() =>
+          isDesktop ? props.onClose() : drawerCloseRef.current?.()
+        }
       />
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div
+        ref={resultsViewportRef}
+        className="min-h-0 flex flex-1 flex-col overflow-y-auto">
         {normalizedQuery.length === 0 ? (
           <div className="py-8">
             <p className="text-center text-zinc-600">
@@ -77,28 +149,43 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
                   className="min-h-11 rounded-full border border-purple-200 bg-purple-50 px-4 font-semibold text-purple-900 transition-colors hover:bg-purple-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
                   key={search}
                   type="button"
-                  onClick={() => setQuery(search)}>
+                  onClick={() => {
+                    setQuery(search);
+                  }}>
                   {search}
                 </button>
               ))}
             </div>
           </div>
-        ) : results.length === 0 ? (
+        ) : displayResults.length === 0 ? (
           <p className="py-8 text-center text-zinc-600">
             Nenhum produto encontrado.
           </p>
         ) : (
           <ul
-            className="flex flex-col-reverse gap-3"
+            className="mt-auto flex flex-col gap-3"
             aria-label="Resultados da busca">
-            {results.map(({ entry, product }) => (
+            {displayResults.map(({ entry, product }, index) => (
               <li key={`${entry.route}-${product.slang}`}>
                 <Link
-                  className="flex min-h-20 items-center gap-3 rounded-xl border border-zinc-200 p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
+                  aria-current={
+                    selectedResultIndex === index ? 'true' : undefined
+                  }
+                  data-search-result-index={index}
+                  className={`flex min-h-20 items-center gap-3 rounded-xl border p-2 text-left transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 motion-reduce:transition-none ${selectedResultIndex === index ? 'border-purple-700 bg-purple-50 ring-2 ring-purple-200' : 'border-zinc-200'}`}
                   to={`/${entry.route}/${product.slang}`}
                   onClick={event => {
                     event.preventDefault();
                     selectResult(`/${entry.route}/${product.slang}`);
+                  }}
+                  onKeyDown={event => {
+                    if (event.key === 'ArrowDown') {
+                      event.preventDefault();
+                      moveResultFocus(index + 1);
+                    } else if (event.key === 'ArrowUp') {
+                      event.preventDefault();
+                      moveResultFocus(index - 1);
+                    }
                   }}>
                   <img
                     alt=""
@@ -132,9 +219,44 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
           className="mt-1 min-h-11 w-full rounded-xl border-2 border-zinc-300 px-3 text-base font-normal text-zinc-950 outline-none focus-visible:border-purple-700 focus-visible:ring-2 focus-visible:ring-purple-300"
           type="search"
           value={query}
-          onChange={event => setQuery(event.target.value)}
+          onKeyDown={event => {
+            if (event.key === 'ArrowDown') {
+              event.preventDefault();
+              moveResultFocus(
+                activeResultIndex < 0 ? 0 : activeResultIndex + 1,
+              );
+            } else if (event.key === 'ArrowUp') {
+              event.preventDefault();
+              moveResultFocus(
+                activeResultIndex < 0
+                  ? displayResults.length - 1
+                  : activeResultIndex - 1,
+              );
+            } else if (event.key === 'Enter' && selectedResultIndex >= 0) {
+              event.preventDefault();
+              const result = displayResults[selectedResultIndex];
+              if (result) {
+                selectResult(`/${result.entry.route}/${result.product.slang}`);
+              }
+            }
+          }}
+          onChange={event => {
+            setActiveResultIndex(-1);
+            setQuery(event.target.value);
+          }}
         />
       </label>
-    </Drawer>
+    </>
+  );
+
+  return (
+    <ResponsiveDialog
+      closeRef={drawerCloseRef}
+      labelledBy="menu-search-title"
+      open={props.isOpen}
+      onClose={props.onClose}
+      onOpened={() => inputRef.current?.focus()}>
+      {content}
+    </ResponsiveDialog>
   );
 }

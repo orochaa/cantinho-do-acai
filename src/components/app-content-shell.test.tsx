@@ -156,6 +156,49 @@ describe(AppContentShell.name, () => {
     expect(findButton('Buscar').getAttribute('aria-current')).toBeNull();
   });
 
+  it('should expose persistent desktop category navigation with the active route', () => {
+    renderShell('/acai/acai-300ml');
+    const navigation = document.querySelector(
+      'nav[aria-label="Categorias do cardápio"]',
+    );
+    expect(navigation).not.toBeNull();
+    expect(
+      navigation?.querySelector('a[aria-current="page"]')?.textContent,
+    ).toContain('Açaí');
+    expect(navigation?.querySelector('a[href="/#acai"]')).not.toBeNull();
+  });
+
+  it('should scroll to a category section when its desktop link is selected', () => {
+    renderShell('/');
+    const section = document.createElement('h1');
+    section.id = 'acai';
+    section.scrollIntoView = vi.fn();
+    document.body.append(section);
+    act(() => {
+      document.querySelector<HTMLAnchorElement>('a[href="/#acai"]')?.click();
+    });
+    expect(section.scrollIntoView).toHaveBeenCalledWith({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  });
+
+  it('should keep desktop category navigation separate from mobile navigation', () => {
+    renderShell();
+    const desktopNavigation = document.querySelector(
+      'nav[aria-label="Categorias do cardápio"]',
+    );
+    const mobileNavigation = document.querySelector(
+      'nav[aria-label="Navegação principal"]',
+    );
+    expect(desktopNavigation).not.toBeNull();
+    expect(mobileNavigation).not.toBeNull();
+    const desktopContainer = desktopNavigation?.parentElement;
+    expect(desktopContainer?.className).toContain('hidden');
+    expect(desktopContainer?.className).toContain('lg:block');
+    expect(mobileNavigation?.className).toContain('lg:hidden');
+  });
+
   it('should autofocus search and restore trigger focus after Escape', () => {
     vi.useFakeTimers();
     renderShell();
@@ -170,6 +213,61 @@ describe(AppContentShell.name, () => {
     act(() => vi.runOnlyPendingTimers());
     expect(document.querySelector('dialog')).toBeNull();
     expect(document.activeElement).toBe(trigger);
+    vi.useRealTimers();
+  });
+
+  it('should open search with the global q shortcut', () => {
+    renderShell();
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
+    });
+    expect(document.querySelector('dialog')).not.toBeNull();
+    expect(document.activeElement).toBe(
+      document.querySelector<HTMLInputElement>('#menu-search-input'),
+    );
+  });
+
+  it('should ignore the global q shortcut from inputs and textareas', () => {
+    renderShell();
+    const input = document.createElement('input');
+    const textarea = document.createElement('textarea');
+    document.body.append(input, textarea);
+
+    act(() => {
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'q', bubbles: true }),
+      );
+      textarea.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'q', bubbles: true }),
+      );
+    });
+
+    expect(document.querySelector('dialog')).toBeNull();
+  });
+
+  it('should clear the search input when the dialog closes', () => {
+    vi.useFakeTimers();
+    renderShell();
+    const trigger = findButton('Buscar');
+    act(() => trigger.click());
+    const input =
+      document.querySelector<HTMLInputElement>('#menu-search-input');
+    if (!input) {
+      throw new Error('Search input not found');
+    }
+    act(() => setInputValue(input, 'pastel'));
+    expect(input.value).toBe('pastel');
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>('button[aria-label="Fechar busca"]')
+        ?.click(),
+    );
+    act(() => vi.advanceTimersByTime(300));
+    act(() => trigger.click());
+    expect(
+      document.querySelector<HTMLInputElement>('#menu-search-input')?.value,
+    ).toBe('');
     vi.useRealTimers();
   });
 
@@ -292,6 +390,43 @@ describe(AppContentShell.name, () => {
     expect(document.querySelector('output')?.textContent).toBe(
       '/pastel/pastel-de-frango',
     );
+  });
+
+  it('should rank a product-name prefix above category matches', () => {
+    renderShell();
+    act(() => findButton('Buscar').click());
+    const input =
+      document.querySelector<HTMLInputElement>('#menu-search-input');
+    if (!input) {
+      throw new Error('Search input not found');
+    }
+    act(() => setInputValue(input, 're'));
+    const results = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>(
+        '[data-search-result-index]',
+      ),
+    );
+    expect(results.at(-1)?.textContent).toContain('Refrigerantes');
+  });
+
+  it('should highlight a result without moving focus from the input', () => {
+    renderShell();
+    act(() => findButton('Buscar').click());
+    const input =
+      document.querySelector<HTMLInputElement>('#menu-search-input');
+    if (!input) {
+      throw new Error('Search input not found');
+    }
+    act(() => setInputValue(input, 're'));
+    act(() =>
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
+      ),
+    );
+    expect(document.activeElement).toBe(input);
+    expect(
+      document.querySelector('[data-search-result-index][aria-current="true"]'),
+    ).not.toBeNull();
   });
 
   it('should show populated cart count, total, and browsing shortcut', () => {

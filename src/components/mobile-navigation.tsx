@@ -1,26 +1,26 @@
 import { Home, Search, ShoppingCart } from 'lucide-react';
-import type { RefObject } from 'react';
+import type { MouseEvent, RefObject } from 'react';
 import { Link } from 'react-router';
 
-export interface MobileBottomNavigationProps {
+export interface MobileNavigationProps {
   cartItemCount: number;
   isSearchOpen: boolean;
   isCartActive: boolean;
   isHomeActive: boolean;
   searchTriggerRef: RefObject<HTMLButtonElement | null>;
-  onSearchClick: () => void;
+  onSearchClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const itemClassName =
   'relative flex min-h-11 min-w-16 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg px-2 text-xs font-medium transition duration-150 ease-out active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none';
 
-export function MobileBottomNavigation(
-  props: MobileBottomNavigationProps,
+export function MobileNavigation(
+  props: MobileNavigationProps,
 ): React.JSX.Element {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-white/20 bg-purple-950/95 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-white shadow-2xl backdrop-blur md:hidden">
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-white/20 bg-purple-950/95 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-white shadow-2xl backdrop-blur lg:hidden">
       <div className="mx-auto flex max-w-md items-stretch gap-2">
         <Link
           aria-current={props.isHomeActive ? 'page' : undefined}

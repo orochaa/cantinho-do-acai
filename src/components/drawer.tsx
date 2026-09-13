@@ -160,7 +160,7 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
           duration: isDragging ? 0 : closeDuration / 1000,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="relative z-10 mx-auto flex w-full max-w-2xl flex-col rounded-t-3xl bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-2xl"
+        className="relative z-10 mx-auto flex w-full max-w-3xl flex-col rounded-t-3xl bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-2xl"
         style={{ height: `${height}px` }}>
         <button
           aria-label="Redimensionar"
