@@ -231,6 +231,9 @@
           },
           "security": {
             "noSecrets": "off"
+          },
+          "style": {
+            "useComponentExportOnlyModules": "off"
           }
         }
       }

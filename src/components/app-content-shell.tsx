@@ -1,7 +1,10 @@
 import { useCart } from '@/context/cart-provider';
-import { Home, ShoppingCart } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router';
+import { useRef, useState } from 'react';
+import { useLocation } from 'react-router';
+import { CartSummary } from './cart-summary';
+import { MenuSearch } from './menu-search';
+import { MobileBottomNavigation } from './mobile-bottom-navigation';
 
 export interface AppContentShellProps {
   children: ReactNode;
@@ -11,35 +14,39 @@ export function AppContentShell(
   props: AppContentShellProps,
 ): React.JSX.Element {
   const location = useLocation();
-  const { cart } = useCart();
+  const { cart, cartRevision } = useCart();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const cartItemCount = cart.reduce((count, item) => count + item.count, 0);
+  const isHomeActive = location.pathname === '/';
+  const isCartActive = location.pathname === '/cart';
+
+  const closeSearch = (): void => {
+    setIsSearchOpen(false);
+    window.requestAnimationFrame(() => searchTriggerRef.current?.focus());
+  };
 
   return (
     <div className="relative min-h-screen bg-linear-to-br from-black to-purple-700">
-      <nav className="fixed top-4 left-0 z-10 w-full">
-        <div className="mx-auto flex w-11/12 max-w-3xl items-center justify-between md:px-2">
-          {location.pathname === '/' ? (
-            <span />
-          ) : (
-            <Link
-              className="flex gap-2 rounded-sm bg-purple-500 p-2 text-zinc-100 shadow-md"
-              title="Ir para página inicial"
-              to="/">
-              <Home className="size-5 shrink-0" />
-              Inicio
-            </Link>
-          )}
-          {cart.length > 0 && location.pathname !== '/cart' && (
-            <Link
-              className="flex gap-2 rounded-sm bg-red-500 p-2 text-white shadow-md"
-              title="Ir para página do carrinho"
-              to="/cart">
-              <ShoppingCart className="size-5 shrink-0" />
-              Pedido
-            </Link>
-          )}
-        </div>
-      </nav>
-      <div className="mx-auto max-w-3xl">{props.children}</div>
+      <div className="mx-auto max-w-3xl pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-0">
+        {props.children}
+      </div>
+      <MobileBottomNavigation
+        searchTriggerRef={searchTriggerRef}
+        cartItemCount={cartItemCount}
+        isCartActive={isCartActive}
+        isSearchOpen={isSearchOpen}
+        isHomeActive={isHomeActive}
+        onSearchClick={() => setIsSearchOpen(true)}
+      />
+      <CartSummary
+        cart={cart}
+        revision={cartRevision}
+      />
+      <MenuSearch
+        isOpen={isSearchOpen}
+        onClose={closeSearch}
+      />
     </div>
   );
 }

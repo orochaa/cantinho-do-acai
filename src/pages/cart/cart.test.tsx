@@ -143,7 +143,31 @@ function renderCheckout(): void {
   act(() => findButton('Preparar fixture').click());
 }
 
+function renderEmptyCart(): void {
+  const container = document.createElement('div');
+  document.body.append(container);
+  activeRoot = createRoot(container);
+  act(() => {
+    activeRoot?.render(
+      <HelmetProvider>
+        <ToastProvider>
+          <CartProvider>
+            <CartPage />
+          </CartProvider>
+        </ToastProvider>
+      </HelmetProvider>,
+    );
+  });
+}
+
 describe(CartPage.name, () => {
+  it('should render an empty cart without redirecting away', () => {
+    renderEmptyCart();
+
+    expect(document.body.textContent).toContain('Seu carrinho está vazio');
+    expect(navigateMock).not.toHaveBeenCalled();
+  });
+
   it('should show a CEP lookup error when the request fails', async () => {
     vi.stubGlobal(
       'fetch',

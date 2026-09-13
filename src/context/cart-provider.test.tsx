@@ -91,6 +91,9 @@ function renderCartProbe(): ReturnType<typeof useCart> {
       return currentContext?.cart ?? [];
     },
     addCartEvent: event => currentContext?.addCartEvent(event),
+    get cartRevision() {
+      return currentContext?.cartRevision ?? 0;
+    },
   };
 }
 

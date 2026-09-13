@@ -1,5 +1,9 @@
 # Repository guidance
 
+## Communication
+
+- Address the user in English unless they explicitly request another language.
+
 ## Architecture
 
 - This is a React 19 single-page app built with Vite, TypeScript, and

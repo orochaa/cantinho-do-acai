@@ -7,6 +7,7 @@ import {
 import type { ReactNode } from 'react';
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -18,11 +19,13 @@ export type { CartEvent, CartItem } from '@/domain/cart';
 interface ICartContext {
   addCartEvent: (event: CartEvent) => void;
   cart: ReadonlyArray<CartItem>;
+  cartRevision: number;
 }
 
 const CartContext = createContext<ICartContext>({
   cart: [],
   addCartEvent() {},
+  cartRevision: 0,
 });
 
 export function CartProvider(props: {
@@ -32,6 +35,14 @@ export function CartProvider(props: {
   const [cart, addCartEvent] = useReducer(cartReducer, persistence, value =>
     hydrateCart(value, CART_STORAGE_VERSION),
   );
+  const [cartRevision, setCartRevision] = useReducer(
+    (revision: number) => revision + 1,
+    0,
+  );
+  const dispatchCartEvent = useCallback((event: CartEvent): void => {
+    setCartRevision();
+    addCartEvent(event);
+  }, []);
 
   useEffect(() => {
     try {
@@ -41,7 +52,10 @@ export function CartProvider(props: {
     }
   }, [cart, persistence]);
 
-  const context = useMemo<ICartContext>(() => ({ cart, addCartEvent }), [cart]);
+  const context = useMemo<ICartContext>(
+    () => ({ cart, addCartEvent: dispatchCartEvent, cartRevision }),
+    [cart, cartRevision, dispatchCartEvent],
+  );
   return (
     <CartContext.Provider value={context}>
       {props.children}

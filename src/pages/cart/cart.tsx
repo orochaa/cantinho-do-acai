@@ -6,7 +6,6 @@ import { useCart } from '@/context/cart-provider';
 import { CheckoutPaymentEnum } from '@/domain/checkout-state';
 import { formatCurrency } from '@/domain/format';
 import { useCartCheckout } from '@/hooks/use-cart-checkout';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { CartDeliveryAddress } from './components/cart-delivery-address';
 import { CartIdentification } from './components/cart-identification';
@@ -20,12 +19,6 @@ export function CartPage(): React.JSX.Element {
   const checkout = useCartCheckout(cart);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (cart.length === 0) {
-      navigate('/');
-    }
-  }, [cart, navigate]);
-
   return (
     <>
       <Seo
@@ -34,55 +27,81 @@ export function CartPage(): React.JSX.Element {
         imgUrl="https://cantinhodoacai.vercel.app/img/novo-logo.png"
       />
       <div className="mx-auto w-11/12 py-20">
-        <div className="flex flex-col gap-8">
+        {cart.length === 0 ? (
           <Container>
-            <h2 className="ml-1 text-xl font-bold text-white">
-              Pedido: {formatCurrency(checkout.orderTotal)}
-            </h2>
-            <CartItems
-              cart={cart}
-              onQuantityChange={(item, count) =>
-                addCartEvent({ type: 'update-quantity', id: item.id, count })
-              }
-              onRemove={item => addCartEvent({ type: 'remove', id: item.id })}
-            />
+            <div className="flex min-h-52 flex-col items-center justify-center gap-4 rounded-sm bg-white p-6 text-center">
+              <h1 className="text-2xl font-bold text-purple-950">
+                Seu carrinho está vazio
+              </h1>
+              <p className="text-zinc-700">
+                Escolha seus produtos favoritos para começar um pedido.
+              </p>
+              <Button
+                variant="confirm"
+                onClick={() => navigate('/')}>
+                Ver cardápio
+              </Button>
+            </div>
           </Container>
-          <CartIdentification {...checkout} />
-          <SingleOptionSelector
-            title="Precisa de talheres?"
-            ctx={checkout.spoonOption}
-            onSelectionChange={checkout.selectSpoonOption}
-          />
-          <SingleOptionSelector
-            title="Opções de entrega"
-            ctx={checkout.checkoutOption}
-            onSelectionChange={checkout.selectCheckoutOption}
-          />
-          {!!checkout.isDelivery && <CartDeliveryAddress {...checkout} />}
-          {!checkout.isDelivery && <CartPickupNotice />}
-          <SingleOptionSelector
-            title="Forma de pagamento"
-            ctx={checkout.paymentMethod}
-            onSelectionChange={checkout.selectPaymentMethod}
-          />
-          {checkout.paymentMethod.options.some(
-            option =>
-              option.name === CheckoutPaymentEnum.Cash && option.isSelected,
-          ) && <CashPayment {...checkout} />}
-        </div>
-        <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <Button
-            variant="cancel"
-            onClick={() => navigate('/')}>
-            Continuar Escolhendo
-          </Button>
-          <Button
-            variant="confirm"
-            onClick={checkout.confirmOrder}>
-            Confirmar Pedido {formatCurrency(checkout.orderTotal)}
-          </Button>
-        </div>
-        {!!checkout.modalOpen && <ConfirmationModal {...checkout} />}
+        ) : (
+          <>
+            <div className="flex flex-col gap-8">
+              <Container>
+                <h2 className="ml-1 text-xl font-bold text-white">
+                  Pedido: {formatCurrency(checkout.orderTotal)}
+                </h2>
+                <CartItems
+                  cart={cart}
+                  onQuantityChange={(item, count) =>
+                    addCartEvent({
+                      type: 'update-quantity',
+                      id: item.id,
+                      count,
+                    })
+                  }
+                  onRemove={item =>
+                    addCartEvent({ type: 'remove', id: item.id })
+                  }
+                />
+              </Container>
+              <CartIdentification {...checkout} />
+              <SingleOptionSelector
+                title="Precisa de talheres?"
+                ctx={checkout.spoonOption}
+                onSelectionChange={checkout.selectSpoonOption}
+              />
+              <SingleOptionSelector
+                title="Opções de entrega"
+                ctx={checkout.checkoutOption}
+                onSelectionChange={checkout.selectCheckoutOption}
+              />
+              {!!checkout.isDelivery && <CartDeliveryAddress {...checkout} />}
+              {!checkout.isDelivery && <CartPickupNotice />}
+              <SingleOptionSelector
+                title="Forma de pagamento"
+                ctx={checkout.paymentMethod}
+                onSelectionChange={checkout.selectPaymentMethod}
+              />
+              {checkout.paymentMethod.options.some(
+                option =>
+                  option.name === CheckoutPaymentEnum.Cash && option.isSelected,
+              ) && <CashPayment {...checkout} />}
+            </div>
+            <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <Button
+                variant="cancel"
+                onClick={() => navigate('/')}>
+                Continuar Escolhendo
+              </Button>
+              <Button
+                variant="confirm"
+                onClick={checkout.confirmOrder}>
+                Confirmar Pedido {formatCurrency(checkout.orderTotal)}
+              </Button>
+            </div>
+            {!!checkout.modalOpen && <ConfirmationModal {...checkout} />}
+          </>
+        )}
       </div>
     </>
   );

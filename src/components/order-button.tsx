@@ -2,7 +2,6 @@ import { useToast } from '@/context/toast-provider';
 import { formatCurrency } from '@/domain/format';
 import { Minus, Plus } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { Button } from './button';
 
 export interface OrderButtonProps {
@@ -20,7 +19,6 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
   const [counter, setCounter] = useState<number>(1);
 
   const toast = useToast();
-  const navigate = useNavigate();
 
   const decrementCounter = useCallback((): void => {
     setCounter(c => (c > 1 ? c - 1 : 1));
@@ -37,16 +35,8 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
       toast.error({ description: error });
     } else {
       order(counter);
-      toast.success({
-        title: 'Produto adicionado',
-        description: `${product.name} adicionado ao carrinho`,
-        action: {
-          label: 'Ver carrinho',
-          onClick: async () => navigate('/cart'),
-        },
-      });
     }
-  }, [validate, toast, order, counter, product.name, navigate]);
+  }, [validate, toast, order, counter]);
 
   return (
     <div className="mt-8 flex gap-2">
