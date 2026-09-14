@@ -68,13 +68,14 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
     <motion.dialog
       ref={dialogRef}
       aria-labelledby={props.labelledBy}
+      tabIndex={-1}
       initial={{ opacity: 0, y: '100%' }}
       animate={{ opacity: isClosing ? 0 : 1, y: isClosing ? '100%' : '0%' }}
       transition={{
         duration: closeDuration / 1000,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="fixed inset-x-0 top-auto bottom-0 m-0 box-border w-full max-w-[100vw] rounded-t-2xl border-0 bg-white text-zinc-950 shadow-[0_-12px_40px_rgb(0_0_0/35%)] backdrop:bg-black/30 max-h-[calc(100svh-env(safe-area-inset-top))]"
+      className="fixed inset-x-0 top-auto bottom-0 m-0 box-border w-full max-w-[100vw] overflow-hidden rounded-t-2xl border-0 bg-white text-zinc-950 shadow-[0_-12px_40px_rgb(0_0_0/35%)] backdrop:bg-black/30 max-h-[calc(100svh-env(safe-area-inset-top))]"
       onCancel={event => {
         event.preventDefault();
         event.stopPropagation();
@@ -85,7 +86,7 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
           requestClose();
         }
       }}>
-      <div className="box-border flex max-h-[calc(100svh-env(safe-area-inset-top))] flex-col overflow-y-auto p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      <div className="box-border flex h-full min-h-0 max-h-[calc(100svh-env(safe-area-inset-top))] flex-col overflow-y-auto overscroll-contain p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         {props.children}
       </div>
     </motion.dialog>

@@ -53,6 +53,49 @@ afterEach(() => {
 });
 
 describe(Drawer.name, () => {
+  it('should use the drawer as the initial focus target instead of its close control', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() =>
+      activeRoot?.render(
+        <Drawer
+          labelledBy="drawer-title"
+          open
+          onClose={() => undefined}>
+          <h2 id="drawer-title">Drawer</h2>
+          <button type="button">Fechar</button>
+        </Drawer>,
+      ),
+    );
+
+    expect(document.querySelector('dialog')?.tabIndex).toBe(-1);
+  });
+
+  it('should keep long content in an overscroll-contained viewport', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() =>
+      activeRoot?.render(
+        <Drawer
+          labelledBy="drawer-title"
+          open
+          onClose={() => undefined}>
+          <h2 id="drawer-title">Drawer</h2>
+        </Drawer>,
+      ),
+    );
+
+    const dialog = document.querySelector('dialog');
+    const viewport = dialog?.firstElementChild;
+    expect(dialog?.className).toContain('overflow-hidden');
+    expect(viewport?.className).toContain('overflow-y-auto');
+    expect(viewport?.className).toContain('overscroll-contain');
+  });
+
   it('should keep the parent open when a nested drawer is cancelled', () => {
     vi.useFakeTimers();
     const container = document.createElement('div');
