@@ -10,8 +10,16 @@ export async function getCoordinates(address: {
   city: string;
   state: string;
 }): Promise<Coordinates> {
+  const params = new URLSearchParams({
+    street: address.street,
+    city: address.city,
+    state: address.state,
+    countrycodes: 'BR',
+    format: 'json',
+    limit: '1',
+  });
   const res = await fetch(
-    `https://nominatim.openstreetmap.org/search.php?street=${encodeURIComponent(address.street)}&city=${encodeURIComponent(address.city)}&state=${encodeURIComponent(address.state)}&countrycodes=BR&format=json&limit=1`,
+    `https://nominatim.openstreetmap.org/search.php?${params.toString()}`,
     {
       headers: {
         'User-Agent': 'Cantinho do Acai App',

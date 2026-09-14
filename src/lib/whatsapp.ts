@@ -140,8 +140,10 @@ const createOrderCheckoutWhatsAppMessage = (
 export const createWhatsAppLink = (
   message: string,
   phone = companyInfo.whatsappPhone,
-): string =>
-  `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+): string => {
+  const params = new URLSearchParams({ phone, text: message });
+  return `https://api.whatsapp.com/send?${params.toString()}`;
+};
 
 export const createOrderCheckoutWhatsAppLink = (
   input: WhatsAppOrderInput,

@@ -111,5 +111,29 @@ describe('WhatsApp', () => {
       expect(link).toContain('text=');
       expect(link).not.toContain('Maria & João');
     });
+
+    it("should preserve an option named M&M's in the message", () => {
+      const link = createOrderCheckoutWhatsAppLink({
+        order: createOrder([
+          createOrderItem({
+            count: 1,
+            options: [{ name: "M&M's", count: 1 }],
+            product,
+          }),
+        ]),
+        clientName: 'Maria',
+        fulfillment: 'Retirada no local',
+        address: null,
+        addressNumber: '',
+        addressComplement: '',
+        addressReference: '',
+        paymentMethod: 'PIX',
+        cashValue: '',
+        includeCutlery: false,
+      });
+
+      expect(getMessage(link)).toContain("- 1 - M&M's");
+      expect(link).toContain('M%26M%27s');
+    });
   });
 });
