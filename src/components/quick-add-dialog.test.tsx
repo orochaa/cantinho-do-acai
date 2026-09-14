@@ -3,8 +3,7 @@ import { CartProvider, useCart } from '@/context/cart-provider';
 import { ToastProvider } from '@/context/toast-provider';
 import { createOrderItem } from '@/domain/order';
 import { act } from 'react';
-import type { Root } from 'react-dom/client';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const product: Product = {

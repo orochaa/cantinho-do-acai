@@ -1,6 +1,5 @@
 import type React from 'react';
-import type { ReactNode } from 'react';
-import { useCallback, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 
 export interface DescriptionProps {
   children: ReactNode;

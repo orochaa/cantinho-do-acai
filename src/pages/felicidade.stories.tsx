@@ -23,7 +23,6 @@ const findButtonByTitle = (title: string): HTMLButtonElement | undefined =>
   document.querySelector<HTMLButtonElement>(`button[title="${title}"]`) ??
   undefined;
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook scenarios live with the page story.
 function FelicidadeStory(props: FelicidadeStoryProps): React.JSX.Element {
   const navigate = useNavigate();
 

@@ -1,5 +1,7 @@
-import type { AcaiComplement } from '@/domain/categories/acai-complements';
-import { acaiComplements } from '@/domain/categories/acai-complements';
+import {
+  type AcaiComplement,
+  acaiComplements,
+} from '@/domain/categories/acai-complements';
 import type { AcaiExtra } from '@/domain/categories/acai-extra';
 import { acaiExtraGroup } from '@/domain/categories/acai-extra-group';
 import { acaiType } from '@/domain/categories/acai-type';

@@ -19,6 +19,36 @@ const normalize = (value: string): string =>
 
 const commonSearches = ['Açaí', 'Copo', 'Pastel', 'Bebida'];
 
+const scrollResultsViewport = (viewport: HTMLDivElement | null): void => {
+  if (viewport === null) {
+    return;
+  }
+  viewport.scrollTop = viewport.scrollHeight;
+};
+
+const getSearchResult = (
+  entry: (typeof visibleMenu)[number],
+  product: (typeof visibleMenu)[number]['products'][number],
+  normalizedQuery: string,
+): { entry: typeof entry; product: typeof product; score: number } | null => {
+  const categoryName = normalize(entry.name);
+  const productName = normalize(product.name);
+  const productMatch = productName.includes(normalizedQuery);
+  const categoryMatch = categoryName.includes(normalizedQuery);
+  if (!(productMatch || categoryMatch)) {
+    return null;
+  }
+  const score =
+    productName === normalizedQuery
+      ? 300
+      : productName.startsWith(normalizedQuery)
+        ? 200
+        : productMatch
+          ? 100
+          : 10;
+  return { entry, product, score };
+};
+
 export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsViewportRef = useRef<HTMLDivElement>(null);
@@ -27,31 +57,28 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
   const isDesktop = useMediaQuery('(min-width: 700px)');
   const navigate = useNavigate();
   const drawerCloseRef = useRef<(() => void) | null>(null);
-  const wasOpenRef = useRef(false);
+  const wasOpenRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     if (!props.isOpen) {
-      wasOpenRef.current = false;
+      wasOpenRef.current = null;
       setQuery('');
       setActiveResultIndex(-1);
       return;
     }
-    if (!wasOpenRef.current || isDesktop) {
+    if (wasOpenRef.current === null || isDesktop) {
       wasOpenRef.current = true;
       inputRef.current?.focus();
     }
   }, [isDesktop, props.isOpen]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `query` is intentionally included to scroll the viewport when the user types.
   useEffect(() => {
     if (!props.isOpen) {
       return;
     }
     window.requestAnimationFrame(() => {
-      if (resultsViewportRef.current) {
-        resultsViewportRef.current.scrollTop =
-          resultsViewportRef.current.scrollHeight;
-      }
+      scrollResultsViewport(resultsViewportRef.current);
     });
   }, [props.isOpen, query]);
 
@@ -62,24 +89,7 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
   const normalizedQuery = normalize(query.trim());
   const results = visibleMenu.flatMap(entry =>
     entry.products
-      .map(product => {
-        const categoryName = normalize(entry.name);
-        const productName = normalize(product.name);
-        const productMatch = productName.includes(normalizedQuery);
-        const categoryMatch = categoryName.includes(normalizedQuery);
-        if (!(productMatch || categoryMatch)) {
-          return null;
-        }
-        const score =
-          productName === normalizedQuery
-            ? 300
-            : productName.startsWith(normalizedQuery)
-              ? 200
-              : productMatch
-                ? 100
-                : 10;
-        return { entry, product, score };
-      })
+      .map(product => getSearchResult(entry, product, normalizedQuery))
       .filter(
         (result): result is NonNullable<typeof result> => result !== null,
       ),
@@ -209,6 +219,7 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
           className="mt-1 min-h-11 w-full rounded-xl border-2 border-zinc-300 px-3 text-base font-normal text-zinc-950 outline-none focus-visible:border-purple-700 focus-visible:ring-2 focus-visible:ring-purple-300"
           type="search"
           value={query}
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Keyboard navigation handles three distinct keys.
           onKeyDown={event => {
             if (event.key === 'ArrowDown') {
               event.preventDefault();

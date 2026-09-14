@@ -1,7 +1,7 @@
-import type { CheckoutOptionsEvent } from '@/domain/checkout-state';
 import {
   CheckoutCutleryEnum,
   CheckoutFulfillmentEnum,
+  type CheckoutOptionsEvent,
   CheckoutPaymentEnum,
   checkoutOptionsReducer,
   createCheckoutOptionsState,

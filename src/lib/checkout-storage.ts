@@ -1,8 +1,8 @@
-import type { CheckoutSpoonOption } from '@/domain/checkout-state';
 import {
   CheckoutCutleryEnum,
   CheckoutFulfillmentEnum,
   CheckoutPaymentEnum,
+  type CheckoutSpoonOption,
 } from '@/domain/checkout-state';
 import type {
   DeliveryAddress,

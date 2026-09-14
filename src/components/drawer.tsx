@@ -1,6 +1,11 @@
 import { motion } from 'motion/react';
-import type { ReactNode, RefObject } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import {
+  type ReactNode,
+  type RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 const closeDuration = 180;

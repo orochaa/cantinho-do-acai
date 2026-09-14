@@ -1,5 +1,7 @@
-import type { QuickAddDialogProps } from '@/components/quick-add-dialog';
-import { QuickAddDialog } from '@/components/quick-add-dialog';
+import {
+  QuickAddDialog,
+  type QuickAddDialogProps,
+} from '@/components/quick-add-dialog';
 
 export function FelicidadeQuickForm(
   props: QuickAddDialogProps,

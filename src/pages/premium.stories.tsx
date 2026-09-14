@@ -39,7 +39,6 @@ const setObservation = (value: string): void => {
   textarea.dispatchEvent(new Event('input', { bubbles: true }));
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixture.
 function PremiumStory(props: PremiumStoryProps): React.JSX.Element {
   useEffect(() => {
     const timer = window.setTimeout(() => {

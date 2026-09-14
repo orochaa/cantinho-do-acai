@@ -1,5 +1,9 @@
-import type { CartItem, CartPersistence } from '@/domain/cart';
-import { createCartReducer, hydrateCart } from '@/domain/cart';
+import {
+  type CartItem,
+  type CartPersistence,
+  createCartReducer,
+  hydrateCart,
+} from '@/domain/cart';
 import { describe, expect, it, vi } from 'vitest';
 
 const product: Product = {

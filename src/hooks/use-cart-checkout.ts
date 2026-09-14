@@ -1,26 +1,22 @@
 import { useToast } from '@/context/toast-provider';
 import type { CartItem } from '@/domain/cart';
-import type {
-  CheckoutOption,
-  CheckoutOptionGroup,
-  CheckoutSpoonOption,
-} from '@/domain/checkout-state';
 import {
   CheckoutCutleryEnum,
   CheckoutFulfillmentEnum,
+  type CheckoutOption,
+  type CheckoutOptionGroup,
   CheckoutPaymentEnum,
+  type CheckoutSpoonOption,
   checkoutOptionsReducer,
   createCheckoutOptionsState,
 } from '@/domain/checkout-state';
-import type {
-  DeliveryAddress,
-  FulfillmentMethod,
-  PaymentMethod,
-} from '@/domain/order';
 import {
   calculateOrderChange,
   calculateOrderTotal,
   createOrder,
+  type DeliveryAddress,
+  type FulfillmentMethod,
+  type PaymentMethod,
   validateOrder,
 } from '@/domain/order';
 import { getCepAddress } from '@/lib/brasil-api';
@@ -122,9 +118,9 @@ export function useCartCheckout(
     Partial<Record<CheckoutField, string>>
   >({});
   const toast = useToast();
-  const skipNextStorageWrite = useRef(false);
+  const skipNextStorageWrite = useRef<boolean>(false);
   useEffect(() => {
-    if (skipNextStorageWrite.current) {
+    if ((skipNextStorageWrite.current as unknown) === true) {
       skipNextStorageWrite.current = false;
       return;
     }

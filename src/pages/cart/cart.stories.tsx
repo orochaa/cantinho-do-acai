@@ -21,7 +21,6 @@ const cartItem: Omit<CartItem, 'id' | 'total'> = {
   product,
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixtures live with the story.
 function SeedCart(): null {
   const { cart, addCartEvent } = useCart();
 
@@ -63,7 +62,6 @@ const setInputValue = (id: string, value: string): void => {
   }
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixtures live with the story.
 function CheckoutStory(props: CheckoutStoryProps): React.JSX.Element {
   useEffect(() => {
     const timer = window.setTimeout(() => {

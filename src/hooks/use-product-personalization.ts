@@ -1,13 +1,11 @@
 import type { OrderItem } from '@/domain/order';
-import type {
-  PersonalizationGroups,
-  ProductPersonalizationEvent,
-  ProductPersonalizationState,
-} from '@/domain/product-personalization';
 import {
   createPersonalizedOrderItem,
   getPersonalizationTotal,
   hydrateProductPersonalizationState,
+  type PersonalizationGroups,
+  type ProductPersonalizationEvent,
+  type ProductPersonalizationState,
   productPersonalizationReducer,
   validateProductPersonalization,
 } from '@/domain/product-personalization';

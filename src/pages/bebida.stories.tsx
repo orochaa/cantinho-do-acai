@@ -36,7 +36,6 @@ const assertOptionLimitReached = (label: string): void => {
   }
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixtures live with the story.
 function BebidaStory(props: BebidaStoryProps): React.JSX.Element {
   useEffect(() => {
     const timer = window.setTimeout(() => {

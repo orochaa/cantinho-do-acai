@@ -1,5 +1,4 @@
-import type { CartItem } from '@/domain/cart';
-import { isValidCartItem } from '@/domain/cart';
+import { type CartItem, isValidCartItem } from '@/domain/cart';
 import { visibleMenu } from '@/domain/menu';
 
 export interface CartEditIntent {

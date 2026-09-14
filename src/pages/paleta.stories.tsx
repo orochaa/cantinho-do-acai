@@ -30,7 +30,6 @@ const assertOptionLimitReached = (label: string): void => {
   }
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixture.
 function PaletaStory(props: PaletaStoryProps): React.JSX.Element {
   useEffect(() => {
     const timer = window.setTimeout(() => {

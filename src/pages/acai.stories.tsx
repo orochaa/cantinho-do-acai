@@ -42,7 +42,6 @@ const assertOptionLimitReached = (label: string): void => {
   }
 };
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook scenario fixture.
 function AcaiStory(props: AcaiStoryProps): React.JSX.Element {
   useEffect(() => {
     const timer = window.setTimeout(() => {

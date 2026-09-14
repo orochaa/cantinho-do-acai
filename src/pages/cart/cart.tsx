@@ -27,6 +27,7 @@ import { CartPickupNotice } from './components/cart-pickup-notice';
 import { CashPayment } from './components/cash-payment';
 import { ConfirmationModal } from './components/confirmation-modal';
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Checkout page coordinates the complete multi-step flow.
 export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart();
   const checkout = useCartCheckout(cart);

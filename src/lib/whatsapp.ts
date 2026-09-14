@@ -1,13 +1,13 @@
 import { companyInfo } from '@/domain/company';
 import { formatCurrency, parseCurrency } from '@/domain/format';
-import type {
-  DeliveryAddress,
-  FulfillmentMethod,
-  Order,
-  OrderItem,
-  PaymentMethod,
+import {
+  calculateOrderChange,
+  type DeliveryAddress,
+  type FulfillmentMethod,
+  type Order,
+  type OrderItem,
+  type PaymentMethod,
 } from '@/domain/order';
-import { calculateOrderChange } from '@/domain/order';
 
 export interface WhatsAppOrderInput {
   order: Order;

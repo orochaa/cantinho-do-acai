@@ -1,7 +1,6 @@
 import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
 import { act } from 'react';
-import type { Root } from 'react-dom/client';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 let activeRoot: Root | undefined;

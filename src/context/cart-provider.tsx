@@ -1,12 +1,16 @@
-import type { CartEvent, CartItem } from '@/domain/cart';
-import { cartReducer, hydrateCart } from '@/domain/cart';
+import {
+  type CartEvent,
+  type CartItem,
+  cartReducer,
+  hydrateCart,
+} from '@/domain/cart';
 import {
   CART_STORAGE_VERSION,
   createLocalStorageCartPersistence,
 } from '@/lib/cart-storage';
-import type { ReactNode } from 'react';
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,

@@ -2,8 +2,7 @@ import { CartProvider, useCart } from '@/context/cart-provider';
 import { ToastProvider } from '@/context/toast-provider';
 import { CartPage } from '@/pages/cart/cart';
 import { act } from 'react';
-import type { Root } from 'react-dom/client';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

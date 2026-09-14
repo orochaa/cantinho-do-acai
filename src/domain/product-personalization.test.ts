@@ -1,13 +1,11 @@
-import type {
-  PersonalizationMultipleGroup,
-  PersonalizationSingleGroup,
-  SelectableOption,
-} from '@/domain/product-personalization';
 import {
   createPersonalizedOrderItem,
   createProductPersonalizationState,
   getPersonalizationTotal,
+  type PersonalizationMultipleGroup,
+  type PersonalizationSingleGroup,
   productPersonalizationReducer,
+  type SelectableOption,
   validateProductPersonalization,
 } from '@/domain/product-personalization';
 

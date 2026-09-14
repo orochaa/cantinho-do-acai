@@ -1,6 +1,5 @@
 import type { ComponentProps } from 'react';
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 const buttonStyles = tv({
   base: 'flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-2 font-semibold shadow-sm transition-[background-color,border-color,box-shadow,transform] hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-purple-200 disabled:pointer-events-none disabled:shadow-none',

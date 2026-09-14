@@ -1,5 +1,4 @@
-import type { RefObject } from 'react';
-import { useEffect, useState } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 
 interface UseIntersectionObserverProps {
   rootMargin?: string;

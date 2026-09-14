@@ -1,5 +1,8 @@
-import type { OrderItem } from '@/domain/order';
-import { createOrderItem, updateOrderItemQuantity } from '@/domain/order';
+import {
+  createOrderItem,
+  type OrderItem,
+  updateOrderItemQuantity,
+} from '@/domain/order';
 
 export interface CartItem extends OrderItem {
   id: string;

@@ -2,8 +2,7 @@ import type {
   InitialSelectableOption,
   SelectableOption,
 } from '@/domain/options';
-import type { OrderItem } from '@/domain/order';
-import { createOrderItem } from '@/domain/order';
+import { createOrderItem, type OrderItem } from '@/domain/order';
 
 export type {
   InitialSelectableOption,

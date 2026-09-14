@@ -1,7 +1,6 @@
 import { Drawer } from '@/components/drawer';
 import { act, useState } from 'react';
-import type { Root } from 'react-dom/client';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let activeRoot: Root | undefined;

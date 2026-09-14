@@ -18,7 +18,6 @@ const findOrderQuantityButton = (): HTMLButtonElement | undefined =>
     'button[title="Aumentar quantidade"]',
   ) ?? undefined;
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixture.
 function PastelStory(props: PastelStoryProps): React.JSX.Element {
   useEffect(() => {
     const timer = window.setTimeout(() => {

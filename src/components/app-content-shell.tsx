@@ -1,6 +1,5 @@
 import { useCart } from '@/context/cart-provider';
-import type { ReactNode } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { CartSummary } from './cart-summary';
 import { DesktopNavigation } from './desktop-navigation';

@@ -3,8 +3,7 @@ import type {
   SelectableOption,
 } from '@/domain/options';
 import type { SingleOptionState } from '@/domain/product-personalization';
-import type { ActionDispatch } from 'react';
-import { useReducer } from 'react';
+import { type ActionDispatch, useReducer } from 'react';
 
 export type {
   InitialSelectableOption,

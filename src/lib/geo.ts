@@ -1,5 +1,4 @@
-import type { CompanyCoordinates } from '@/domain/company';
-import { companyInfo } from '@/domain/company';
+import { type CompanyCoordinates, companyInfo } from '@/domain/company';
 
 export type { CompanyCoordinates as Coordinates } from '@/domain/company';
 

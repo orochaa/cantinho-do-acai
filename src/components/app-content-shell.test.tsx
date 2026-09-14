@@ -1,19 +1,17 @@
 import { AppContentShell } from '@/components/app-content-shell';
 import { CartProvider, useCart } from '@/context/cart-provider';
 import { act, useEffect } from 'react';
-import type { Root } from 'react-dom/client';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let activeRoot: Root | undefined;
-// biome-ignore lint/style/useComponentExportOnlyModules: Test fixture component.
+
 function LocationProbe(): React.JSX.Element {
   const location = useLocation();
   return <output>{location.pathname}</output>;
 }
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Test fixture component.
 function SeedCart(): null {
   const { cart, addCartEvent } = useCart();
   useEffect(() => {
@@ -40,7 +38,6 @@ function SeedCart(): null {
   return null;
 }
 
-// biome-ignore lint/style/useComponentExportOnlyModules: Test fixture component.
 function AddCartButton(): React.JSX.Element {
   const { addCartEvent } = useCart();
   return (
