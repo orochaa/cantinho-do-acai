@@ -198,14 +198,14 @@ describe(AppContentShell.name, () => {
     expect(mobileNavigation?.className).toContain('lg:hidden');
   });
 
-  it('should autofocus search and restore trigger focus after Escape', () => {
+  it('should not autofocus search on mobile and restore trigger focus after Escape', () => {
     vi.useFakeTimers();
     renderShell();
     const trigger = findButton('Buscar');
     act(() => trigger.click());
-    const input =
-      document.querySelector<HTMLInputElement>('#menu-search-input');
-    expect(document.activeElement).toBe(input);
+    expect(document.activeElement).not.toBe(
+      document.querySelector<HTMLInputElement>('#menu-search-input'),
+    );
     const dialog = document.querySelector('dialog');
     act(() => dialog?.dispatchEvent(new Event('cancel', { cancelable: true })));
     act(() => vi.advanceTimersByTime(300));
@@ -221,7 +221,7 @@ describe(AppContentShell.name, () => {
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
     });
     expect(document.querySelector('dialog')).not.toBeNull();
-    expect(document.activeElement).toBe(
+    expect(document.activeElement).not.toBe(
       document.querySelector<HTMLInputElement>('#menu-search-input'),
     );
   });
@@ -254,6 +254,7 @@ describe(AppContentShell.name, () => {
     if (!input) {
       throw new Error('Search input not found');
     }
+    act(() => input.focus());
     act(() => setInputValue(input, 'pastel'));
     expect(input.value).toBe('pastel');
 
@@ -302,7 +303,7 @@ describe(AppContentShell.name, () => {
     expect(drawer?.className).toContain(
       'max-h-[calc(100dvh-env(safe-area-inset-top))]',
     );
-    expect(drawer?.className).toContain('min-h-[60dvh]');
+    expect(drawer?.className).not.toContain('min-h-');
     expect(drawer?.querySelector('[aria-label="Redimensionar"]')).toBeNull();
   });
 
@@ -368,6 +369,7 @@ describe(AppContentShell.name, () => {
     if (!input) {
       throw new Error('Search input not found');
     }
+    act(() => input.focus());
     act(() => setInputValue(input, 're'));
     act(() =>
       input.dispatchEvent(

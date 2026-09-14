@@ -7,7 +7,6 @@ export interface ResponsiveDialogProps {
   children: ReactNode;
   closeRef?: RefObject<(() => void) | null>;
   labelledBy: string;
-  drawerSize?: 'content' | 'medium' | 'full';
   open: boolean;
   onClose: () => void;
   onOpened?: () => void;
@@ -35,7 +34,6 @@ export function ResponsiveDialog(
     <Drawer
       closeRef={props.closeRef}
       labelledBy={props.labelledBy}
-      size={props.drawerSize}
       open={props.open}
       onClose={props.onClose}>
       {props.children}

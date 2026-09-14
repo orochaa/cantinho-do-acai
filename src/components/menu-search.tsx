@@ -57,17 +57,14 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
   const isDesktop = useMediaQuery('(min-width: 700px)');
   const navigate = useNavigate();
   const drawerCloseRef = useRef<(() => void) | null>(null);
-  const wasOpenRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     if (!props.isOpen) {
-      wasOpenRef.current = null;
       setQuery('');
       setActiveResultIndex(-1);
       return;
     }
-    if (wasOpenRef.current === null || isDesktop) {
-      wasOpenRef.current = true;
+    if (isDesktop) {
       inputRef.current?.focus();
     }
   }, [isDesktop, props.isOpen]);
@@ -258,7 +255,11 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
       labelledBy="menu-search-title"
       open={props.isOpen}
       onClose={props.onClose}
-      onOpened={() => inputRef.current?.focus()}>
+      onOpened={() => {
+        if (isDesktop) {
+          inputRef.current?.focus();
+        }
+      }}>
       {content}
     </ResponsiveDialog>
   );
