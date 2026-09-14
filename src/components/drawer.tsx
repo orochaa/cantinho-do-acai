@@ -1,3 +1,4 @@
+import { cn } from '@/lib/format';
 import { motion } from 'motion/react';
 import {
   type ReactNode,
@@ -14,6 +15,7 @@ export interface DrawerProps {
   children: ReactNode;
   closeRef?: RefObject<(() => void) | null>;
   labelledBy: string;
+  size?: 'content' | 'medium' | 'full';
   onClose: () => void;
   open: boolean;
 }
@@ -74,7 +76,14 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
         duration: closeDuration / 1000,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="fixed inset-x-0 top-auto bottom-0 m-0 box-border flex w-full max-w-none flex-col overflow-y-auto rounded-t-2xl border-0 bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-zinc-950 shadow-[0_-12px_40px_rgb(0_0_0/35%)] backdrop:bg-black/30 max-h-[calc(100dvh-env(safe-area-inset-top))]"
+      className={cn(
+        'fixed inset-x-0 top-auto bottom-0 m-0 box-border flex w-full max-w-none flex-col overflow-y-auto rounded-t-2xl border-0 bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-zinc-950 shadow-[0_-12px_40px_rgb(0_0_0/35%)] backdrop:bg-black/30 max-h-[calc(100dvh-env(safe-area-inset-top))]',
+        {
+          'min-h-[60dvh]': props.size === 'medium',
+          'min-h-[calc(100dvh-env(safe-area-inset-top))]':
+            props.size === 'full',
+        },
+      )}
       onCancel={event => {
         event.preventDefault();
         event.stopPropagation();

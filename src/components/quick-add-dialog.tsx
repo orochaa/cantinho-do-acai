@@ -177,6 +177,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
   return (
     <ResponsiveDialog
       labelledBy="quick-add-title"
+      drawerSize="medium"
       open={props.open}
       onClose={close}>
       {!!product && (
@@ -312,6 +313,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
       )}
       <ResponsiveDialog
         labelledBy="discard-changes-title"
+        drawerSize="content"
         open={props.open && isDiscardDialogOpen}
         onClose={discard}>
         <div className="flex min-h-0 flex-1 flex-col">

@@ -302,6 +302,7 @@ describe(AppContentShell.name, () => {
     expect(drawer?.className).toContain(
       'max-h-[calc(100dvh-env(safe-area-inset-top))]',
     );
+    expect(drawer?.className).toContain('min-h-[60dvh]');
     expect(drawer?.querySelector('[aria-label="Redimensionar"]')).toBeNull();
   });
 

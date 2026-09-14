@@ -296,6 +296,7 @@ export function CartPage(): React.JSX.Element {
             {!!checkout.modalOpen && <ConfirmationModal {...checkout} />}
             <ResponsiveDialog
               labelledBy="remove-cart-item-title"
+              drawerSize="content"
               open={pendingRemoval !== null}
               onClose={() => setPendingRemoval(null)}>
               <DialogHeader
