@@ -1,3 +1,4 @@
+import { AppProvider } from '@/context/app-provider';
 import { CartProvider } from '@/context/cart-provider';
 import { ToastProvider } from '@/context/toast-provider';
 import type { ReactNode } from 'react';
@@ -10,9 +11,11 @@ export interface AppShellProps {
 export function AppShell(props: AppShellProps): React.JSX.Element {
   return (
     <HelmetProvider>
-      <ToastProvider>
-        <CartProvider>{props.children}</CartProvider>
-      </ToastProvider>
+      <AppProvider>
+        <ToastProvider>
+          <CartProvider>{props.children}</CartProvider>
+        </ToastProvider>
+      </AppProvider>
     </HelmetProvider>
   );
 }

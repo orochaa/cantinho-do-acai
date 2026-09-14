@@ -23,6 +23,7 @@ interface ToastOptions {
   title?: string;
   description: string;
   action?: ToastAction;
+  desktopOnly?: boolean;
 }
 
 interface IToastContext {
@@ -31,6 +32,10 @@ interface IToastContext {
 }
 
 const ToastContext = createContext<IToastContext | undefined>(undefined);
+
+export function useOptionalToast(): IToastContext | undefined {
+  return useContext(ToastContext);
+}
 
 export function useToast(): IToastContext {
   const context = useContext(ToastContext);
@@ -97,7 +102,7 @@ export function ToastProvider(props: ToastProviderProps): React.JSX.Element {
             x: 0,
             opacity: 1,
           }}
-          className="fixed right-2 bottom-20 z-50 w-11/12 max-w-sm rounded-md bg-slate-800 p-4 text-white shadow-lg lg:right-5 lg:bottom-5">
+          className={`${toast.desktopOnly ? 'hidden md:block' : ''} fixed right-2 bottom-20 z-50 w-11/12 max-w-sm rounded-md bg-slate-800 p-4 text-white shadow-lg lg:right-5 lg:bottom-5`}>
           <div className="flex items-center gap-4">
             {toast.type === 'success' ? (
               <Check className="size-8 text-green-500" />

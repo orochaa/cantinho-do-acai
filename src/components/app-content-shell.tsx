@@ -1,3 +1,4 @@
+import { useOptionalApp } from '@/context/app-provider';
 import { useCart } from '@/context/cart-provider';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -15,6 +16,7 @@ export function AppContentShell(
 ): React.JSX.Element {
   const location = useLocation();
   const { cart, cartRevision } = useCart();
+  const app = useOptionalApp();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const searchOriginRef = useRef<HTMLButtonElement>(null);
@@ -79,7 +81,7 @@ export function AppContentShell(
       />
       <CartSummary
         cart={cart}
-        revision={cartRevision}
+        request={app?.cartSummaryRequest ?? cartRevision}
       />
       <MenuSearch
         isOpen={isSearchOpen}

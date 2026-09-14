@@ -10,7 +10,7 @@ const swipeCloseDistance = 80;
 
 export function CartSummary(props: {
   cart: ReadonlyArray<CartItem>;
-  revision: number;
+  request: number;
 }): React.JSX.Element | null {
   const location = useLocation();
   const [phase, setPhase] = useState<'visible' | 'fading' | 'hidden'>('hidden');
@@ -29,7 +29,7 @@ export function CartSummary(props: {
   const total = props.cart.reduce((sum, item) => sum + item.total, 0);
 
   useEffect(() => {
-    if (props.revision === 0) {
+    if (props.request === 0) {
       return;
     }
 
@@ -72,7 +72,7 @@ export function CartSummary(props: {
         window.clearTimeout(dismissTimer.current);
       }
     };
-  }, [props.revision]);
+  }, [props.request]);
 
   if (location.pathname === '/cart' || phase === 'hidden') {
     return null;
