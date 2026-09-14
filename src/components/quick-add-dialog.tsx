@@ -8,6 +8,7 @@ import { Button } from './button';
 import { DialogHeader } from './dialog-header';
 import { QuantityStepper } from './quantity-stepper';
 import { ResponsiveDialog } from './responsive-dialog';
+import { Textarea } from './textarea';
 
 export interface QuickAddOption {
   name: string;
@@ -258,9 +259,9 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
                 className="mt-4 block text-sm font-medium text-purple-950"
                 htmlFor="quick-add-observation">
                 Observação (opcional)
-                <textarea
+                <Textarea
                   id="quick-add-observation"
-                  className="mt-1 min-h-20 w-full rounded-lg border border-purple-200 bg-white p-2 text-base font-normal"
+                  className="mt-1 text-base font-normal"
                   placeholder={props.observationPlaceholder}
                   value={observation}
                   onChange={event => setObservation(event.target.value)}

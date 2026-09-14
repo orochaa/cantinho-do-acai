@@ -3,6 +3,7 @@ import { Container } from '@/components/container';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
+import { Textarea } from '@/components/textarea';
 import { useCart } from '@/context/cart-provider';
 import { premiumCategory } from '@/domain/categories/premium';
 import { formatCurrency } from '@/domain/format';
@@ -98,10 +99,9 @@ export function PremiumPage(): React.JSX.Element {
               className="m-1 text-xl font-bold text-white">
               Observação
             </label>
-            <textarea
+            <Textarea
               id="observation"
               rows={4}
-              className="font-lato rounded-sm bg-white p-2 outline-hidden"
               value={observation}
               onChange={e => setObservation(e.target.value)}
               placeholder="Exemplo: Favor retirar..."
