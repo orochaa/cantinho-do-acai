@@ -1,15 +1,17 @@
+import { bebidaCategory } from '@/domain/categories/bebida';
+import { paletaCategory } from '@/domain/categories/paleta';
 import { getMenuEntry, getProduct, menu, visibleMenu } from '@/domain/menu';
 
 describe('menu registry', () => {
   it('should expose route metadata for every category', () => {
     expect(menu).toHaveLength(8);
     expect(menu.map(entry => entry.path)).toEqual([
-      'pastel/:slang',
       'acai/:slang',
       'premium/:slang',
-      'paleta/:slang',
       'felicidade/:slang',
+      'paleta/:slang',
       'geladinho/:slang',
+      'pastel/:slang',
       'salgados/:slang',
       'bebidas/:slang',
     ]);
@@ -34,5 +36,16 @@ describe('menu registry', () => {
     );
     expect(getProduct('premium', 'fini-fest')).toBeUndefined();
     expect(getProduct('unknown', 'anything')).toBeUndefined();
+  });
+
+  it('should expose first-class quick-add products for paletas and bebidas', () => {
+    expect(paletaCategory.products.map(product => product.name)).toContain(
+      'Paleta de Ninho com Nutella',
+    );
+    expect(bebidaCategory.products.map(product => product.name)).toContain(
+      'Sprite 600ml',
+    );
+    expect(paletaCategory.quickAdd).toBe(true);
+    expect(bebidaCategory.quickAdd).toBe(true);
   });
 });

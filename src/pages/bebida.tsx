@@ -1,46 +1,17 @@
 import { Banner } from '@/components/banner';
-import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { bebidaCategory } from '@/domain/categories/bebida';
-import type {
-  MultipleOptionsEvent,
-  PersonalizationMultipleGroup,
-  ProductPersonalizationEvent,
-} from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-
-interface BebidaPersonalizationGroups {
-  flavors: PersonalizationMultipleGroup;
-}
 
 export function BebidaPage(): React.JSX.Element {
   const bebida = useProduct(bebidaCategory);
 
   const { addCartEvent } = useCart();
 
-  const personalization =
-    useProductPersonalization<BebidaPersonalizationGroups>(
-      { ...bebida, price: 0 },
-      {
-        flavors: {
-          type: 'multiple',
-          options: bebidaCategory.flavors,
-          countLimit: 20,
-          required: 'Favor escolher sabores',
-        },
-      },
-    );
-
-  const dispatchFlavorEvent = (event: MultipleOptionsEvent): void => {
-    personalization.dispatch({
-      type: event.type,
-      group: 'flavors',
-      option: event.option,
-    } as ProductPersonalizationEvent<BebidaPersonalizationGroups>);
-  };
+  const personalization = useProductPersonalization(bebida, {});
 
   return (
     <div>
@@ -67,13 +38,6 @@ export function BebidaPage(): React.JSX.Element {
                 : `Serve até ${bebida.people} pessoas`}
             </span>
           </div>
-        </div>
-        <div className="flex flex-col gap-8">
-          <MultipleOptionsSelector
-            dispatchEvent={dispatchFlavorEvent}
-            ctx={personalization.groups.flavors}
-            title="Sabores:"
-          />
         </div>
         <OrderButton
           product={bebida}

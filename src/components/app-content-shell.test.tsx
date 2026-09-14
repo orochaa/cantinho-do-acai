@@ -7,8 +7,6 @@ import { MemoryRouter, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let activeRoot: Root | undefined;
-const drawerHeightPattern = /height: ([\d.]+)px/;
-
 // biome-ignore lint/style/useComponentExportOnlyModules: Test fixture component.
 function LocationProbe(): React.JSX.Element {
   const location = useLocation();
@@ -270,9 +268,7 @@ describe(AppContentShell.name, () => {
     act(() => findButton('Buscar').click());
     const dialog = document.querySelector('dialog');
     expect(dialog).not.toBeNull();
-    act(() =>
-      dialog?.querySelector<HTMLButtonElement>('.cursor-default')?.click(),
-    );
+    act(() => dialog?.click());
     act(() => vi.advanceTimersByTime(300));
     expect(document.querySelector('dialog')).toBeNull();
     vi.useRealTimers();
@@ -291,74 +287,27 @@ describe(AppContentShell.name, () => {
     ).toBe('Açaí');
   });
 
-  it('should resize the fixed search panel without depending on result count', () => {
+  it('should use a content-sized search drawer with a safe viewport limit', () => {
     renderShell();
     act(() => findButton('Buscar').click());
-    const panel = document.querySelector('dialog section');
-    expect(
-      Number.parseFloat(
-        panel?.getAttribute('style')?.match(drawerHeightPattern)?.[1] ?? '0',
-      ),
-    ).toBeCloseTo(window.innerHeight * 0.6);
-    const handle = findButton('Redimensionar');
-    const pointerDown = new Event('pointerdown', { bubbles: true });
-    Object.defineProperty(pointerDown, 'clientY', { value: 300 });
-    const pointerUp = new Event('pointerup', { bubbles: true });
-    Object.defineProperty(pointerUp, 'clientY', { value: 400 });
-    act(() => {
-      handle.dispatchEvent(pointerDown);
-      handle.dispatchEvent(pointerUp);
-    });
-    expect(
-      Number.parseFloat(
-        panel?.getAttribute('style')?.match(drawerHeightPattern)?.[1] ?? '0',
-      ),
-    ).toBeCloseTo(window.innerHeight * 0.4);
-    const thirdPointerDown = new Event('pointerdown', { bubbles: true });
-    Object.defineProperty(thirdPointerDown, 'clientY', { value: 400 });
-    const thirdPointerUp = new Event('pointerup', { bubbles: true });
-    Object.defineProperty(thirdPointerUp, 'clientY', { value: 200 });
-    act(() => {
-      handle.dispatchEvent(thirdPointerDown);
-      handle.dispatchEvent(thirdPointerUp);
-    });
-    expect(
-      Number.parseFloat(
-        panel?.getAttribute('style')?.match(drawerHeightPattern)?.[1] ?? '0',
-      ),
-    ).toBeCloseTo(window.innerHeight * 0.6);
-    const secondPointerDown = new Event('pointerdown', { bubbles: true });
-    Object.defineProperty(secondPointerDown, 'clientY', { value: 400 });
-    const secondPointerUp = new Event('pointerup', { bubbles: true });
-    Object.defineProperty(secondPointerUp, 'clientY', { value: 200 });
-    act(() => {
-      handle.dispatchEvent(secondPointerDown);
-      handle.dispatchEvent(secondPointerUp);
-    });
-    expect(
-      Number.parseFloat(
-        panel?.getAttribute('style')?.match(drawerHeightPattern)?.[1] ?? '0',
-      ),
-    ).toBeCloseTo(window.innerHeight);
+    const drawer = document.querySelector('dialog');
+    expect(drawer?.className).toContain(
+      'max-h-[calc(100svh-env(safe-area-inset-top))]',
+    );
+    expect(drawer?.querySelector('[aria-label="Redimensionar"]')).toBeNull();
   });
 
-  it('should close the drawer when swiping down below the small step', () => {
+  it('should close the drawer when it receives a native cancel event', () => {
     vi.useFakeTimers();
     renderShell();
     act(() => findButton('Buscar').click());
-    const handle = findButton('Redimensionar');
-    const swipe = (start: number, end: number): void => {
-      const down = new Event('pointerdown', { bubbles: true });
-      Object.defineProperty(down, 'clientY', { value: start });
-      const up = new Event('pointerup', { bubbles: true });
-      Object.defineProperty(up, 'clientY', { value: end });
-      act(() => {
-        handle.dispatchEvent(down);
-        handle.dispatchEvent(up);
-      });
-    };
-    swipe(100, 200);
-    swipe(100, 200);
+    act(() =>
+      document
+        .querySelector('dialog')
+        ?.dispatchEvent(
+          new Event('cancel', { bubbles: true, cancelable: true }),
+        ),
+    );
     act(() => vi.advanceTimersByTime(300));
     expect(document.querySelector('dialog')).toBeNull();
     vi.useRealTimers();
@@ -393,13 +342,13 @@ describe(AppContentShell.name, () => {
     if (!input) {
       throw new Error('Search input not found');
     }
-    act(() => setInputValue(input, 're'));
+    act(() => setInputValue(input, 'coc'));
     const results = Array.from(
       document.querySelectorAll<HTMLAnchorElement>(
         '[data-search-result-index]',
       ),
     );
-    expect(results.at(-1)?.textContent).toContain('Refrigerantes');
+    expect(results.at(-1)?.textContent).toContain('Coca');
   });
 
   it('should highlight a result without moving focus from the input', () => {

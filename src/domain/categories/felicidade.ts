@@ -2,6 +2,7 @@ import { slang } from '@/domain/format';
 
 export const felicidadeCategory: Category<Product> = {
   slang: 'felicidade',
+  quickAdd: true,
   description:
     'Nossos copos da felicidade são uma explosão de sabores, com combinações irresistíveis de cremes caseiros, frutas e chocolates que vão te surpreender a cada colherada.',
   products: [

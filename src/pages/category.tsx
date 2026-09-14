@@ -1,10 +1,30 @@
 import { MenuCard } from '@/components/menu-card';
+import type { QuickAddDialogProps } from '@/components/quick-add-dialog';
 import { Seo } from '@/components/seo';
 import { visibleMenu } from '@/domain/menu';
+import { BebidaQuickForm } from '@/pages/bebida.quick';
+import { FelicidadeQuickForm } from '@/pages/felicidade.quick';
+import { GeladinhoQuickForm } from '@/pages/geladinho.quick';
+import { PaletaQuickForm } from '@/pages/paleta.quick';
+import { PastelQuickForm } from '@/pages/pastel.quick';
+import { PremiumQuickForm } from '@/pages/premium.quick';
+import { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
+
+type CategoryQuickForm = (props: QuickAddDialogProps) => React.JSX.Element;
+
+const quickForms: Readonly<Partial<Record<string, CategoryQuickForm>>> = {
+  bebidas: BebidaQuickForm,
+  felicidade: FelicidadeQuickForm,
+  geladinho: GeladinhoQuickForm,
+  paleta: PaletaQuickForm,
+  pastel: PastelQuickForm,
+  premium: PremiumQuickForm,
+};
 
 export function CategoryPage(): React.JSX.Element {
   const { category: categoryRoute } = useParams();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const entry = visibleMenu.find(item => item.route === categoryRoute);
 
   if (!entry) {
@@ -15,6 +35,8 @@ export function CategoryPage(): React.JSX.Element {
       />
     );
   }
+
+  const QuickForm = quickForms[entry.route];
 
   return (
     <>
@@ -35,13 +57,23 @@ export function CategoryPage(): React.JSX.Element {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           {entry.products.map(product => (
             <MenuCard
-              href={`/${entry.route}/${product.slang}`}
+              href={QuickForm ? undefined : `/${entry.route}/${product.slang}`}
               key={product.slang}
               product={product}
+              onClick={
+                QuickForm ? () => setSelectedProduct(product) : undefined
+              }
             />
           ))}
         </div>
       </div>
+      {!!QuickForm && (
+        <QuickForm
+          open={selectedProduct !== null}
+          onClose={() => setSelectedProduct(null)}
+          product={selectedProduct}
+        />
+      )}
     </>
   );
 }

@@ -5,6 +5,7 @@ type Category<
   slang: string;
   products: Array<TProduct>;
   description: string;
+  quickAdd?: boolean;
   disabled?: boolean;
 } & TExtras;
 

@@ -5,6 +5,7 @@ export const pastelCategory: Category<
   { size: Array<{ name: string; price: number }> }
 > = {
   slang: 'pastel',
+  quickAdd: true,
   description:
     'Pastéis crocantes e recheados, com opções doces e salgadas para qualquer momento do dia.',
   products: [

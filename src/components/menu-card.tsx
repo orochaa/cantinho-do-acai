@@ -2,16 +2,14 @@ import { formatCurrency } from '@/domain/format';
 import { Link } from 'react-router';
 
 export interface MenuCardProps {
-  href: string;
+  href?: string;
   product: Product;
+  onClick?: () => void;
 }
 
 export function MenuCard(props: MenuCardProps): React.JSX.Element {
-  return (
-    <Link
-      className="group h-87.5 rounded-xl border-2 border-violet-500/90 bg-white/10 p-2 transition hover:-translate-y-1 hover:border-amber-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
-      title={`Selecionar ${props.product.name}`}
-      to={props.href}>
+  const content = (
+    <>
       <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
         <img
           src={props.product.img}
@@ -43,6 +41,25 @@ export function MenuCard(props: MenuCardProps): React.JSX.Element {
           </div>
         </div>
       </div>
+    </>
+  );
+  const className =
+    'group block h-87.5 rounded-xl border-2 border-violet-500/90 bg-white/10 p-2 text-left transition hover:-translate-y-1 hover:border-amber-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300';
+
+  return props.onClick ? (
+    <button
+      type="button"
+      className={className}
+      title={`Selecionar ${props.product.name}`}
+      onClick={props.onClick}>
+      {content}
+    </button>
+  ) : (
+    <Link
+      className={className}
+      title={`Selecionar ${props.product.name}`}
+      to={props.href ?? '#'}>
+      {content}
     </Link>
   );
 }

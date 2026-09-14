@@ -1,24 +1,32 @@
-export const bebidaCategory: Category<
-  Product,
-  { flavors: Array<{ name: string; price: number }> }
-> = {
+import { slang } from '@/domain/format';
+
+export const bebidaCategory: Category<Product> = {
   slang: 'bebidas',
+  quickAdd: true,
   description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa.',
   products: [
     {
-      img: '/img/bebidas/bebidas.png',
-      name: 'Refrigerantes',
-      fullPrice: 10,
-      price: 10,
-      people: 1,
-      slang: 'refrigerantes',
-      description: 'Bebidas variadas para acompanhar seu lanche ou sobremesa',
+      img: '/img/bebidas/coca-600.png',
+      name: 'Coca-Cola 600ml',
     },
-  ],
-  flavors: [
-    { name: 'Coca-Cola 600ml', price: 10 },
-    { name: 'Coca-Cola Zero 600ml', price: 10 },
-    { name: 'Guaraná 600ml', price: 10 },
-    { name: 'Sprite 600ml', price: 10 },
-  ],
+    {
+      img: '/img/bebidas/coca-zero-600.avif',
+      name: 'Coca-Cola Zero 600ml',
+    },
+    {
+      img: '/img/bebidas/guarana-600.avif',
+      name: 'Guaraná 600ml',
+    },
+    {
+      img: '/img/bebidas/sprite-600.avif',
+      name: 'Sprite 600ml',
+    },
+  ].map(product => ({
+    ...product,
+    fullPrice: 10,
+    price: 10,
+    people: 1,
+    slang: slang(product.name),
+    description: 'Bebida gelada para acompanhar seu lanche ou sobremesa.',
+  })),
 };

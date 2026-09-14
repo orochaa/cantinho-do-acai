@@ -6,6 +6,7 @@ export type Premium = Product & {
 
 export const premiumCategory: Category<Premium> = {
   slang: 'premium',
+  quickAdd: true,
   description:
     'Nossos copos premium são criações exclusivas, com ingredientes selecionados e combinações que vão além do comum.',
   products: [

@@ -1,20 +1,10 @@
 import { Banner } from '@/components/banner';
-import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { geladinhoCategory } from '@/domain/categories/geladinho';
-import type {
-  MultipleOptionsEvent,
-  PersonalizationMultipleGroup,
-  ProductPersonalizationEvent,
-} from '@/domain/product-personalization';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-
-interface GeladinhoPersonalizationGroups {
-  flavors: PersonalizationMultipleGroup;
-}
 
 export function GeladinhoPage(): React.JSX.Element {
   const geladinho = useProduct(geladinhoCategory);
@@ -22,15 +12,7 @@ export function GeladinhoPage(): React.JSX.Element {
   const { addCartEvent } = useCart();
 
   const orderProduct = { ...geladinho, price: 0 };
-  const personalization =
-    useProductPersonalization<GeladinhoPersonalizationGroups>(orderProduct, {
-      flavors: {
-        type: 'multiple',
-        options: geladinhoCategory.flavors,
-        countLimit: 20,
-        required: 'Favor escolher sabores',
-      },
-    });
+  const personalization = useProductPersonalization(orderProduct, {});
 
   return (
     <div>
@@ -61,19 +43,7 @@ export function GeladinhoPage(): React.JSX.Element {
             </span>
           </div>
         </div>
-        <div className="flex flex-col gap-8">
-          <MultipleOptionsSelector
-            dispatchEvent={(event: MultipleOptionsEvent) =>
-              personalization.dispatch({
-                type: event.type,
-                group: 'flavors',
-                option: event.option,
-              } as ProductPersonalizationEvent<GeladinhoPersonalizationGroups>)
-            }
-            ctx={personalization.groups.flavors}
-            title="Sabores:"
-          />
-        </div>
+
         <OrderButton
           product={geladinho}
           totalPrice={personalization.total}
