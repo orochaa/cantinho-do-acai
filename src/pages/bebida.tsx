@@ -3,6 +3,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { bebidaCategory } from '@/domain/categories/bebida';
+import { singularOrPlural } from '@/domain/format';
 import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
@@ -35,9 +36,7 @@ export function BebidaPage(): React.JSX.Element {
               {bebida.description}
             </p>
             <span>
-              {bebida.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${bebida.people} pessoas`}
+              {`Serve até ${singularOrPlural(bebida.people, 'pessoa', 'pessoas')}`}
             </span>
           </div>
         </div>

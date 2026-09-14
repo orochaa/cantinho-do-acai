@@ -1,5 +1,5 @@
 import type { CartItem } from '@/domain/cart';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 
 export function CartItems(props: {
@@ -17,7 +17,7 @@ export function CartItems(props: {
             <div>
               <h3 className="font-bold text-zinc-900">{item.product.name}</h3>
               <p className="text-sm text-zinc-500">
-                {item.count} {item.count === 1 ? 'unidade' : 'unidades'}
+                {singularOrPlural(item.count, 'unidade', 'unidades')}
               </p>
             </div>
             <div className="flex items-center gap-1">

@@ -5,6 +5,7 @@ import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { pastelCategory } from '@/domain/categories/pastel';
+import { singularOrPlural } from '@/domain/format';
 import type {
   PersonalizationSingleGroup,
   SelectableOption,
@@ -61,9 +62,7 @@ export function PastelPage(): React.JSX.Element {
               <p>Contém aproximadamente {pastel.quantity}g</p>
             )}
             <span>
-              {pastel.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${pastel.people} pessoas`}
+              {`Serve até ${singularOrPlural(pastel.people, 'pessoa', 'pessoas')}`}
             </span>
           </div>
         </div>

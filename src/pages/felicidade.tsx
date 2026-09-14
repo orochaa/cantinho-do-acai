@@ -4,7 +4,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { felicidadeCategory } from '@/domain/categories/felicidade';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
@@ -43,9 +43,7 @@ export function FelicidadePage(): React.JSX.Element {
             <Description>{copo.description}</Description>
             {!!copo.quantity && <p>Contém aproximadamente {copo.quantity}g</p>}
             <span>
-              {copo.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${copo.people} pessoas`}
+              {`Serve até ${singularOrPlural(copo.people, 'pessoa', 'pessoas')}`}
             </span>
             <span className="font-poppins text-xl font-medium">
               {formatCurrency(copo.price)}

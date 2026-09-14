@@ -7,7 +7,7 @@ import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import type { CartItem } from '@/domain/cart';
 import { CheckoutPaymentEnum } from '@/domain/checkout-state';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { useCartCheckout } from '@/hooks/use-cart-checkout';
 import { getProductPath } from '@/lib/navigation';
 import {
@@ -269,7 +269,11 @@ export function CartPage(): React.JSX.Element {
                     </h2>
                   </div>
                   <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-900">
-                    {cart.reduce((total, item) => total + item.count, 0)} itens
+                    {singularOrPlural(
+                      cart.reduce((total, item) => total + item.count, 0),
+                      'item',
+                      'itens',
+                    )}
                   </span>
                 </div>
                 <CartItems

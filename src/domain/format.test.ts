@@ -1,4 +1,15 @@
-import { parseCurrency, slang } from '@/domain/format';
+import { parseCurrency, singularOrPlural, slang } from '@/domain/format';
+
+describe(singularOrPlural.name, () => {
+  it('should use the singular form for one', () => {
+    expect(singularOrPlural(1, 'item', 'itens')).toBe('1 item');
+  });
+
+  it('should use the plural form for every other count', () => {
+    expect(singularOrPlural(0, 'item', 'itens')).toBe('0 itens');
+    expect(singularOrPlural(2, 'item', 'itens')).toBe('2 itens');
+  });
+});
 
 describe('domain formatting helpers', () => {
   it('should create URL-safe slugs from accented names and whitespace', () => {

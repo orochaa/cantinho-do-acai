@@ -16,6 +16,14 @@ export function formatCurrency(value: string | number): string {
   });
 }
 
+export function singularOrPlural(
+  count: number,
+  singular: string,
+  plural: string,
+): string {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
 export function parseCurrency(value: string): number {
   return Number.parseFloat(
     value.replace(',', '.').replaceAll(/[^\d.-]/g, '') || '0',

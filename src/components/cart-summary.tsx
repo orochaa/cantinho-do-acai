@@ -1,5 +1,5 @@
 import type { CartItem } from '@/domain/cart';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
@@ -137,8 +137,7 @@ export function CartSummary(props: {
         pointerStartY.current = null;
       }}>
       <span className="text-sm font-semibold">
-        {itemCount} {itemCount === 1 ? 'item' : 'itens'} ·{' '}
-        {formatCurrency(total)}
+        {singularOrPlural(itemCount, 'item', 'itens')} · {formatCurrency(total)}
       </span>
       <Link
         className="min-h-11 rounded-lg bg-purple-700 px-4 py-3 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"

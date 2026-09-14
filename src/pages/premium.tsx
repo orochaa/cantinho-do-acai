@@ -6,7 +6,7 @@ import { SingleOptionSelector } from '@/components/single-option-selector';
 import { Textarea } from '@/components/textarea';
 import { useCart } from '@/context/cart-provider';
 import { premiumCategory } from '@/domain/categories/premium';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import type {
   PersonalizationSingleGroup,
   SelectableOption,
@@ -68,9 +68,7 @@ export function PremiumPage(): React.JSX.Element {
             </p>
             {!!copo.quantity && <p>Contém aproximadamente {copo.quantity}g</p>}
             <span>
-              {copo.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${copo.people} pessoas`}
+              {`Serve até ${singularOrPlural(copo.people, 'pessoa', 'pessoas')}`}
             </span>
             <span className="font-poppins text-xl font-medium">
               {formatCurrency(copo.price)}

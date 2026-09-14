@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { Link } from 'react-router';
 
 export interface MenuCardProps {
@@ -23,9 +23,7 @@ export function MenuCard(props: MenuCardProps): React.JSX.Element {
               {props.product.name}
             </h2>
             <p className="text-sm text-black md:text-base">
-              {props.product.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${props.product.people} pessoas`}
+              {`Serve até ${singularOrPlural(props.product.people, 'pessoa', 'pessoas')}`}
               {props.product.quantity ? ` · ${props.product.quantity}g` : ''}
             </p>
           </div>

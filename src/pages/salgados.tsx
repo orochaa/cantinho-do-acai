@@ -5,7 +5,7 @@ import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { salgadosCategory } from '@/domain/categories/salgados';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
   PersonalizationMultipleGroup,
@@ -70,9 +70,7 @@ export function SalgadosPage(): React.JSX.Element {
               <p>Contém aproximadamente {salgado.quantity}g</p>
             )}
             <span>
-              {salgado.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${salgado.people} pessoas`}
+              {`Serve até ${singularOrPlural(salgado.people, 'pessoa', 'pessoas')}`}
             </span>
             <span className="font-poppins text-xl font-medium">
               {formatCurrency(salgado.price)}

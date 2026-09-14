@@ -5,7 +5,7 @@ import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { acaiCategory } from '@/domain/categories/acai';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
   PersonalizationMultipleGroup,
@@ -74,9 +74,7 @@ export function AcaiPage(): React.JSX.Element {
             </p>
             {!!acai.quantity && <p>Contém aproximadamente {acai.quantity}g</p>}
             <span>
-              {acai.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${acai.people} pessoas`}
+              {`Serve até ${singularOrPlural(acai.people, 'pessoa', 'pessoas')}`}
             </span>
             <span className="font-poppins text-xl font-medium">
               {formatCurrency(acai.price)}

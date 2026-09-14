@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
   MultipleOptionsState,
@@ -24,7 +24,9 @@ export function MultipleOptionsSelector<TName extends string>(
     <Container>
       <div className="m-1 text-white">
         <h2 className="text-xl font-bold">{title}</h2>
-        <p className="text-sm">Escolha até {ctx.countLimit} opções</p>
+        <p className="text-sm">
+          Escolha até {singularOrPlural(ctx.countLimit, 'opção', 'opções')}
+        </p>
       </div>
 
       <div className="grid auto-rows-[1fr] grid-cols-1 gap-2">

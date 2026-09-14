@@ -3,6 +3,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { geladinhoCategory } from '@/domain/categories/geladinho';
+import { singularOrPlural } from '@/domain/format';
 import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
@@ -43,9 +44,7 @@ export function GeladinhoPage(): React.JSX.Element {
               <p>Contém aproximadamente {geladinho.quantity}g</p>
             )}
             <span>
-              {geladinho.people === 1
-                ? 'Serve uma pessoa'
-                : `Serve até ${geladinho.people} pessoas`}
+              {`Serve até ${singularOrPlural(geladinho.people, 'pessoa', 'pessoas')}`}
             </span>
           </div>
         </div>
