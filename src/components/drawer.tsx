@@ -86,7 +86,7 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
           requestClose();
         }
       }}>
-      <div className="box-border flex h-full min-h-0 max-h-[calc(100svh-env(safe-area-inset-top))] flex-col overflow-y-auto overscroll-contain p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      <div className="box-border flex min-h-0 max-h-[calc(100svh-env(safe-area-inset-top))] flex-col overflow-y-auto overscroll-contain p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         {props.children}
       </div>
     </motion.dialog>
