@@ -23,7 +23,7 @@ export function CartItems(props: {
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                className="rounded-lg p-2 text-purple-800 hover:bg-purple-100"
+                className="rounded-lg p-2 text-purple-800 hover:bg-purple-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
                 aria-label={`Editar ${item.product.name}`}
                 title="Editar item"
                 onClick={() => props.onEdit(item)}>
@@ -31,7 +31,7 @@ export function CartItems(props: {
               </button>
               <button
                 type="button"
-                className="rounded-lg p-2 text-red-700 hover:bg-red-100"
+                className="rounded-lg p-2 text-red-700 hover:bg-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
                 aria-label={`Remover ${item.product.name}`}
                 title="Remover item"
                 onClick={() => props.onRemove(item)}>

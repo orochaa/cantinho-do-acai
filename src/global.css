@@ -20,6 +20,11 @@ button:disabled {
   cursor: default;
 }
 
+:where(button, a):focus-visible {
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
 * {
   font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;

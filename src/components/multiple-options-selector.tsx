@@ -34,6 +34,7 @@ export function MultipleOptionsSelector<TName extends string>(
             className={`flex items-center rounded-xl border bg-white shadow-sm transition ${option.count > 0 ? 'border-purple-300 bg-purple-50/50' : 'border-zinc-200 hover:border-purple-200 hover:shadow-md'}`}>
             <button
               type="button"
+              tabIndex={-1}
               className="flex min-h-14 h-full grow items-center gap-2 p-3 text-left"
               onClick={() => dispatchEvent({ type: 'add', option })}>
               {!!option.img && (
@@ -93,7 +94,7 @@ function AddOptionButton<TName extends string>(
   return (
     <button
       type="button"
-      className="flex min-h-11 min-w-11 h-full items-center flex-1 justify-end rounded-lg py-3 pr-5.75 pl-0 text-purple-700 disabled:text-zinc-400"
+      className="flex min-h-11 min-w-11 h-full items-center flex-1 justify-end rounded-lg py-3 pr-5.75 pl-0 text-purple-700 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400"
       aria-label={`Adicionar ${option.name}`}
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}

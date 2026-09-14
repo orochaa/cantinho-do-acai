@@ -31,7 +31,7 @@ export function CartDeliveryAddress(
             href="https://buscacepinter.correios.com.br/app/endereco/index.php"
             target="_blank"
             rel="noreferrer"
-            className="text-sm text-blue-500 hover:underline">
+            className="rounded text-sm text-blue-500 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
             Não sabe seu CEP?
           </a>
         </div>

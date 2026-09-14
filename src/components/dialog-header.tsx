@@ -18,7 +18,7 @@ export function DialogHeader(props: DialogHeaderProps): React.JSX.Element {
       {!!props.onClose && (
         <button
           aria-label={props.closeLabel ?? 'Fechar'}
-          className="grid size-11 shrink-0 place-items-center rounded-full text-purple-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
+          className="grid size-11 shrink-0 place-items-center rounded-lg text-purple-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
           type="button"
           onClick={props.onClose}>
           <X

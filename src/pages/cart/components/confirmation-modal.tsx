@@ -83,7 +83,7 @@ export function ConfirmationModal(
           </h2>
           <button
             type="button"
-            className="min-h-11 min-w-11 rounded-sm p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200"
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-sm p-0.5 text-gray-600 hover:text-zinc-800 active:bg-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
             aria-label="Fechar modal"
             title="Fechar modal"
             onClick={() => setModalOpen(false)}>

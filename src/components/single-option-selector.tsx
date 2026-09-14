@@ -39,6 +39,7 @@ export function SingleOptionSelector<
             className="flex items-center rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:border-purple-200 hover:shadow-md">
             <button
               type="button"
+              tabIndex={-1}
               className="flex min-h-14 grow items-center gap-3 p-3 text-left"
               onClick={() => onSelectionChange(option)}>
               {!!option.img && (
@@ -62,12 +63,10 @@ export function SingleOptionSelector<
               </div>
             </button>
 
-            <div className="h-14">
-              <ToggleOptionButton
-                onSelectionChange={onSelectionChange}
-                option={option}
-              />
-            </div>
+            <ToggleOptionButton
+              onSelectionChange={onSelectionChange}
+              option={option}
+            />
           </div>
         ))}
       </div>
@@ -101,7 +100,7 @@ function ToggleOptionButton<
       aria-label={`${option.isSelected ? 'Selecionado' : 'Selecionar'} ${option.name}`}
       aria-pressed={option.isSelected}
       title={`${option.isSelected ? 'Selecionado' : 'Selecionar'}`}
-      className="flex min-h-11 min-w-11 h-full items-center justify-center p-3 pl-0"
+      className="flex min-h-11 min-w-11 h-full items-center justify-center p-3 rounded-lg pl-0 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
       disabled={option.isSelected}
       onClick={() => onSelectionChange(option)}>
       <span

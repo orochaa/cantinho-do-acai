@@ -214,7 +214,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
                     key={item.name}
                     type="button"
                     aria-pressed={optionIndexes[currentOptionStep.id] === index}
-                    className={`min-h-16 rounded-lg border px-3 text-left ${optionIndexes[currentOptionStep.id] === index ? 'border-purple-700 bg-purple-100' : 'border-zinc-300'}`}
+                    className={`min-h-16 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 rounded-lg border px-3 text-left ${optionIndexes[currentOptionStep.id] === index ? 'border-purple-700 bg-purple-100' : 'border-zinc-300'}`}
                     onClick={() =>
                       setOptionIndexes(current => ({
                         ...current,

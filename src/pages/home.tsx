@@ -4,7 +4,7 @@ import { companyInfo } from '@/domain/company';
 import { visibleMenu } from '@/domain/menu';
 
 const socialLinkClassName =
-  'grid size-11 place-items-center rounded-xl border border-white/35 bg-white/10 text-white transition hover:border-amber-300 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300';
+  'grid size-11 place-items-center rounded-xl border border-white/35 bg-white/10 text-white transition hover:border-amber-300 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
 
 export function HomePage(): React.JSX.Element {
   return (

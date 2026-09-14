@@ -15,6 +15,7 @@ export function Description(props: DescriptionProps): React.JSX.Element {
   return (
     <button
       type="button"
+      className="rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
       onClick={handleToggle}>
       <p
         className={`${isExpanded ? 'line-clamp-none' : 'line-clamp-5'} text-left text-pretty whitespace-pre-line`}>

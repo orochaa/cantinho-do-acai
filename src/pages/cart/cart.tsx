@@ -85,9 +85,14 @@ export function CartPage(): React.JSX.Element {
     <section className="overflow-hidden rounded-2xl border border-white/15 bg-white shadow-lg shadow-purple-950/10">
       <button
         type="button"
-        className="flex w-full items-center gap-3 p-4 text-left"
+        className="flex w-full items-center gap-3 border border-transparent p-4 text-left transition-colors focus:outline-none focus-visible:border-purple-700 focus-visible:bg-purple-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
         aria-expanded={activeStep === props.step}
-        onClick={() => setActiveStep(props.step)}>
+        aria-controls={`cart-step-content-${props.step}`}
+        onClick={() =>
+          setActiveStep(currentStep =>
+            currentStep === props.step ? 0 : props.step,
+          )
+        }>
         <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-purple-100 text-purple-800">
           {isStepComplete(props.step) && activeStep !== props.step ? (
             <Check className="size-5" />
@@ -109,6 +114,7 @@ export function CartPage(): React.JSX.Element {
         />
       </button>
       <div
+        id={`cart-step-content-${props.step}`}
         className={`border-t border-zinc-100 p-4 ${activeStep === props.step ? '' : 'hidden'}`}>
         {props.content}
         {props.step < 4 && (
@@ -181,7 +187,7 @@ export function CartPage(): React.JSX.Element {
                         />
                         <button
                           type="button"
-                          className="self-start text-sm text-purple-800 underline"
+                          className="self-start rounded text-sm text-purple-800 underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
                           onClick={checkout.forgetSavedDetails}>
                           Esquecer dados salvos
                         </button>

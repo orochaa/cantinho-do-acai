@@ -44,7 +44,7 @@ export function MenuCard(props: MenuCardProps): React.JSX.Element {
     </>
   );
   const className =
-    'group block h-87.5 rounded-xl border-2 border-violet-500/90 bg-white/10 p-2 text-left transition hover:-translate-y-1 hover:border-amber-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300';
+    'group block h-87.5 rounded-xl border-2 border-violet-500/90 bg-white/10 p-2 text-left transition hover:-translate-y-1 hover:border-amber-400 focus-visible:border-amber-300';
 
   return props.onClick ? (
     <button

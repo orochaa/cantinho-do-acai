@@ -41,7 +41,7 @@ export function QuantityStepper(
       )}>
       <button
         type="button"
-        className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-purple-700 disabled:text-zinc-400"
+        className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400"
         aria-label={decreaseLabel}
         title={decreaseTitle}
         disabled={decreaseDisabled}
@@ -55,7 +55,7 @@ export function QuantityStepper(
       </span>
       <button
         type="button"
-        className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-purple-700 disabled:text-zinc-400"
+        className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400"
         aria-label={increaseLabel}
         title={increaseTitle}
         disabled={increaseDisabled}

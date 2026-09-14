@@ -12,7 +12,7 @@ export function CategoryCard(props: CategoryCardProps): React.JSX.Element {
   return (
     <Link
       aria-label={`Ver categoria ${props.name}`}
-      className="group relative aspect-square overflow-hidden rounded-2xl border-2 border-violet-400/70 bg-white/15 shadow-lg shadow-black/20 transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-xl hover:shadow-black/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300 motion-reduce:transition-none"
+      className="group relative aspect-square overflow-hidden rounded-2xl border-2 border-violet-400/70 bg-white/15 shadow-lg shadow-black/20 transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-xl hover:shadow-black/30 focus-visible:border-amber-300 motion-reduce:transition-none"
       to={props.href}>
       <img
         alt={`Imagem da categoria ${props.name}`}
