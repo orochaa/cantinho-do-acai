@@ -30,10 +30,10 @@ export function MultipleOptionsSelector<TName extends string>(
         {ctx.options.map(option => (
           <div
             key={option.name}
-            className="flex items-center rounded-sm bg-zinc-100 active:bg-zinc-200">
+            className={`flex items-center rounded-xl border bg-white shadow-sm transition ${option.count > 0 ? 'border-purple-300 bg-purple-50/50' : 'border-zinc-200 hover:border-purple-200 hover:shadow-md'}`}>
             <button
               type="button"
-              className="flex grow items-center gap-2 p-3"
+              className="flex min-h-14 grow items-center gap-2 p-3 text-left"
               onClick={() => dispatchEvent({ type: 'add', option })}>
               {!!option.img && (
                 <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
@@ -92,7 +92,7 @@ function AddOptionButton<TName extends string>(
   return (
     <button
       type="button"
-      className="flex min-h-11 min-w-11 h-full items-center justify-center rounded-xs p-3 pl-0 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+      className="flex min-h-11 min-w-11 h-full items-center justify-center rounded-lg p-3 pl-0 text-purple-700 disabled:text-zinc-400"
       aria-label={`Adicionar ${option.name}`}
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
@@ -115,10 +115,10 @@ export function QuantitySelector<TName extends string>(
 
   return (
     <div className="flex h-full items-center p-3 pl-0">
-      <div className="flex items-center rounded-xs border border-zinc-300 bg-zinc-100 p-0.5 shadow-sm">
+      <div className="flex items-center rounded-lg border border-purple-200 bg-white p-0.5 shadow-sm">
         <button
           type="button"
-          className="min-h-11 min-w-11 rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200"
+          className="min-h-11 min-w-11 rounded-md px-2 py-1.5 text-purple-700 disabled:text-zinc-400"
           aria-label={`${item.count === 1 ? 'Remover' : 'Diminuir'} ${item.name}`}
           title={item.count === 1 ? 'Remover' : 'Diminuir'}
           onClick={() => onCountChange({ type: 'remove', option: item })}>
@@ -128,10 +128,12 @@ export function QuantitySelector<TName extends string>(
             <Minus className="size-5 shrink-0" />
           )}
         </button>
-        <span className="px-2 py-1.5">{item.count}</span>
+        <span className="min-w-8 px-2 py-1.5 text-center font-bold text-purple-950">
+          {item.count}
+        </span>
         <button
           type="button"
-          className="min-h-11 min-w-11 rounded-xs px-2 py-1.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
+          className="min-h-11 min-w-11 rounded-md px-2 py-1.5 text-purple-700 disabled:text-zinc-400"
           aria-label={`Adicionar ${item.name}`}
           title="Adicionar"
           disabled={ctx.countTotal >= ctx.countLimit}

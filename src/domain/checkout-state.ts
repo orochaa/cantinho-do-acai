@@ -66,20 +66,51 @@ const createOptionGroup = <TName extends string>(
   };
 };
 
-export const createCheckoutOptionsState = (): CheckoutOptionsState => ({
+export const createCheckoutOptionsState = (initial?: {
+  fulfillment?: FulfillmentMethod;
+  paymentMethod?: PaymentMethod;
+  cutlery?: CheckoutSpoonOption;
+}): CheckoutOptionsState => ({
   groups: {
     fulfillment: createOptionGroup([
-      { name: CheckoutFulfillmentEnum.Pickup, isSelected: true },
-      { name: CheckoutFulfillmentEnum.Delivery },
+      {
+        name: CheckoutFulfillmentEnum.Pickup,
+        isSelected:
+          initial?.fulfillment === CheckoutFulfillmentEnum.Pickup ||
+          initial?.fulfillment === undefined,
+      },
+      {
+        name: CheckoutFulfillmentEnum.Delivery,
+        isSelected: initial?.fulfillment === CheckoutFulfillmentEnum.Delivery,
+      },
     ]),
     payment: createOptionGroup([
-      { name: CheckoutPaymentEnum.Pix, isSelected: true },
-      { name: CheckoutPaymentEnum.CreditCard },
-      { name: CheckoutPaymentEnum.Cash },
+      {
+        name: CheckoutPaymentEnum.Pix,
+        isSelected:
+          initial?.paymentMethod === CheckoutPaymentEnum.Pix ||
+          initial?.paymentMethod === undefined,
+      },
+      {
+        name: CheckoutPaymentEnum.CreditCard,
+        isSelected: initial?.paymentMethod === CheckoutPaymentEnum.CreditCard,
+      },
+      {
+        name: CheckoutPaymentEnum.Cash,
+        isSelected: initial?.paymentMethod === CheckoutPaymentEnum.Cash,
+      },
     ]),
     cutlery: createOptionGroup([
-      { name: CheckoutCutleryEnum.No, isSelected: true },
-      { name: CheckoutCutleryEnum.Yes },
+      {
+        name: CheckoutCutleryEnum.No,
+        isSelected:
+          initial?.cutlery === CheckoutCutleryEnum.No ||
+          initial?.cutlery === undefined,
+      },
+      {
+        name: CheckoutCutleryEnum.Yes,
+        isSelected: initial?.cutlery === CheckoutCutleryEnum.Yes,
+      },
     ]),
   },
 });

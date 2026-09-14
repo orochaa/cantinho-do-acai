@@ -1,6 +1,6 @@
 import type { CartItem } from '@/domain/cart';
 import { formatCurrency } from '@/domain/format';
-import { Pencil, PlusSquare, Trash2 } from 'lucide-react';
+import { Pencil, Plus, Trash2 } from 'lucide-react';
 
 export function CartItems(props: {
   cart: ReadonlyArray<CartItem>;
@@ -8,21 +8,22 @@ export function CartItems(props: {
   onEdit: (item: CartItem) => void;
 }): React.JSX.Element {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       {props.cart.map(item => (
         <div
           key={item.id}
-          className="relative flex flex-col gap-2 rounded-sm bg-zinc-50 p-2 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold">
-              {item.count} - {item.product.name}{' '}
-              {!!item.product.price &&
-                `- ${formatCurrency(item.product.price)}`}
-            </h3>
+          className="relative flex flex-col gap-2 rounded-xl border border-zinc-100 bg-zinc-50 p-3">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h3 className="font-bold text-zinc-900">{item.product.name}</h3>
+              <p className="text-sm text-zinc-500">
+                {item.count} {item.count === 1 ? 'unidade' : 'unidades'}
+              </p>
+            </div>
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                className="rounded-sm p-2 text-purple-800"
+                className="rounded-lg p-2 text-purple-800 hover:bg-purple-100"
                 aria-label={`Editar ${item.product.name}`}
                 title="Editar item"
                 onClick={() => props.onEdit(item)}>
@@ -30,7 +31,7 @@ export function CartItems(props: {
               </button>
               <button
                 type="button"
-                className="rounded-sm p-2 text-red-700"
+                className="rounded-lg p-2 text-red-700 hover:bg-red-100"
                 aria-label={`Remover ${item.product.name}`}
                 title="Remover item"
                 onClick={() => props.onRemove(item)}>
@@ -38,15 +39,12 @@ export function CartItems(props: {
               </button>
             </div>
           </div>
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-1 text-sm text-zinc-600">
             {item.options.map(option => (
               <li
                 key={option.name}
                 className="flex items-center gap-1">
-                <PlusSquare
-                  size={20}
-                  className="text-pink-600"
-                />
+                <Plus className="size-4 shrink-0 text-pink-600" />
                 {[
                   option.count,
                   option.name,
@@ -59,15 +57,17 @@ export function CartItems(props: {
           </ul>
           {!!item.observation && (
             <div>
-              <h3 className="font-semibold">Observação:</h3>
-              <p className="text-pretty whitespace-pre-line">
+              <h3 className="text-sm font-semibold text-zinc-800">
+                Observação
+              </h3>
+              <p className="text-pretty text-sm whitespace-pre-line text-zinc-600">
                 {item.observation}
               </p>
             </div>
           )}
-          {item.options.length > 0 && (
-            <p className="font-semibold">Total: {formatCurrency(item.total)}</p>
-          )}
+          <p className="border-t border-zinc-200 pt-2 text-right font-bold text-zinc-900">
+            {formatCurrency(item.total)}
+          </p>
         </div>
       ))}
     </div>

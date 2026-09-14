@@ -185,6 +185,20 @@ describe(CartPage.name, () => {
     );
   });
 
+  it('should let customers open any checkout step directly', () => {
+    renderCheckout();
+
+    const paymentStep = Array.from(document.querySelectorAll('button')).find(
+      candidate =>
+        candidate.getAttribute('aria-expanded') !== null &&
+        candidate.textContent?.includes('Forma de pagamento'),
+    );
+
+    act(() => paymentStep?.click());
+
+    expect(paymentStep?.getAttribute('aria-expanded')).toBe('true');
+  });
+
   it('should show a CEP lookup error when the request fails', async () => {
     vi.stubGlobal(
       'fetch',

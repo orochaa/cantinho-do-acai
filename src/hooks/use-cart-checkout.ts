@@ -24,8 +24,16 @@ import {
   validateOrder,
 } from '@/domain/order';
 import { getCepAddress } from '@/lib/brasil-api';
+import { checkoutStorage, loadCheckoutStorage } from '@/lib/checkout-storage';
 import { createOrderCheckoutWhatsAppLink } from '@/lib/whatsapp';
-import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 export type CheckoutField =
   | 'clientName'
   | 'cep'
@@ -58,10 +66,18 @@ const getValidationField = (input: {
 export function useCartCheckout(
   cart: ReadonlyArray<CartItem>,
 ): CartCheckoutState {
+  const [savedCheckout] = useState(loadCheckoutStorage);
+  const cartSignature = cart.map(item => item.id).join('|');
+  const hasSavedCartState = savedCheckout.cartSignature === cartSignature;
   const [{ groups }, dispatch] = useReducer(
     checkoutOptionsReducer,
-    undefined,
-    createCheckoutOptionsState,
+    hasSavedCartState ? savedCheckout : undefined,
+    saved =>
+      createCheckoutOptionsState({
+        fulfillment: saved?.fulfillment,
+        paymentMethod: saved?.paymentMethod,
+        cutlery: saved?.cutlery,
+      }),
   );
   const {
     fulfillment: checkoutOption,
@@ -78,21 +94,79 @@ export function useCartCheckout(
     checkoutOption.options.find(
       option => option.name === CheckoutFulfillmentEnum.Delivery,
     )?.isSelected ?? false;
-  const [cep, setCep] = useState('');
-  const [address, setAddress] = useState<DeliveryAddress | null>(null);
+  const fulfillment = isDelivery
+    ? CheckoutFulfillmentEnum.Delivery
+    : CheckoutFulfillmentEnum.Pickup;
+  const [cep, setCep] = useState(savedCheckout.address?.cep ?? '');
+  const [address, setAddress] = useState<DeliveryAddress | null>(
+    savedCheckout.address,
+  );
   const [addressError, setAddressError] = useState<string | null>(null);
   const [cepLoading, setCepLoading] = useState(false);
   const cepRequestRef = useRef(0);
-  const [addressNumber, setAddressNumber] = useState('');
-  const [addressComplement, setAddressComplement] = useState('');
-  const [addressReference, setAddressReference] = useState('');
-  const [clientName, setClientName] = useState('');
-  const [cashValue, setCashValue] = useState('');
+  const [addressNumber, setAddressNumber] = useState(
+    savedCheckout.addressNumber,
+  );
+  const [addressComplement, setAddressComplement] = useState(
+    savedCheckout.addressComplement,
+  );
+  const [addressReference, setAddressReference] = useState(
+    savedCheckout.addressReference,
+  );
+  const [clientName, setClientName] = useState(savedCheckout.clientName);
+  const [cashValue, setCashValue] = useState(
+    hasSavedCartState ? (savedCheckout.cashValue ?? '') : '',
+  );
   const [modalOpen, setModalOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     Partial<Record<CheckoutField, string>>
   >({});
   const toast = useToast();
+  const skipNextStorageWrite = useRef(false);
+  useEffect(() => {
+    if (skipNextStorageWrite.current) {
+      skipNextStorageWrite.current = false;
+      return;
+    }
+    checkoutStorage.save({
+      clientName,
+      address,
+      addressNumber,
+      addressComplement,
+      addressReference,
+      fulfillment,
+      paymentMethod: paymentMethod.options.find(option => option.isSelected)
+        ?.name,
+      cutlery: spoonOption.options.find(option => option.isSelected)?.name,
+      cashValue,
+      cartSignature,
+      cartStateSavedAt: Date.now(),
+    });
+  }, [
+    address,
+    addressComplement,
+    addressNumber,
+    addressReference,
+    cashValue,
+    clientName,
+    cartSignature,
+    fulfillment,
+    paymentMethod,
+    spoonOption,
+  ]);
+  const forgetSavedDetails = useCallback(() => {
+    checkoutStorage.clear();
+    skipNextStorageWrite.current = true;
+    setClientName('');
+    setCep('');
+    setAddress(null);
+    setAddressNumber('');
+    setAddressComplement('');
+    setAddressReference('');
+    setCashValue('');
+    setAddressError(null);
+    setValidationErrors({});
+  }, []);
   const orderTotal = useMemo(() => calculateOrderTotal(cart), [cart]);
   const change = useMemo(
     () =>
@@ -139,9 +213,6 @@ export function useCartCheckout(
     }
   }, []);
 
-  const fulfillment = isDelivery
-    ? CheckoutFulfillmentEnum.Delivery
-    : CheckoutFulfillmentEnum.Pickup;
   const selectedPaymentMethod =
     paymentMethod.options.find(option => option.isSelected)?.name ??
     CheckoutPaymentEnum.Pix;
@@ -225,6 +296,7 @@ export function useCartCheckout(
     clientName,
     confirmOrder,
     fulfillment,
+    forgetSavedDetails,
     goToWhatsappLink,
     handleCepChange,
     isDelivery,
@@ -259,6 +331,7 @@ export interface CartCheckoutState {
   clientName: string;
   confirmOrder: () => void;
   fulfillment: FulfillmentMethod;
+  forgetSavedDetails: () => void;
   goToWhatsappLink: string;
   handleCepChange: (value: string) => Promise<void>;
   isDelivery: boolean;

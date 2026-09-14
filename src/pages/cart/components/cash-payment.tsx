@@ -1,4 +1,4 @@
-import { Container } from '@/components/container';
+import { Input } from '@/components/input';
 import { formatCurrency, parseCurrency } from '@/domain/format';
 import type { CartCheckoutState } from '@/hooks/use-cart-checkout';
 
@@ -15,11 +15,8 @@ export function CashPayment(
   ];
 
   return (
-    <Container>
-      <h2 className="ml-1 text-xl font-bold text-white">
-        Pagamento em dinheiro
-      </h2>
-      <div className="flex flex-col gap-2 rounded-sm bg-zinc-100 px-2 py-4">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         <label
           htmlFor="cash-value"
           className="ml-1 leading-3 font-bold">
@@ -30,7 +27,7 @@ export function CashPayment(
             <button
               key={amount}
               type="button"
-              className="min-h-11 min-w-11 rounded border border-zinc-300 bg-zinc-200 px-2 py-1.5"
+              className="min-h-11 min-w-11 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-purple-900 shadow-sm transition hover:border-purple-200 hover:bg-purple-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-purple-100"
               onClick={() =>
                 props.setCashValue(
                   formatCurrency(parseCurrency(props.cashValue) + amount),
@@ -40,12 +37,11 @@ export function CashPayment(
             </button>
           ))}
         </div>
-        <input
+        <Input
           id="cash-value"
           type="text"
           inputMode="numeric"
           placeholder="Digite outro valor que você irá pagar em dinheiro"
-          className="w-full rounded-sm border border-zinc-300 p-2 shadow-sm"
           value={props.cashValue}
           aria-describedby="cash-value-help cash-value-error"
           aria-invalid={!!props.validationErrors?.cashValue}
@@ -72,6 +68,6 @@ export function CashPayment(
           {formatCurrency(props.change)}
         </p>
       </div>
-    </Container>
+    </div>
   );
 }

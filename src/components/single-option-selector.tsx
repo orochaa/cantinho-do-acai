@@ -16,6 +16,7 @@ export interface SingleOptionSelectorProps<
   title: string;
   ctx: { options: Array<TOption> };
   onSelectionChange: (option: TOption) => void;
+  bare?: boolean;
 }
 
 export function SingleOptionSelector<
@@ -24,9 +25,9 @@ export function SingleOptionSelector<
 >(props: SingleOptionSelectorProps<TName, TOption>): React.JSX.Element {
   const { title, ctx, onSelectionChange } = props;
 
-  return (
-    <Container>
-      <div className="m-1 text-white">
+  const content = (
+    <>
+      <div className={`m-1 ${props.bare ? 'text-zinc-900' : 'text-white'}`}>
         <h2 className="text-xl font-bold">{title}</h2>
         <p className="text-sm">Escolha uma opção</p>
       </div>
@@ -35,10 +36,10 @@ export function SingleOptionSelector<
         {ctx.options.map(option => (
           <div
             key={option.name}
-            className="flex items-center rounded-sm bg-zinc-100 active:bg-zinc-200">
+            className="flex items-center rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:border-purple-200 hover:shadow-md">
             <button
               type="button"
-              className="flex grow items-center gap-2 p-3"
+              className="flex min-h-14 grow items-center gap-3 p-3 text-left"
               onClick={() => onSelectionChange(option)}>
               {!!option.img && (
                 <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
@@ -70,7 +71,13 @@ export function SingleOptionSelector<
           </div>
         ))}
       </div>
-    </Container>
+    </>
+  );
+
+  return props.bare ? (
+    <div className="flex flex-col gap-3">{content}</div>
+  ) : (
+    <Container>{content}</Container>
   );
 }
 
@@ -99,7 +106,7 @@ function ToggleOptionButton<
       onClick={() => onSelectionChange(option)}>
       <span
         data-disabled={option.isSelected}
-        className="block size-6 rounded-full bg-zinc-200 ring-2 ring-red-500 ring-offset-2 active:bg-red-300 data-[disabled=true]:bg-red-500"
+        className="block size-5 rounded-full bg-zinc-100 ring-2 ring-purple-700 ring-offset-2 transition-colors active:bg-purple-200 data-[disabled=true]:bg-purple-700"
       />
     </button>
   );

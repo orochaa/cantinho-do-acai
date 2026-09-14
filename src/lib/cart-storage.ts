@@ -1,33 +1,43 @@
 import type { CartItem, CartPersistence } from '@/domain/cart';
+import { createVersionedLocalStorage } from '@/lib/versioned-storage';
 
 export const CART_STORAGE_KEY = 'cantinho-do-acai-cart';
-export const CART_STORAGE_VERSION = 1;
-
-interface StoredCart {
-  version: typeof CART_STORAGE_VERSION;
-  cart: ReadonlyArray<CartItem>;
-}
+export const CART_STORAGE_VERSION = 2;
 
 export function createLocalStorageCartPersistence(): CartPersistence {
+  const storage = createVersionedLocalStorage<{
+    cart: ReadonlyArray<CartItem>;
+  }>({
+    key: CART_STORAGE_KEY,
+    version: CART_STORAGE_VERSION,
+    isValid: isValidStoredCart,
+  });
   return {
     load: () => {
-      if (typeof window === 'undefined') {
-        return;
-      }
-      const saved = window.localStorage.getItem(CART_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : undefined;
+      const value = storage.load();
+      return value
+        ? { version: CART_STORAGE_VERSION, cart: value.cart }
+        : undefined;
     },
-    save: cart => {
-      if (typeof window === 'undefined') {
-        return;
-      }
-      const stored: StoredCart = { version: CART_STORAGE_VERSION, cart };
-      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(stored));
-    },
-    clear: () => {
-      if (typeof window !== 'undefined') {
-        window.localStorage.removeItem(CART_STORAGE_KEY);
-      }
-    },
+    save: cart => storage.save({ cart }),
+    clear: storage.clear,
   };
+}
+
+function isValidStoredCart(
+  value: unknown,
+): value is { cart: ReadonlyArray<CartItem> } {
+  if (!(typeof value === 'object' && value !== null)) {
+    return false;
+  }
+  const cart = (value as { cart?: unknown }).cart;
+  return Array.isArray(cart) && cart.every(isValidCartItem);
+}
+
+function isValidCartItem(value: unknown): value is CartItem {
+  if (!(typeof value === 'object' && value !== null)) {
+    return false;
+  }
+  const item = value as Record<string, unknown>;
+  return typeof item.id === 'string' && item.id.length > 0;
 }

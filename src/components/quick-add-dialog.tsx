@@ -160,11 +160,11 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
         ? { type: 'replace', id: editItem.id, item }
         : { type: 'add', item },
     );
-    toast.success({
-      description: editItem
-        ? `${product.name} atualizado no pedido.`
-        : `${product.name} adicionado ao pedido.`,
-    });
+    if (editItem) {
+      toast.success({
+        description: `${product.name} atualizado no pedido.`,
+      });
+    }
     props.onClose();
     resetDraft();
     if (editItem) {
