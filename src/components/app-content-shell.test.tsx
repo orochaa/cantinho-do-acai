@@ -300,7 +300,7 @@ describe(AppContentShell.name, () => {
     act(() => findButton('Buscar').click());
     const drawer = document.querySelector('dialog');
     expect(drawer?.className).toContain(
-      'max-h-[calc(100svh-env(safe-area-inset-top))]',
+      'max-h-[calc(100dvh-env(safe-area-inset-top))]',
     );
     expect(drawer?.querySelector('[aria-label="Redimensionar"]')).toBeNull();
   });

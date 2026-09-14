@@ -74,7 +74,7 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
         duration: closeDuration / 1000,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="fixed inset-x-0 top-auto bottom-0 m-0 box-border flex w-full max-w-none flex-col overflow-y-auto rounded-t-2xl border-0 bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-zinc-950 shadow-[0_-12px_40px_rgb(0_0_0/35%)] backdrop:bg-black/30 max-h-[calc(100svh-env(safe-area-inset-top))]"
+      className="fixed inset-x-0 top-auto bottom-0 m-0 box-border flex w-full max-w-none flex-col overflow-y-auto rounded-t-2xl border-0 bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-zinc-950 shadow-[0_-12px_40px_rgb(0_0_0/35%)] backdrop:bg-black/30 max-h-[calc(100dvh-env(safe-area-inset-top))]"
       onCancel={event => {
         event.preventDefault();
         event.stopPropagation();
