@@ -7,6 +7,7 @@ export interface CartItem extends OrderItem {
 
 export type CartEvent =
   | { type: 'add'; item: Omit<CartItem, 'id' | 'total'> }
+  | { type: 'replace'; id?: string; item: Omit<CartItem, 'id' | 'total'> }
   | { type: 'remove'; id?: string; index?: number }
   | { type: 'update-quantity'; id?: string; index?: number; count: number };
 
@@ -53,6 +54,16 @@ export const createCartReducer =
         return index < 0 || index >= state.length
           ? state
           : state.filter((_, i) => i !== index);
+      }
+      case 'replace': {
+        const index = findItemIndex(state, event);
+        if (index < 0 || index >= state.length) {
+          return state;
+        }
+        const current = state[index];
+        const updatedCart = [...state];
+        updatedCart[index] = { ...createOrderItem(event.item), id: current.id };
+        return updatedCart;
       }
       case 'update-quantity': {
         const index = findItemIndex(state, event);

@@ -1,7 +1,7 @@
 import { useToast } from '@/context/toast-provider';
 import { formatCurrency } from '@/domain/format';
 import { Minus, Plus } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from './button';
 
 export interface OrderButtonProps {
@@ -11,12 +11,17 @@ export interface OrderButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   validate?: () => string | undefined;
   order: (count: number) => void;
+  initialCount?: number;
 }
 
 export function OrderButton(props: OrderButtonProps): React.JSX.Element {
   const { product, totalPrice, validate, order, multiple } = props;
 
-  const [counter, setCounter] = useState<number>(1);
+  const [counter, setCounter] = useState<number>(props.initialCount ?? 1);
+
+  useEffect(() => {
+    setCounter(props.initialCount ?? 1);
+  }, [props.initialCount]);
 
   const toast = useToast();
 

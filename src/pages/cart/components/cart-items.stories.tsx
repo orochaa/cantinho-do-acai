@@ -30,8 +30,8 @@ const meta = {
   parameters: { layout: 'centered' },
   args: {
     cart,
-    onQuantityChange: () => {},
     onRemove: () => {},
+    onEdit: () => {},
   },
 } satisfies Meta<typeof CartItems>;
 

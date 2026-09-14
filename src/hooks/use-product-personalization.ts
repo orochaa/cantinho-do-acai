@@ -6,8 +6,8 @@ import type {
 } from '@/domain/product-personalization';
 import {
   createPersonalizedOrderItem,
-  createProductPersonalizationState,
   getPersonalizationTotal,
+  hydrateProductPersonalizationState,
   productPersonalizationReducer,
   validateProductPersonalization,
 } from '@/domain/product-personalization';
@@ -16,6 +16,7 @@ import { useCallback, useReducer } from 'react';
 export function useProductPersonalization<Groups extends PersonalizationGroups>(
   product: Product,
   groups: Groups,
+  initialItem?: Pick<OrderItem, 'options'>,
 ): ProductPersonalizationState<Groups> & {
   dispatch: (event: ProductPersonalizationEvent<Groups>) => void;
   total: number;
@@ -24,8 +25,9 @@ export function useProductPersonalization<Groups extends PersonalizationGroups>(
 } {
   const [state, dispatch] = useReducer(
     productPersonalizationReducer,
-    groups,
-    createProductPersonalizationState,
+    { groups, initialItem },
+    value =>
+      hydrateProductPersonalizationState(value.groups, value.initialItem),
   );
   const dispatchEvent = useCallback(
     (event: ProductPersonalizationEvent<Groups>): void => {

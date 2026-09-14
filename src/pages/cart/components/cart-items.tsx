@@ -1,12 +1,11 @@
-import { QuantitySelector } from '@/components/multiple-options-selector';
 import type { CartItem } from '@/domain/cart';
 import { formatCurrency } from '@/domain/format';
-import { PlusSquare } from 'lucide-react';
+import { Pencil, PlusSquare, Trash2 } from 'lucide-react';
 
 export function CartItems(props: {
   cart: ReadonlyArray<CartItem>;
-  onQuantityChange: (item: CartItem, count: number) => void;
   onRemove: (item: CartItem) => void;
+  onEdit: (item: CartItem) => void;
 }): React.JSX.Element {
   return (
     <div className="flex flex-col gap-2">
@@ -20,25 +19,24 @@ export function CartItems(props: {
               {!!item.product.price &&
                 `- ${formatCurrency(item.product.price)}`}
             </h3>
-            <QuantitySelector
-              onCountChange={event => {
-                if (event.type === 'add') {
-                  props.onQuantityChange(item, item.count + 1);
-                } else if (item.count > 1) {
-                  props.onQuantityChange(item, item.count - 1);
-                } else {
-                  props.onRemove(item);
-                }
-              }}
-              item={{ name: item.product.name, count: item.count }}
-              ctx={{
-                countLimit: 15,
-                countTotal: props.cart.reduce(
-                  (sum, cartItem) => sum + cartItem.count,
-                  0,
-                ),
-              }}
-            />
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="rounded-sm p-2 text-purple-800"
+                aria-label={`Editar ${item.product.name}`}
+                title="Editar item"
+                onClick={() => props.onEdit(item)}>
+                <Pencil className="size-5" />
+              </button>
+              <button
+                type="button"
+                className="rounded-sm p-2 text-red-700"
+                aria-label={`Remover ${item.product.name}`}
+                title="Remover item"
+                onClick={() => props.onRemove(item)}>
+                <Trash2 className="size-5" />
+              </button>
+            </div>
           </div>
           <ul className="flex flex-col gap-1">
             {item.options.map(option => (

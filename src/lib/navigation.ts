@@ -1,3 +1,35 @@
+import type { CartItem } from '@/domain/cart';
+import { isValidCartItem } from '@/domain/cart';
+import { visibleMenu } from '@/domain/menu';
+
+export interface CartEditIntent {
+  type: 'edit-cart-intent';
+  item: CartItem;
+}
+
+export const isCartEditIntent = (value: unknown): value is CartEditIntent =>
+  typeof value === 'object' &&
+  value !== null &&
+  (value as { type?: unknown }).type === 'edit-cart-intent' &&
+  isValidCartItem((value as { item?: unknown }).item);
+
+export const getProductPath = (product: Product): string => {
+  const entry = visibleMenu.find(item =>
+    item.products.some(
+      candidate =>
+        candidate.slang === product.slang || candidate.name === product.name,
+    ),
+  );
+  const matchedProduct = entry?.products.find(
+    candidate =>
+      candidate.slang === product.slang || candidate.name === product.name,
+  );
+  const slug = matchedProduct?.slang ?? product.slang;
+  return entry?.category.quickAdd
+    ? `/${entry.route}`
+    : `/${entry?.route}/${slug}`;
+};
+
 export const navigateToElement = (elementId: string): void => {
   const element = document.querySelector(`#${elementId}`);
 

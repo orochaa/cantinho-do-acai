@@ -2,6 +2,7 @@ import { MenuCard } from '@/components/menu-card';
 import type { QuickAddDialogProps } from '@/components/quick-add-dialog';
 import { Seo } from '@/components/seo';
 import { visibleMenu } from '@/domain/menu';
+import { isCartEditIntent } from '@/lib/navigation';
 import { BebidaQuickForm } from '@/pages/bebida.quick';
 import { FelicidadeQuickForm } from '@/pages/felicidade.quick';
 import { GeladinhoQuickForm } from '@/pages/geladinho.quick';
@@ -9,7 +10,7 @@ import { PaletaQuickForm } from '@/pages/paleta.quick';
 import { PastelQuickForm } from '@/pages/pastel.quick';
 import { PremiumQuickForm } from '@/pages/premium.quick';
 import { useState } from 'react';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 
 type CategoryQuickForm = (props: QuickAddDialogProps) => React.JSX.Element;
 
@@ -24,6 +25,8 @@ const quickForms: Readonly<Partial<Record<string, CategoryQuickForm>>> = {
 
 export function CategoryPage(): React.JSX.Element {
   const { category: categoryRoute } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const entry = visibleMenu.find(item => item.route === categoryRoute);
 
@@ -37,6 +40,10 @@ export function CategoryPage(): React.JSX.Element {
   }
 
   const QuickForm = quickForms[entry.route];
+  const editIntent = isCartEditIntent(location.state)
+    ? location.state
+    : undefined;
+  const editProduct = editIntent?.item.product;
 
   return (
     <>
@@ -69,9 +76,16 @@ export function CategoryPage(): React.JSX.Element {
       </div>
       {!!QuickForm && (
         <QuickForm
-          open={selectedProduct !== null}
-          onClose={() => setSelectedProduct(null)}
-          product={selectedProduct}
+          open={selectedProduct !== null || !!editProduct}
+          onClose={() => {
+            setSelectedProduct(null);
+            if (editIntent) {
+              navigate('/cart');
+            }
+          }}
+          product={selectedProduct ?? editProduct ?? null}
+          editItem={editIntent?.item}
+          onEditSave={() => navigate('/cart')}
         />
       )}
     </>

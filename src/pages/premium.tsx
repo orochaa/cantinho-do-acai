@@ -11,9 +11,10 @@ import type {
   SelectableOption,
   SingleOptionState,
 } from '@/domain/product-personalization';
+import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface PremiumPersonalizationGroups {
   complements: PersonalizationSingleGroup;
@@ -25,18 +26,25 @@ export function PremiumPage(): React.JSX.Element {
   const [observation, setObservation] = useState<string>('');
 
   const { addCartEvent } = useCart();
+  const edit = useCartEditIntent(copo);
 
   const personalization =
-    useProductPersonalization<PremiumPersonalizationGroups>(copo, {
-      complements: {
-        type: 'single',
-        options: (copo.complements ?? []).map(name => ({ name })),
-        required:
-          copo.complements !== undefined && copo.complements.length > 0
-            ? 'Escolha seu Fini'
-            : undefined,
+    useProductPersonalization<PremiumPersonalizationGroups>(
+      copo,
+      {
+        complements: {
+          type: 'single',
+          options: (copo.complements ?? []).map(name => ({ name })),
+          required:
+            copo.complements !== undefined && copo.complements.length > 0
+              ? 'Escolha seu Fini'
+              : undefined,
+        },
       },
-    });
+      edit.item,
+    );
+
+  useEffect(() => setObservation(edit.item?.observation ?? ''), [edit.item]);
 
   return (
     <div>
@@ -103,6 +111,7 @@ export function PremiumPage(): React.JSX.Element {
 
         <OrderButton
           product={copo}
+          initialCount={edit.item?.count}
           totalPrice={personalization.total}
           multiple
           validate={personalization.validate}
@@ -112,7 +121,11 @@ export function PremiumPage(): React.JSX.Element {
               observation,
             );
 
-            addCartEvent({ type: 'add', item });
+            if (edit.item) {
+              edit.save(item);
+            } else {
+              addCartEvent({ type: 'add', item });
+            }
           }}
         />
       </div>

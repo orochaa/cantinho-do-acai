@@ -1,5 +1,6 @@
 import { useCart } from '@/context/cart-provider';
 import { useToast } from '@/context/toast-provider';
+import type { CartItem } from '@/domain/cart';
 import { formatCurrency } from '@/domain/format';
 import { createOrderItem } from '@/domain/order';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,8 @@ export interface QuickAddDialogProps {
   open: boolean;
   onClose: () => void;
   steps?: ReadonlyArray<QuickAddOptionStep>;
+  editItem?: CartItem;
+  onEditSave?: () => void;
 }
 
 type OptionIndexes = Readonly<Record<string, number>>;
@@ -49,6 +52,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
   const [step, setStep] = useState(0);
   const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState(false);
   const product = props.product;
+  const editItem = props.editItem;
   const currentOptionStep = optionSteps[step];
   const selectedOptions = optionSteps.flatMap(optionStep => {
     const option = optionStep.options[optionIndexes[optionStep.id]];
@@ -60,17 +64,44 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
       count
     : 0;
   const dirty =
-    count !== 1 ||
-    observation.trim() !== '' ||
+    count !== (editItem?.count ?? 1) ||
+    observation !== (editItem?.observation ?? '') ||
     optionSteps.some(
       optionStep =>
-        optionIndexes[optionStep.id] !== optionStep.defaultOptionIndex,
+        optionIndexes[optionStep.id] !==
+        (editItem?.options.find(option =>
+          optionStep.options.some(candidate => candidate.name === option.name),
+        )
+          ? optionStep.options.findIndex(
+              candidate =>
+                candidate.name ===
+                editItem?.options.find(option =>
+                  optionStep.options.some(
+                    candidate => candidate.name === option.name,
+                  ),
+                )?.name,
+            )
+          : optionStep.defaultOptionIndex),
     );
 
   const resetDraft = (): void => {
-    setCount(1);
-    setObservation('');
-    setOptionIndexes(createOptionIndexes(optionSteps));
+    setCount(editItem?.count ?? 1);
+    setObservation(editItem?.observation ?? '');
+    setOptionIndexes(
+      Object.fromEntries(
+        optionSteps.map(step => {
+          const saved = editItem?.options.find(option =>
+            step.options.some(candidate => candidate.name === option.name),
+          );
+          return [
+            step.id,
+            saved
+              ? step.options.findIndex(option => option.name === saved.name)
+              : step.defaultOptionIndex,
+          ];
+        }),
+      ),
+    );
     setStep(0);
     setIsDiscardDialogOpen(false);
   };
@@ -79,12 +110,26 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
     if (!props.open) {
       return;
     }
-    setCount(1);
-    setObservation('');
-    setOptionIndexes(createOptionIndexes(optionSteps));
+    setCount(editItem?.count ?? 1);
+    setObservation(editItem?.observation ?? '');
+    setOptionIndexes(
+      Object.fromEntries(
+        optionSteps.map(step => {
+          const saved = editItem?.options.find(option =>
+            step.options.some(candidate => candidate.name === option.name),
+          );
+          return [
+            step.id,
+            saved
+              ? step.options.findIndex(option => option.name === saved.name)
+              : step.defaultOptionIndex,
+          ];
+        }),
+      ),
+    );
     setStep(0);
     setIsDiscardDialogOpen(false);
-  }, [optionSteps, props.open]);
+  }, [editItem, optionSteps, props.open]);
 
   const close = (): void => {
     if (dirty) {
@@ -110,10 +155,21 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
       count,
       observation: observation || undefined,
     });
-    addCartEvent({ type: 'add', item });
-    toast.success({ description: `${product.name} adicionado ao pedido.` });
+    addCartEvent(
+      editItem
+        ? { type: 'replace', id: editItem.id, item }
+        : { type: 'add', item },
+    );
+    toast.success({
+      description: editItem
+        ? `${product.name} atualizado no pedido.`
+        : `${product.name} adicionado ao pedido.`,
+    });
     props.onClose();
     resetDraft();
+    if (editItem) {
+      props.onEditSave?.();
+    }
   };
 
   return (

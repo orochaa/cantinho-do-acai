@@ -3,6 +3,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { geladinhoCategory } from '@/domain/categories/geladinho';
+import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 
@@ -10,9 +11,14 @@ export function GeladinhoPage(): React.JSX.Element {
   const geladinho = useProduct(geladinhoCategory);
 
   const { addCartEvent } = useCart();
+  const edit = useCartEditIntent(geladinho);
 
   const orderProduct = { ...geladinho, price: 0 };
-  const personalization = useProductPersonalization(orderProduct, {});
+  const personalization = useProductPersonalization(
+    orderProduct,
+    {},
+    edit.item,
+  );
 
   return (
     <div>
@@ -46,13 +52,18 @@ export function GeladinhoPage(): React.JSX.Element {
 
         <OrderButton
           product={geladinho}
+          initialCount={edit.item?.count}
           totalPrice={personalization.total}
           validate={personalization.validate}
           order={count => {
             const { total: _total, ...item } =
               personalization.createOrderItem(count);
 
-            addCartEvent({ type: 'add', item });
+            if (edit.item) {
+              edit.save(item);
+            } else {
+              addCartEvent({ type: 'add', item });
+            }
           }}
         />
       </div>

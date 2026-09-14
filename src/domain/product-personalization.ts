@@ -210,6 +210,51 @@ export const addPersonalizationOption = <Groups extends PersonalizationGroups>(
   };
 };
 
+export const hydrateProductPersonalizationState = <
+  Groups extends PersonalizationGroups,
+>(
+  groups: Groups,
+  item: Pick<OrderItem, 'options'> | undefined,
+): ProductPersonalizationState<Groups> => {
+  const state = createProductPersonalizationState(groups);
+  if (!item) {
+    return state;
+  }
+  const saved = new Map(item.options.map(option => [option.name, option]));
+  return {
+    groups: Object.fromEntries(
+      (
+        Object.entries(state.groups) as Array<
+          [keyof Groups, PersonalizationGroupState]
+        >
+      ).map(([name, group]) => [
+        name,
+        group.type === 'single'
+          ? {
+              ...group,
+              isSelected: group.options.some(option => saved.has(option.name)),
+              options: group.options.map(option => ({
+                ...option,
+                isSelected: saved.has(option.name),
+                count: saved.has(option.name) ? 1 : 0,
+              })),
+            }
+          : {
+              ...group,
+              countTotal: group.options.reduce(
+                (total, option) => total + (saved.get(option.name)?.count ?? 0),
+                0,
+              ),
+              options: group.options.map(option => ({
+                ...option,
+                count: saved.get(option.name)?.count ?? 0,
+              })),
+            },
+      ]),
+    ) as ProductPersonalizationState<Groups>['groups'],
+  };
+};
+
 export const removePersonalizationOption = <
   Groups extends PersonalizationGroups,
 >(

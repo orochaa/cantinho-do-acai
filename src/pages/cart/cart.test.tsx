@@ -168,6 +168,23 @@ describe(CartPage.name, () => {
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
+  it('should open the matching product when editing a cart item', () => {
+    renderCheckout();
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>('button[aria-label^="Editar"]')
+        ?.click(),
+    );
+
+    expect(navigateMock).toHaveBeenCalledWith(
+      expect.stringContaining('produto-de-teste'),
+      expect.objectContaining({
+        state: expect.objectContaining({ type: 'edit-cart-intent' }),
+      }),
+    );
+  });
+
   it('should show a CEP lookup error when the request fails', async () => {
     vi.stubGlobal(
       'fetch',

@@ -3,6 +3,7 @@ import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { bebidaCategory } from '@/domain/categories/bebida';
+import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 
@@ -10,8 +11,9 @@ export function BebidaPage(): React.JSX.Element {
   const bebida = useProduct(bebidaCategory);
 
   const { addCartEvent } = useCart();
+  const edit = useCartEditIntent(bebida);
 
-  const personalization = useProductPersonalization(bebida, {});
+  const personalization = useProductPersonalization(bebida, {}, edit.item);
 
   return (
     <div>
@@ -41,13 +43,18 @@ export function BebidaPage(): React.JSX.Element {
         </div>
         <OrderButton
           product={bebida}
+          initialCount={edit.item?.count}
           totalPrice={personalization.total}
           validate={personalization.validate}
           order={count => {
             const { total: _total, ...item } =
               personalization.createOrderItem(count);
 
-            addCartEvent({ type: 'add', item });
+            if (edit.item) {
+              edit.save(item);
+            } else {
+              addCartEvent({ type: 'add', item });
+            }
           }}
         />
       </div>

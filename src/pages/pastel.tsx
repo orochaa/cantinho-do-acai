@@ -10,6 +10,7 @@ import type {
   SelectableOption,
   SingleOptionState,
 } from '@/domain/product-personalization';
+import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 
@@ -21,6 +22,7 @@ export function PastelPage(): React.JSX.Element {
   const pastel = useProduct(pastelCategory);
 
   const { addCartEvent } = useCart();
+  const edit = useCartEditIntent(pastel);
 
   const personalization =
     useProductPersonalization<PastelPersonalizationGroups>(
@@ -35,6 +37,7 @@ export function PastelPage(): React.JSX.Element {
           })),
         },
       },
+      edit.item,
     );
 
   return (
@@ -78,6 +81,7 @@ export function PastelPage(): React.JSX.Element {
         />
         <OrderButton
           product={pastel}
+          initialCount={edit.item?.count}
           totalPrice={personalization.total}
           validate={personalization.validate}
           multiple
@@ -85,7 +89,11 @@ export function PastelPage(): React.JSX.Element {
             const { total: _total, ...item } =
               personalization.createOrderItem(count);
 
-            addCartEvent({ type: 'add', item });
+            if (edit.item) {
+              edit.save(item);
+            } else {
+              addCartEvent({ type: 'add', item });
+            }
           }}
         />
       </div>

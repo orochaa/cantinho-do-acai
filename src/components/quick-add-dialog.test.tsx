@@ -1,6 +1,7 @@
 import { QuickAddDialog } from '@/components/quick-add-dialog';
 import { CartProvider } from '@/context/cart-provider';
 import { ToastProvider } from '@/context/toast-provider';
+import { createOrderItem } from '@/domain/order';
 import { act } from 'react';
 import type { Root } from 'react-dom/client';
 import { createRoot } from 'react-dom/client';
@@ -17,6 +18,19 @@ const product: Product = {
 };
 
 let activeRoot: Root | undefined;
+const storage = new Map<string, string>();
+
+beforeEach(() => {
+  Object.defineProperty(window, 'localStorage', {
+    configurable: true,
+    value: {
+      clear: () => storage.clear(),
+      getItem: (key: string) => storage.get(key) ?? null,
+      removeItem: (key: string) => storage.delete(key),
+      setItem: (key: string, value: string) => storage.set(key, value),
+    },
+  });
+});
 
 const setTextareaValue = (
   textarea: HTMLTextAreaElement,
@@ -44,10 +58,73 @@ afterEach(() => {
   act(() => activeRoot?.unmount());
   activeRoot = undefined;
   document.body.innerHTML = '';
+  storage.clear();
   vi.restoreAllMocks();
 });
 
 describe(QuickAddDialog.name, () => {
+  it('should hydrate an edited item and invoke its save callback', () => {
+    const editItem = {
+      ...createOrderItem({
+        product,
+        options: [{ name: 'Forte', price: 2, count: 1 }],
+        count: 2,
+        observation: 'Com carinho',
+      }),
+      id: 'saved-item',
+    };
+    const onEditSave = vi.fn();
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <QuickAddDialog
+              editItem={editItem}
+              open
+              onClose={vi.fn()}
+              onEditSave={onEditSave}
+              product={product}
+              steps={[
+                {
+                  defaultOptionIndex: 0,
+                  description: 'Escolha a intensidade.',
+                  id: 'intensity',
+                  options: [
+                    { name: 'Suave', price: 0 },
+                    { name: 'Forte', price: 2 },
+                  ],
+                  title: 'Intensidade',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    expect(
+      document.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
+        ?.textContent,
+    ).toContain('Forte');
+
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.trim() === 'Continuar')
+        ?.click(),
+    );
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.includes('Adicionar 2'))
+        ?.click(),
+    );
+
+    expect(onEditSave).toHaveBeenCalledOnce();
+  });
+
   it('should render an injected option step', () => {
     const container = document.createElement('div');
     document.body.append(container);

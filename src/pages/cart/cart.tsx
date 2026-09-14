@@ -1,11 +1,16 @@
 import { Button } from '@/components/button';
 import { Container } from '@/components/container';
+import { DialogHeader } from '@/components/dialog-header';
+import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
+import type { CartItem } from '@/domain/cart';
 import { CheckoutPaymentEnum } from '@/domain/checkout-state';
 import { formatCurrency } from '@/domain/format';
 import { useCartCheckout } from '@/hooks/use-cart-checkout';
+import { getProductPath } from '@/lib/navigation';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CartDeliveryAddress } from './components/cart-delivery-address';
 import { CartIdentification } from './components/cart-identification';
@@ -18,6 +23,7 @@ export function CartPage(): React.JSX.Element {
   const { addCartEvent, cart } = useCart();
   const checkout = useCartCheckout(cart);
   const navigate = useNavigate();
+  const [pendingRemoval, setPendingRemoval] = useState<CartItem | null>(null);
 
   return (
     <>
@@ -52,15 +58,11 @@ export function CartPage(): React.JSX.Element {
                 </h2>
                 <CartItems
                   cart={cart}
-                  onQuantityChange={(item, count) =>
-                    addCartEvent({
-                      type: 'update-quantity',
-                      id: item.id,
-                      count,
+                  onRemove={item => setPendingRemoval(item)}
+                  onEdit={item =>
+                    navigate(getProductPath(item.product), {
+                      state: { type: 'edit-cart-intent', item },
                     })
-                  }
-                  onRemove={item =>
-                    addCartEvent({ type: 'remove', id: item.id })
                   }
                 />
               </Container>
@@ -100,6 +102,36 @@ export function CartPage(): React.JSX.Element {
               </Button>
             </div>
             {!!checkout.modalOpen && <ConfirmationModal {...checkout} />}
+            <ResponsiveDialog
+              labelledBy="remove-cart-item-title"
+              open={pendingRemoval !== null}
+              onClose={() => setPendingRemoval(null)}>
+              <DialogHeader
+                title="Remover item?"
+                titleId="remove-cart-item-title"
+                onClose={() => setPendingRemoval(null)}
+              />
+              <p className="text-zinc-700">
+                Deseja remover {pendingRemoval?.product.name} do seu pedido?
+              </p>
+              <div className="mt-6 grid grid-cols-2 gap-2">
+                <Button
+                  variant="cancel"
+                  onClick={() => setPendingRemoval(null)}>
+                  Cancelar
+                </Button>
+                <Button
+                  variant="confirm"
+                  onClick={() => {
+                    if (pendingRemoval) {
+                      addCartEvent({ type: 'remove', id: pendingRemoval.id });
+                    }
+                    setPendingRemoval(null);
+                  }}>
+                  Remover
+                </Button>
+              </div>
+            </ResponsiveDialog>
           </>
         )}
       </div>

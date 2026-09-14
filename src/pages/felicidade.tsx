@@ -5,6 +5,7 @@ import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
 import { felicidadeCategory } from '@/domain/categories/felicidade';
 import { formatCurrency } from '@/domain/format';
+import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
 
@@ -14,9 +15,14 @@ export function FelicidadePage(): React.JSX.Element {
   const copo = useProduct(felicidadeCategory);
 
   const { addCartEvent } = useCart();
+  const edit = useCartEditIntent(copo);
 
   const personalization =
-    useProductPersonalization<FelicidadePersonalizationGroups>(copo, {});
+    useProductPersonalization<FelicidadePersonalizationGroups>(
+      copo,
+      {},
+      edit.item,
+    );
 
   return (
     <div>
@@ -49,6 +55,7 @@ export function FelicidadePage(): React.JSX.Element {
 
         <OrderButton
           product={copo}
+          initialCount={edit.item?.count}
           totalPrice={personalization.total}
           multiple
           validate={personalization.validate}
@@ -56,7 +63,11 @@ export function FelicidadePage(): React.JSX.Element {
             const { total: _total, ...item } =
               personalization.createOrderItem(count);
 
-            addCartEvent({ type: 'add', item });
+            if (edit.item) {
+              edit.save(item);
+            } else {
+              addCartEvent({ type: 'add', item });
+            }
           }}
         />
       </div>

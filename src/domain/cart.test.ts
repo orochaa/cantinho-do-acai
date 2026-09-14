@@ -69,6 +69,40 @@ describe(createCartReducer.name, () => {
     });
   });
 
+  it('should replace an item by id while preserving id and deriving total', () => {
+    const reducer = createCartReducer(() => 'stable-id');
+    const initial = reducer([], { type: 'add', item });
+    const result = reducer(initial, {
+      type: 'replace',
+      id: 'stable-id',
+      item: {
+        ...item,
+        count: 3,
+        options: [{ name: 'New extra', count: 1, price: 4 }],
+      },
+    });
+
+    expect(result).toEqual([
+      {
+        ...item,
+        id: 'stable-id',
+        count: 3,
+        options: [{ name: 'New extra', count: 1, price: 4 }],
+        total: 42,
+      },
+    ]);
+    expect(result).not.toBe(initial);
+  });
+
+  it.each([
+    { type: 'replace', id: 'missing-id', item },
+    { type: 'replace', item },
+  ] as const)('should ignore replacement without a matching id', event => {
+    const reducer = createCartReducer(() => 'stable-id');
+    const initial = reducer([], { type: 'add', item });
+    expect(reducer(initial, event)).toBe(initial);
+  });
+
   it.each([
     { type: 'update-quantity', id: 'stable-id', count: 0 },
     { type: 'update-quantity', id: 'stable-id', count: -1 },
