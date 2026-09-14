@@ -1,5 +1,4 @@
 import { Button } from '@/components/button';
-import { Container } from '@/components/container';
 import { DialogHeader } from '@/components/dialog-header';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Seo } from '@/components/seo';
@@ -138,21 +137,35 @@ export function CartPage(): React.JSX.Element {
       />
       <div className="mx-auto w-11/12 max-w-6xl py-12 sm:py-16">
         {cart.length === 0 ? (
-          <Container>
-            <div className="flex min-h-52 flex-col items-center justify-center gap-4 rounded-sm bg-white p-6 text-center">
-              <h1 className="text-2xl font-bold text-purple-950">
+          <section
+            aria-labelledby="empty-cart-title"
+            className="flex min-h-[calc(100vh-10rem)] items-center justify-center py-8 sm:min-h-[calc(100vh-12rem)] sm:py-12">
+            <div className="w-full max-w-xl rounded-3xl border border-white/20 bg-white p-7 text-center shadow-2xl shadow-purple-950/25 sm:p-12">
+              <div className="mx-auto mb-6 grid size-20 place-items-center rounded-full bg-purple-100 text-purple-800 ring-8 ring-purple-50 sm:size-24">
+                <ShoppingBag
+                  aria-hidden="true"
+                  className="size-10 sm:size-12"
+                />
+              </div>
+              <p className="mb-2 text-sm font-bold tracking-[0.18em] text-purple-700 uppercase">
+                Seu pedido
+              </p>
+              <h1
+                id="empty-cart-title"
+                className="text-2xl font-black text-purple-950 sm:text-3xl">
                 Seu carrinho está vazio
               </h1>
-              <p className="text-zinc-700">
-                Escolha seus produtos favoritos para começar um pedido.
+              <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-zinc-600 sm:text-lg">
+                Escolha seus produtos favoritos para começar.
               </p>
               <Button
                 variant="confirm"
+                className="mt-7 min-h-12 w-full text-base font-bold sm:mx-auto sm:w-auto sm:min-w-52"
                 onClick={() => navigate('/')}>
                 Ver cardápio
               </Button>
             </div>
-          </Container>
+          </section>
         ) : (
           <>
             <header className="mb-8 text-white">
