@@ -84,6 +84,7 @@ describe(QuickAddDialog.name, () => {
             <CartProbe />
             <QuickAddDialog
               open
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
               product={product}
               onClose={vi.fn()}
               steps={[
@@ -149,6 +150,7 @@ describe(QuickAddDialog.name, () => {
               open
               onClose={vi.fn()}
               onEditSave={onEditSave}
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
               product={product}
               steps={[
                 {
@@ -198,6 +200,7 @@ describe(QuickAddDialog.name, () => {
           <CartProvider>
             <QuickAddDialog
               open
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
               steps={[
                 {
                   defaultOptionIndex: 1,
@@ -256,6 +259,7 @@ describe(QuickAddDialog.name, () => {
               open
               product={product}
               onClose={vi.fn()}
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
             />
           </CartProvider>
         </ToastProvider>,
@@ -288,6 +292,7 @@ describe(QuickAddDialog.name, () => {
               open
               product={product}
               onClose={vi.fn()}
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
             />
           </CartProvider>
         </ToastProvider>,
@@ -326,6 +331,7 @@ describe(QuickAddDialog.name, () => {
               open
               product={product}
               onClose={onClose}
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
             />
           </CartProvider>
         </ToastProvider>,

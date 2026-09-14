@@ -104,7 +104,7 @@ export function PremiumPage(): React.JSX.Element {
               className="font-lato rounded-sm bg-white p-2 outline-hidden"
               value={observation}
               onChange={e => setObservation(e.target.value)}
-              placeholder="Ex: Favor retirar..."
+              placeholder="Exemplo: Favor retirar..."
             />
           </Container>
         </div>

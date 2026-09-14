@@ -26,6 +26,7 @@ export interface QuickAddDialogProps {
   product: Product | null;
   open: boolean;
   onClose: () => void;
+  observationPlaceholder: string;
   steps?: ReadonlyArray<QuickAddOptionStep>;
   editItem?: CartItem;
   onEditSave?: () => void;
@@ -260,7 +261,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
                 <textarea
                   id="quick-add-observation"
                   className="mt-1 min-h-20 w-full rounded-lg border border-purple-200 bg-white p-2 text-base font-normal"
-                  placeholder="Ex.: sem guardanapo"
+                  placeholder={props.observationPlaceholder}
                   value={observation}
                   onChange={event => setObservation(event.target.value)}
                 />

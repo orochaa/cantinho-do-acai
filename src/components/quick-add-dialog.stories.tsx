@@ -52,6 +52,7 @@ function QuickAddStory(props: QuickAddStoryProps): React.JSX.Element {
     <QuickAddDialog
       editItem={editItem}
       onClose={() => undefined}
+      observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
       open
       product={product}
       steps={props.scenario === 'default' ? undefined : steps}

@@ -77,6 +77,7 @@ export function CategoryPage(): React.JSX.Element {
       {!!QuickForm && (
         <QuickForm
           open={selectedProduct !== null || !!editProduct}
+          observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
           onClose={() => {
             setSelectedProduct(null);
             if (editIntent) {

@@ -16,6 +16,7 @@ export function PastelQuickForm(props: QuickAddDialogProps): React.JSX.Element {
   return (
     <QuickAddDialog
       {...props}
+      observationPlaceholder="Exemplo: Favor não colocar cebola"
       steps={pastelQuickSteps}
     />
   );

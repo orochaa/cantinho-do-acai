@@ -138,7 +138,7 @@ export function CartDeliveryAddress(
               <Input
                 id="address-complement"
                 type="text"
-                placeholder="Ex: Apartamento 101, Bloco A"
+                placeholder="Exemplo: Apartamento 101, Bloco A"
                 value={props.addressComplement}
                 onChange={event =>
                   props.setAddressComplement(event.target.value)
@@ -154,7 +154,7 @@ export function CartDeliveryAddress(
               <Input
                 id="address-reference"
                 type="text"
-                placeholder="Ex: Próximo à padaria"
+                placeholder="Exemplo: Próximo à padaria"
                 value={props.addressReference}
                 onChange={event =>
                   props.setAddressReference(event.target.value)
