@@ -30,6 +30,7 @@ export function Drawer(props: DrawerProps): React.JSX.Element | null {
     }
     if (props.open && !dialog.open) {
       dialog.showModal();
+      dialog.focus();
       setIsClosing(false);
     } else if (!props.open && dialog.open) {
       dialog.close();

@@ -54,6 +54,13 @@ afterEach(() => {
 
 describe(Drawer.name, () => {
   it('should use the drawer as the initial focus target instead of its close control', () => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
+      configurable: true,
+      value(this: HTMLDialogElement) {
+        this.open = true;
+        this.querySelector<HTMLButtonElement>('button')?.focus();
+      },
+    });
     const container = document.createElement('div');
     document.body.append(container);
     activeRoot = createRoot(container);
@@ -70,7 +77,9 @@ describe(Drawer.name, () => {
       ),
     );
 
-    expect(document.querySelector('dialog')?.tabIndex).toBe(-1);
+    const dialog = document.querySelector('dialog');
+    expect(dialog?.tabIndex).toBe(-1);
+    expect(document.activeElement).toBe(dialog);
   });
 
   it('should keep long content in an overscroll-contained viewport', () => {
