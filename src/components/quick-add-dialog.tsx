@@ -1,7 +1,7 @@
 import { useCart } from '@/context/cart-provider';
 import { useToast } from '@/context/toast-provider';
 import type { CartItem } from '@/domain/cart';
-import { formatCurrency } from '@/domain/format';
+import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { createOrderItem } from '@/domain/order';
 import { useEffect, useState } from 'react';
 import { Button } from './button';
@@ -41,6 +41,56 @@ const createOptionIndexes = (
 ): OptionIndexes =>
   Object.fromEntries(steps.map(step => [step.id, step.defaultOptionIndex]));
 
+interface ProductDetailsDialogProps {
+  product: Product;
+  open: boolean;
+  onClose: () => void;
+}
+
+function ProductDetailsDialog(
+  props: ProductDetailsDialogProps,
+): React.JSX.Element | null {
+  return (
+    <ResponsiveDialog
+      labelledBy="product-details-title"
+      open={props.open}
+      onClose={props.onClose}>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <DialogHeader
+          title={props.product.name}
+          titleId="product-details-title"
+        />
+        <div className="mt-1 rounded-xl bg-purple-50 p-4">
+          <img
+            src={props.product.img}
+            alt={`Imagem de ${props.product.name}`}
+            className="aspect-video w-full rounded-lg object-cover"
+          />
+          <p className="mt-2 whitespace-pre-line text-zinc-700">
+            {props.product.description}
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-purple-200 pt-4">
+            <p className="text-sm font-medium text-purple-950">
+              Serve até{' '}
+              {singularOrPlural(props.product.people, 'pessoa', 'pessoas')}
+              {props.product.quantity ? ` · ${props.product.quantity}g` : ''}
+            </p>
+            <p className="font-poppins text-xl font-semibold tracking-tighter text-purple-950">
+              {formatCurrency(props.product.price)}
+            </p>
+          </div>
+          <Button
+            variant="cancel"
+            className="mt-4 w-full"
+            onClick={props.onClose}>
+            Voltar
+          </Button>
+        </div>
+      </div>
+    </ResponsiveDialog>
+  );
+}
+
 export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
   const { addCartEvent } = useCart();
   const toast = useToast();
@@ -54,6 +104,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
   );
   const [step, setStep] = useState(0);
   const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState(false);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const product = props.product;
   const editItem = props.editItem;
   const currentOptionStep = optionSteps[step];
@@ -107,6 +158,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
     );
     setStep(0);
     setIsDiscardDialogOpen(false);
+    setIsDetailsDialogOpen(false);
   };
 
   useEffect(() => {
@@ -132,6 +184,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
     );
     setStep(0);
     setIsDiscardDialogOpen(false);
+    setIsDetailsDialogOpen(false);
   }, [editItem, optionSteps, props.open]);
 
   const close = (): void => {
@@ -183,7 +236,17 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
       {!!product && (
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
           <DialogHeader
-            title={product.name}
+            title={
+              <div className="flex flex-col gap-1">
+                <span>{product.name}</span>
+                <button
+                  type="button"
+                  className="self-start text-sm text-purple-600 underline decoration-purple-300 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
+                  onClick={() => setIsDetailsDialogOpen(true)}>
+                  Ver detalhes
+                </button>
+              </div>
+            }
             titleId="quick-add-title"
             onClose={close}
           />
@@ -310,6 +373,13 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
             )}
           </div>
         </div>
+      )}
+      {!!product && (
+        <ProductDetailsDialog
+          product={product}
+          open={props.open && isDetailsDialogOpen}
+          onClose={() => setIsDetailsDialogOpen(false)}
+        />
       )}
       <ResponsiveDialog
         labelledBy="discard-changes-title"

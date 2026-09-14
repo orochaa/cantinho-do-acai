@@ -245,6 +245,80 @@ describe(QuickAddDialog.name, () => {
     );
   });
 
+  it('should preserve the quick-add draft when viewing product details', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <QuickAddDialog
+              open
+              observationPlaceholder="Exemplo: Favor retirar algum ingrediente"
+              product={product}
+              onClose={vi.fn()}
+              steps={[
+                {
+                  defaultOptionIndex: 0,
+                  description: 'Escolha a intensidade.',
+                  id: 'intensity',
+                  options: [
+                    { name: 'Suave', price: 0 },
+                    { name: 'Forte', price: 2 },
+                  ],
+                  title: 'Intensidade',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>('button[aria-pressed="false"]')
+        ?.click(),
+    );
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent === 'Continuar')
+        ?.click(),
+    );
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>('button:not([aria-label])')
+        ?.click(),
+    );
+
+    expect(
+      document.querySelector('dialog[aria-labelledby="product-details-title"]'),
+    ).not.toBeNull();
+    expect(document.body.textContent).toContain('Produto de teste');
+    expect(document.body.textContent).toContain('Serve até 1 pessoa');
+    expect(document.body.textContent).toContain('R$\u00a010,00');
+    expect(
+      document.querySelector<HTMLImageElement>(
+        'dialog[aria-labelledby="product-details-title"] img',
+      )?.src,
+    ).toContain('/img/test.png');
+
+    act(() =>
+      Array.from(
+        document.querySelectorAll<HTMLButtonElement>(
+          'dialog[aria-labelledby="product-details-title"] button',
+        ),
+      )
+        .find(button => button.textContent?.trim() === 'Voltar')
+        ?.click(),
+    );
+
+    expect(document.body.textContent).toContain('Revise seu pedido');
+    expect(document.body.textContent).toContain('Forte');
+  });
+
   it('should keep an observation in the final review', () => {
     const container = document.createElement('div');
     document.body.append(container);

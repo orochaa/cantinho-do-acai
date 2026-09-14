@@ -70,6 +70,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = { args: { scenario: 'default' } };
+export const ProductDetails: Story = {
+  args: { scenario: 'default' },
+  play: async () => {
+    const canvas = within(document.body);
+    await userEvent.click(
+      await canvas.findByRole('button', { name: 'Ver detalhes' }),
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Open product details without leaving the quick-add review.',
+      },
+    },
+  },
+};
 export const RequiredOption: Story = {
   args: { scenario: 'option' },
   play: async () => {

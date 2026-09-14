@@ -1,7 +1,8 @@
 import { X } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 export interface DialogHeaderProps {
-  title: string;
+  title: ReactNode;
   titleId: string;
   closeLabel?: string;
   onClose?: () => void;
