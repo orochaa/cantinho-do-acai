@@ -1,8 +1,8 @@
 import { useToast } from '@/context/toast-provider';
 import { formatCurrency } from '@/domain/format';
-import { Minus, Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from './button';
+import { QuantityStepper } from './quantity-stepper';
 
 export interface OrderButtonProps {
   product: Product;
@@ -17,21 +17,13 @@ export interface OrderButtonProps {
 export function OrderButton(props: OrderButtonProps): React.JSX.Element {
   const { product, totalPrice, validate, order, multiple } = props;
 
-  const [counter, setCounter] = useState<number>(props.initialCount ?? 1);
+  const [count, setCount] = useState(props.initialCount ?? 1);
 
   useEffect(() => {
-    setCounter(props.initialCount ?? 1);
+    setCount(props.initialCount ?? 1);
   }, [props.initialCount]);
 
   const toast = useToast();
-
-  const decrementCounter = useCallback((): void => {
-    setCounter(c => (c > 1 ? c - 1 : 1));
-  }, []);
-
-  const incrementCounter = useCallback((): void => {
-    setCounter(c => c + 1);
-  }, []);
 
   const addOrder = useCallback(() => {
     const error = validate?.();
@@ -39,39 +31,29 @@ export function OrderButton(props: OrderButtonProps): React.JSX.Element {
     if (typeof error === 'string' && error.trim()) {
       toast.error({ description: error });
     } else {
-      order(counter);
+      order(count);
     }
-  }, [validate, toast, order, counter]);
+  }, [validate, toast, order, count]);
 
   return (
     <div className="mt-8 flex gap-2">
       {!!multiple && (
-        <div className="flex items-center gap-3 rounded-xs border border-zinc-300 bg-zinc-100 p-1.5 shadow-sm">
-          <button
-            type="button"
-            className="min-h-11 min-w-11 rounded-xs p-0.5 text-red-500 active:bg-zinc-200 disabled:text-zinc-500"
-            aria-label={`Remover ${product.name}`}
-            title="Remover"
-            onClick={decrementCounter}
-            disabled={counter === 1}>
-            <Minus className="size-5" />
-          </button>
-          <span>{counter}</span>
-          <button
-            type="button"
-            className="min-h-11 min-w-11 rounded-xs p-0.5 text-red-500 active:bg-zinc-200"
-            aria-label={`Adicionar ${product.name}`}
-            title="Adicionar"
-            onClick={incrementCounter}>
-            <Plus className="size-5" />
-          </button>
-        </div>
+        <QuantityStepper
+          count={count}
+          decreaseDisabled={count === 1}
+          decreaseLabel={`Diminuir quantidade de ${product.name}`}
+          decreaseTitle="Diminuir quantidade"
+          increaseLabel={`Aumentar quantidade de ${product.name}`}
+          increaseTitle="Aumentar quantidade"
+          onDecrease={() => setCount(current => current - 1)}
+          onIncrease={() => setCount(current => current + 1)}
+        />
       )}
       <Button
         variant="confirm"
         className="grow"
         onClick={addOrder}>
-        Adicionar ao Pedido - {formatCurrency(totalPrice * counter)}
+        Adicionar ao pedido · {formatCurrency(totalPrice * count)}
       </Button>
     </div>
   );

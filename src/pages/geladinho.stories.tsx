@@ -46,7 +46,7 @@ function GeladinhoStory(props: GeladinhoStoryProps): React.JSX.Element {
 
     const selectionTimer = window.setTimeout(() => {
       if (props.scenario === 'validation') {
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
         return;
       }
 
@@ -70,7 +70,7 @@ function GeladinhoStory(props: GeladinhoStoryProps): React.JSX.Element {
     const addToCartTimer =
       props.scenario === 'add-to-cart'
         ? window.setTimeout(() => {
-            findButton('Adicionar ao Pedido')?.click();
+            findButton('Adicionar ao pedido')?.click();
           }, 350)
         : undefined;
 

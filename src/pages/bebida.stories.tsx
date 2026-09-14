@@ -45,7 +45,7 @@ function BebidaStory(props: BebidaStoryProps): React.JSX.Element {
       }
 
       if (props.scenario === 'validation') {
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
       }
 
       if (props.scenario === 'flavor-quantity') {
@@ -63,7 +63,7 @@ function BebidaStory(props: BebidaStoryProps): React.JSX.Element {
       if (props.scenario === 'add-to-cart') {
         findOptionButton('Sprite 600ml')?.click();
         window.setTimeout(() => {
-          findButton('Adicionar ao Pedido')?.click();
+          findButton('Adicionar ao pedido')?.click();
         }, 150);
       }
     }, 150);

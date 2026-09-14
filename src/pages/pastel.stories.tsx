@@ -14,8 +14,8 @@ const findButton = (label: string): HTMLButtonElement | undefined =>
   );
 
 const findOrderQuantityButton = (): HTMLButtonElement | undefined =>
-  findButton('Adicionar ao Pedido')?.parentElement?.querySelector(
-    'button[title="Adicionar"]',
+  findButton('Adicionar ao pedido')?.parentElement?.querySelector(
+    'button[title="Aumentar quantidade"]',
   ) ?? undefined;
 
 // biome-ignore lint/style/useComponentExportOnlyModules: Storybook fixture.
@@ -36,7 +36,7 @@ function PastelStory(props: PastelStoryProps): React.JSX.Element {
 
       if (props.scenario === 'add-to-cart') {
         findButton('Pastel Grande')?.click();
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
       }
     }, 150);
 

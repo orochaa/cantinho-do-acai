@@ -5,8 +5,9 @@ import type {
   MultipleOptionsEvent,
   MultipleOptionsState,
 } from '@/domain/product-personalization';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { Container } from './container';
+import { QuantityStepper } from './quantity-stepper';
 
 export interface MultipleOptionsSelectorProps<TName extends string> {
   title: string;
@@ -33,7 +34,7 @@ export function MultipleOptionsSelector<TName extends string>(
             className={`flex items-center rounded-xl border bg-white shadow-sm transition ${option.count > 0 ? 'border-purple-300 bg-purple-50/50' : 'border-zinc-200 hover:border-purple-200 hover:shadow-md'}`}>
             <button
               type="button"
-              className="flex min-h-14 grow items-center gap-2 p-3 text-left"
+              className="flex min-h-14 h-full grow items-center gap-2 p-3 text-left"
               onClick={() => dispatchEvent({ type: 'add', option })}>
               {!!option.img && (
                 <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
@@ -56,7 +57,7 @@ export function MultipleOptionsSelector<TName extends string>(
               </div>
             </button>
 
-            <div className="flex h-14 min-w-28.75 items-center justify-end sm:min-w-auto">
+            <div className="flex min-h-14 h-full min-w-32 items-center justify-end">
               {option.count === 0 ? (
                 <AddOptionButton
                   dispatchEvent={dispatchEvent}
@@ -92,7 +93,7 @@ function AddOptionButton<TName extends string>(
   return (
     <button
       type="button"
-      className="flex min-h-11 min-w-11 h-full items-center justify-center rounded-lg p-3 pl-0 text-purple-700 disabled:text-zinc-400"
+      className="flex min-h-11 min-w-11 h-full items-center flex-1 justify-end rounded-lg py-3 pr-5.75 pl-0 text-purple-700 disabled:text-zinc-400"
       aria-label={`Adicionar ${option.name}`}
       title="Adicionar"
       disabled={ctx.countTotal >= ctx.countLimit}
@@ -114,33 +115,20 @@ export function QuantitySelector<TName extends string>(
   const { onCountChange, item, ctx } = props;
 
   return (
-    <div className="flex h-full items-center p-3 pl-0">
-      <div className="flex items-center rounded-lg border border-purple-200 bg-white p-0.5 shadow-sm">
-        <button
-          type="button"
-          className="min-h-11 min-w-11 rounded-md px-2 py-1.5 text-purple-700 disabled:text-zinc-400"
-          aria-label={`${item.count === 1 ? 'Remover' : 'Diminuir'} ${item.name}`}
-          title={item.count === 1 ? 'Remover' : 'Diminuir'}
-          onClick={() => onCountChange({ type: 'remove', option: item })}>
-          {item.count === 1 ? (
-            <Trash2 className="size-5 shrink-0" />
-          ) : (
-            <Minus className="size-5 shrink-0" />
-          )}
-        </button>
-        <span className="min-w-8 px-2 py-1.5 text-center font-bold text-purple-950">
-          {item.count}
-        </span>
-        <button
-          type="button"
-          className="min-h-11 min-w-11 rounded-md px-2 py-1.5 text-purple-700 disabled:text-zinc-400"
-          aria-label={`Adicionar ${item.name}`}
-          title="Adicionar"
-          disabled={ctx.countTotal >= ctx.countLimit}
-          onClick={() => onCountChange({ type: 'add', option: item })}>
-          <Plus className="size-5 shrink-0" />
-        </button>
-      </div>
+    <div className="flex h-full items-center pr-2">
+      <QuantityStepper
+        count={item.count}
+        decreaseIcon={
+          item.count === 1 ? <Trash2 className="size-5 shrink-0" /> : null
+        }
+        decreaseLabel={`${item.count === 1 ? 'Remover' : 'Diminuir'} ${item.name}`}
+        decreaseTitle={item.count === 1 ? 'Remover' : 'Diminuir'}
+        increaseDisabled={ctx.countTotal >= ctx.countLimit}
+        increaseLabel={`Adicionar ${item.name}`}
+        increaseTitle="Adicionar"
+        onDecrease={() => onCountChange({ type: 'remove', option: item })}
+        onIncrease={() => onCountChange({ type: 'add', option: item })}
+      />
     </div>
   );
 }

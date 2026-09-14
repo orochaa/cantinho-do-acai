@@ -22,9 +22,9 @@ const findButton = (label: string): HTMLButtonElement | undefined =>
 
 const findOrderQuantityButton = (): HTMLButtonElement | undefined =>
   findButton(
-    'Adicionar ao Pedido',
+    'Adicionar ao pedido',
   )?.parentElement?.querySelector<HTMLButtonElement>(
-    'button[title="Adicionar"]',
+    'button[title="Aumentar quantidade"]',
   ) ?? undefined;
 
 const assertOptionLimitReached = (label: string): void => {
@@ -50,7 +50,7 @@ function SalgadosStory(props: SalgadosStoryProps): React.JSX.Element {
       }
 
       if (props.scenario === 'validation') {
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
         return;
       }
 
@@ -87,7 +87,7 @@ function SalgadosStory(props: SalgadosStoryProps): React.JSX.Element {
 
       if (props.scenario === 'add-to-cart') {
         window.setTimeout(
-          () => findButton('Adicionar ao Pedido')?.click(),
+          () => findButton('Adicionar ao pedido')?.click(),
           150,
         );
       }

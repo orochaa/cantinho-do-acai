@@ -155,7 +155,7 @@ describe(CartProvider.name, () => {
     window.localStorage.setItem('cantinho-do-acai-cart', '{malformed');
     expect(renderCartProbe().cart).toEqual([]);
     expect(window.localStorage.getItem('cantinho-do-acai-cart')).toBe(
-      JSON.stringify({ version: 1, cart: [] }),
+      JSON.stringify({ version: 2, value: { cart: [] } }),
     );
 
     activeRoot?.unmount();
@@ -167,7 +167,7 @@ describe(CartProvider.name, () => {
 
     expect(renderCartProbe().cart).toEqual([]);
     expect(window.localStorage.getItem('cantinho-do-acai-cart')).toBe(
-      JSON.stringify({ version: 1, cart: [] }),
+      JSON.stringify({ version: 2, value: { cart: [] } }),
     );
   });
 

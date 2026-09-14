@@ -22,12 +22,12 @@ const findButton = (label: string): HTMLButtonElement | undefined =>
 
 const findOrderButton = (): HTMLButtonElement | undefined =>
   Array.from(document.querySelectorAll('button')).find(button =>
-    button.textContent?.includes('Adicionar ao Pedido'),
+    button.textContent?.includes('Adicionar ao pedido'),
   );
 
 const findOrderQuantityButton = (): HTMLButtonElement | undefined =>
   findOrderButton()?.parentElement?.querySelector<HTMLButtonElement>(
-    'button[title="Adicionar"]',
+    'button[title="Aumentar quantidade"]',
   ) ?? undefined;
 
 const assertOptionLimitReached = (label: string): void => {

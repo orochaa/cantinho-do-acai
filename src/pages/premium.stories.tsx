@@ -20,8 +20,8 @@ const findButton = (label: string): HTMLButtonElement | undefined =>
   );
 
 const findOrderQuantityButton = (): HTMLButtonElement | undefined =>
-  findButton('Adicionar ao Pedido')?.parentElement?.querySelector(
-    'button[title="Adicionar"]',
+  findButton('Adicionar ao pedido')?.parentElement?.querySelector(
+    'button[title="Aumentar quantidade"]',
   ) ?? undefined;
 
 const setObservation = (value: string): void => {
@@ -48,7 +48,7 @@ function PremiumStory(props: PremiumStoryProps): React.JSX.Element {
       }
 
       if (props.scenario === 'validation') {
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
         return;
       }
 
@@ -64,7 +64,7 @@ function PremiumStory(props: PremiumStoryProps): React.JSX.Element {
 
       if (props.scenario === 'add-to-cart') {
         window.setTimeout(() => {
-          findButton('Adicionar ao Pedido')?.click();
+          findButton('Adicionar ao pedido')?.click();
         }, 150);
       }
     }, 150);

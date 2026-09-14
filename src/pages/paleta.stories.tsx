@@ -37,7 +37,7 @@ function PaletaStory(props: PaletaStoryProps): React.JSX.Element {
       const flavor = 'Morango com Leite Condensado';
 
       if (props.scenario === 'validation') {
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
         return;
       }
 
@@ -60,7 +60,7 @@ function PaletaStory(props: PaletaStoryProps): React.JSX.Element {
 
       if (props.scenario === 'add-to-cart') {
         window.setTimeout(() => {
-          findButton('Adicionar ao Pedido')?.click();
+          findButton('Adicionar ao pedido')?.click();
         }, 150);
       }
     }, 150);

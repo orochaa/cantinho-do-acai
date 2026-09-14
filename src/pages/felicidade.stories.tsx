@@ -44,7 +44,7 @@ function FelicidadeStory(props: FelicidadeStoryProps): React.JSX.Element {
       }
 
       if (props.scenario === 'validation' || props.scenario === 'add-to-cart') {
-        findButton('Adicionar ao Pedido')?.click();
+        findButton('Adicionar ao pedido')?.click();
       }
     }, 150);
 

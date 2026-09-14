@@ -6,6 +6,7 @@ import { createOrderItem } from '@/domain/order';
 import { useEffect, useState } from 'react';
 import { Button } from './button';
 import { DialogHeader } from './dialog-header';
+import { QuantityStepper } from './quantity-stepper';
 import { ResponsiveDialog } from './responsive-dialog';
 
 export interface QuickAddOption {
@@ -58,11 +59,11 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
     const option = optionStep.options[optionIndexes[optionStep.id]];
     return option ? [option] : [];
   });
-  const total = product
-    ? (product.price +
-        selectedOptions.reduce((sum, option) => sum + option.price, 0)) *
-      count
+  const unitPrice = product
+    ? product.price +
+      selectedOptions.reduce((sum, option) => sum + option.price, 0)
     : 0;
+  const total = unitPrice * count;
   const dirty =
     count !== (editItem?.count ?? 1) ||
     observation !== (editItem?.observation ?? '') ||
@@ -265,34 +266,27 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
                 />
               </label>
               <div className="mt-4 flex items-center justify-between gap-3 border-t border-purple-200 pt-4">
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    className="min-h-11 min-w-11 rounded-lg border border-purple-300 bg-white"
-                    aria-label="Diminuir quantidade"
-                    onClick={() => setCount(value => Math.max(1, value - 1))}>
-                    −
-                  </button>
-                  <span aria-live="polite">{count}</span>
-                  <button
-                    type="button"
-                    className="min-h-11 min-w-11 rounded-lg border border-purple-300 bg-white"
-                    aria-label="Aumentar quantidade"
-                    onClick={() => setCount(value => value + 1)}>
-                    +
-                  </button>
-                </div>
+                <QuantityStepper
+                  count={count}
+                  decreaseDisabled={count === 1}
+                  decreaseLabel="Diminuir quantidade"
+                  decreaseTitle="Diminuir quantidade"
+                  increaseLabel="Aumentar quantidade"
+                  increaseTitle="Aumentar quantidade"
+                  onDecrease={() => setCount(current => current - 1)}
+                  onIncrease={() => setCount(current => current + 1)}
+                />
                 <span className="font-poppins text-xl font-semibold">
                   {formatCurrency(total)}
                 </span>
               </div>
             </div>
           )}
-          <div className="flex gap-3 pt-6">
+          <div className="mt-4 flex gap-3">
             {step > 0 && (
               <Button
                 variant="cancel"
-                className="min-h-11"
+                className="grow"
                 onClick={() => setStep(current => current - 1)}>
                 Voltar
               </Button>
@@ -300,16 +294,16 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
             {step < reviewStep ? (
               <Button
                 variant="confirm"
-                className="min-h-11 flex-1"
+                className="grow-2"
                 onClick={() => setStep(current => current + 1)}>
                 Continuar
               </Button>
             ) : (
               <Button
                 variant="confirm"
-                className="min-h-11 flex-1"
+                className="grow-2"
                 onClick={add}>
-                Adicionar {count} ao Pedido - {formatCurrency(total)}
+                Adicionar ao pedido · {formatCurrency(total)}
               </Button>
             )}
           </div>

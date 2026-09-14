@@ -118,7 +118,7 @@ describe(QuickAddDialog.name, () => {
     );
     act(() =>
       Array.from(document.querySelectorAll('button'))
-        .find(button => button.textContent?.includes('Adicionar 2'))
+        .find(button => button.textContent?.includes('Adicionar ao pedido'))
         ?.click(),
     );
 
