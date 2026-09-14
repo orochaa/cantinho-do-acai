@@ -1,6 +1,7 @@
 import { formatCurrency } from '@/domain/format';
 import { visibleMenu } from '@/domain/menu';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import type { QuickAddIntent } from '@/lib/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { DialogHeader } from './dialog-header';
@@ -100,9 +101,19 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
         ? displayResults.length - 1
         : -1;
 
-  const selectResult = (path: string): void => {
-    drawerCloseRef.current?.();
-    navigate(path);
+  const selectResult = (result: (typeof displayResults)[number]): void => {
+    const path = result.entry.category.quickAdd
+      ? `/${result.entry.route}`
+      : `/${result.entry.route}/${result.product.slang}`;
+    const state: QuickAddIntent | undefined = result.entry.category.quickAdd
+      ? { type: 'quick-add-intent', productSlang: result.product.slang }
+      : undefined;
+    navigate(path, state ? { state } : undefined);
+    if (isDesktop) {
+      props.onClose();
+    } else {
+      drawerCloseRef.current?.();
+    }
   };
 
   const moveResultFocus = (index: number): void => {
@@ -170,10 +181,14 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
                   }
                   data-search-result-index={index}
                   className={`flex min-h-20 items-center gap-3 rounded-xl border p-2 text-left transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 motion-reduce:transition-none ${selectedResultIndex === index ? 'border-purple-700 bg-purple-50 ring-2 ring-purple-200' : 'border-zinc-200'}`}
-                  to={`/${entry.route}/${product.slang}`}
+                  to={
+                    entry.category.quickAdd
+                      ? `/${entry.route}`
+                      : `/${entry.route}/${product.slang}`
+                  }
                   onClick={event => {
                     event.preventDefault();
-                    selectResult(`/${entry.route}/${product.slang}`);
+                    selectResult({ entry, product, score: 0 });
                   }}
                   onKeyDown={event => {
                     if (event.key === 'ArrowDown') {
@@ -236,7 +251,7 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
               event.preventDefault();
               const result = displayResults[selectedResultIndex];
               if (result) {
-                selectResult(`/${result.entry.route}/${result.product.slang}`);
+                selectResult(result);
               }
             }
           }}

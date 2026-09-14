@@ -323,7 +323,7 @@ describe(AppContentShell.name, () => {
     vi.useRealTimers();
   });
 
-  it('should match categories and navigate directly to a result', () => {
+  it('should match categories and navigate to a quick-add category', () => {
     renderShell();
     act(() => findButton('Buscar').click());
     const input =
@@ -334,14 +334,37 @@ describe(AppContentShell.name, () => {
     act(() => setInputValue(input, 'pastéis'));
     expect(document.body.textContent).toContain('Pastel de Frango');
     expect(document.body.textContent).toContain('R$');
-    const result = document.querySelector<HTMLAnchorElement>(
-      'a[href="/pastel/pastel-de-frango"]',
-    );
+    const result = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>(
+        '[data-search-result-index]',
+      ),
+    ).find(candidate => candidate.textContent?.includes('Pastel de Frango'));
     expect(result).not.toBeNull();
     act(() => result?.click());
-    expect(document.querySelector('output')?.textContent).toBe(
-      '/pastel/pastel-de-frango',
+    expect(document.querySelector('output')?.textContent).toBe('/pastel');
+  });
+
+  it('should navigate directly to a full-page product from search', () => {
+    renderShell();
+    act(() => findButton('Buscar').click());
+    const input =
+      document.querySelector<HTMLInputElement>('#menu-search-input');
+    if (!input) {
+      throw new Error('Search input not found');
+    }
+    act(() => setInputValue(input, 'kit salgados pequeno'));
+    const result = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>(
+        '[data-search-result-index]',
+      ),
+    ).find(candidate =>
+      candidate.textContent?.includes('Kit Salgados Pequeno'),
     );
+    expect(result).not.toBeNull();
+    const href = result?.getAttribute('href');
+    expect(href?.startsWith('/salgados/')).toBe(true);
+    act(() => result?.click());
+    expect(document.querySelector('output')?.textContent).toBe(href);
   });
 
   it('should rank a product-name prefix above category matches', () => {

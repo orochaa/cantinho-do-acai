@@ -2,14 +2,14 @@ import { MenuCard } from '@/components/menu-card';
 import type { QuickAddDialogProps } from '@/components/quick-add-dialog';
 import { Seo } from '@/components/seo';
 import { visibleMenu } from '@/domain/menu';
-import { isCartEditIntent } from '@/lib/navigation';
+import { isCartEditIntent, isQuickAddIntent } from '@/lib/navigation';
 import { BebidaQuickForm } from '@/pages/bebida.quick';
 import { FelicidadeQuickForm } from '@/pages/felicidade.quick';
 import { GeladinhoQuickForm } from '@/pages/geladinho.quick';
 import { PaletaQuickForm } from '@/pages/paleta.quick';
 import { PastelQuickForm } from '@/pages/pastel.quick';
 import { PremiumQuickForm } from '@/pages/premium.quick';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 
 type CategoryQuickForm = (props: QuickAddDialogProps) => React.JSX.Element;
@@ -29,6 +29,19 @@ export function CategoryPage(): React.JSX.Element {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const entry = visibleMenu.find(item => item.route === categoryRoute);
+  const QuickForm = entry ? quickForms[entry.route] : undefined;
+
+  useEffect(() => {
+    if (!(QuickForm && entry && isQuickAddIntent(location.state))) {
+      return;
+    }
+    const product = entry.products.find(
+      candidate => candidate.slang === location.state.productSlang,
+    );
+    if (product) {
+      setSelectedProduct(product);
+    }
+  }, [QuickForm, entry, location.state]);
 
   if (!entry) {
     return (
@@ -39,7 +52,6 @@ export function CategoryPage(): React.JSX.Element {
     );
   }
 
-  const QuickForm = quickForms[entry.route];
   const editIntent = isCartEditIntent(location.state)
     ? location.state
     : undefined;
