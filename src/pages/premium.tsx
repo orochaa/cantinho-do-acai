@@ -1,5 +1,6 @@
 import { Banner } from '@/components/banner';
 import { Container } from '@/components/container';
+import { Description } from '@/components/description';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
@@ -63,9 +64,7 @@ export function PremiumPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{copo.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="text-pretty whitespace-pre-line">
-              {copo.description}
-            </p>
+            <Description>{copo.description}</Description>
             {!!copo.quantity && <p>Contém aproximadamente {copo.quantity}g</p>}
             <span>
               {`Serve até ${singularOrPlural(copo.people, 'pessoa', 'pessoas')}`}

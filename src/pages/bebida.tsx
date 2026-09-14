@@ -1,4 +1,5 @@
 import { Banner } from '@/components/banner';
+import { Description } from '@/components/description';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
@@ -32,9 +33,7 @@ export function BebidaPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{bebida.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="text-pretty whitespace-pre-line">
-              {bebida.description}
-            </p>
+            <Description>{bebida.description}</Description>
             <span>
               {`Serve até ${singularOrPlural(bebida.people, 'pessoa', 'pessoas')}`}
             </span>

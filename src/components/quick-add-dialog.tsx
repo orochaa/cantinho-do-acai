@@ -5,6 +5,7 @@ import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { createOrderItem } from '@/domain/order';
 import { useEffect, useState } from 'react';
 import { Button } from './button';
+import { Description } from './description';
 import { DialogHeader } from './dialog-header';
 import { QuantityStepper } from './quantity-stepper';
 import { ResponsiveDialog } from './responsive-dialog';
@@ -66,9 +67,9 @@ function ProductDetailsDialog(
             alt={`Imagem de ${props.product.name}`}
             className="aspect-video w-full rounded-lg object-cover"
           />
-          <p className="mt-2 whitespace-pre-line text-zinc-700">
-            {props.product.description}
-          </p>
+          <div className="mt-2 text-zinc-700">
+            <Description>{props.product.description}</Description>
+          </div>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-purple-200 pt-4">
             <p className="text-sm font-medium text-purple-950">
               Serve até{' '}

@@ -1,4 +1,5 @@
 import { Banner } from '@/components/banner';
+import { Description } from '@/components/description';
 import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
@@ -69,9 +70,7 @@ export function AcaiPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{acai.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="text-pretty whitespace-pre-line">
-              {acai.description}
-            </p>
+            <Description>{acai.description}</Description>
             {!!acai.quantity && <p>Contém aproximadamente {acai.quantity}g</p>}
             <span>
               {`Serve até ${singularOrPlural(acai.people, 'pessoa', 'pessoas')}`}

@@ -1,4 +1,5 @@
 import { Banner } from '@/components/banner';
+import { Description } from '@/components/description';
 import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
@@ -63,9 +64,7 @@ export function SalgadosPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{salgado.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="text-pretty whitespace-pre-line">
-              {salgado.description}
-            </p>
+            <Description>{salgado.description}</Description>
             {!!salgado.quantity && (
               <p>Contém aproximadamente {salgado.quantity}g</p>
             )}

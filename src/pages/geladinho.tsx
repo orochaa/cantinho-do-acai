@@ -1,4 +1,5 @@
 import { Banner } from '@/components/banner';
+import { Description } from '@/components/description';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { useCart } from '@/context/cart-provider';
@@ -37,9 +38,7 @@ export function GeladinhoPage(): React.JSX.Element {
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{geladinho.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
-            <p className="text-pretty whitespace-pre-line">
-              {geladinho.description}
-            </p>
+            <Description>{geladinho.description}</Description>
             {!!geladinho.quantity && (
               <p>Contém aproximadamente {geladinho.quantity}g</p>
             )}
