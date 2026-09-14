@@ -55,6 +55,18 @@ const localStorageMock: Storage = {
 };
 
 beforeEach(() => {
+  Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
+    configurable: true,
+    value(this: HTMLDialogElement) {
+      this.open = true;
+    },
+  });
+  Object.defineProperty(HTMLDialogElement.prototype, 'close', {
+    configurable: true,
+    value(this: HTMLDialogElement) {
+      this.open = false;
+    },
+  });
   Object.defineProperty(window, 'localStorage', {
     configurable: true,
     value: localStorageMock,
@@ -183,6 +195,79 @@ describe(CartPage.name, () => {
         state: expect.objectContaining({ type: 'edit-cart-intent' }),
       }),
     );
+  });
+
+  it('should cancel removal without changing the cart', () => {
+    renderCheckout();
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>('button[aria-label^="Remover"]')
+        ?.click(),
+    );
+    expect(document.body.textContent).toContain('Remover item?');
+
+    act(() => findExactButton('Cancelar').click());
+
+    expect(document.body.textContent).toContain('Produto de teste');
+    expect(document.body.textContent).not.toContain('Remover item?');
+  });
+
+  it('should remove the requested item after confirmation and recalculate the total', () => {
+    renderCheckout();
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>('button[aria-label^="Remover"]')
+        ?.click(),
+    );
+    act(() => findExactButton('Remover').click());
+
+    expect(document.body.textContent).toContain('Seu carrinho está vazio');
+    expect(document.body.textContent).not.toContain('Confirmar Pedido');
+  });
+
+  it('should restore saved name and address and let customers forget them', () => {
+    storage.set(
+      'cantinho-do-acai-checkout',
+      JSON.stringify({
+        version: 1,
+        value: {
+          clientName: 'Maria',
+          address: {
+            cep: '95000000',
+            state: 'RS',
+            city: 'Caxias do Sul',
+            neighborhood: 'Centro',
+            street: 'Rua Salva',
+          },
+          addressNumber: '42',
+          addressComplement: 'Casa',
+          addressReference: 'Esquina',
+        },
+      }),
+    );
+    renderCheckout();
+
+    expect(
+      document.querySelector<HTMLInputElement>('#client-name')?.value,
+    ).toBe('Maria');
+    act(() => findButton('Entrega (com taxa de entrega)').click());
+    expect(document.querySelector<HTMLInputElement>('#cep')?.value).toBe(
+      '95000000',
+    );
+    expect(document.body.textContent).toContain('Rua Salva');
+    expect(
+      document.querySelector<HTMLInputElement>('#address-number')?.value,
+    ).toBe('42');
+
+    act(() => findExactButton('Esquecer dados salvos').click());
+
+    expect(
+      document.querySelector<HTMLInputElement>('#client-name')?.value,
+    ).toBe('');
+    expect(document.querySelector<HTMLInputElement>('#cep')?.value).toBe('');
+    expect(window.localStorage.getItem('cantinho-do-acai-checkout')).toBeNull();
   });
 
   it('should let customers open any checkout step directly', () => {

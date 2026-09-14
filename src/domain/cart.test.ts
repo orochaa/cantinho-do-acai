@@ -134,6 +134,30 @@ describe(createCartReducer.name, () => {
     );
     expect(reducer(initial, { type: 'remove', index: 4 })).toBe(initial);
   });
+
+  it('should keep independently added duplicate items addressable by id', () => {
+    let nextId = 0;
+    const reducer = createCartReducer(() => `duplicate-${nextId++}`);
+    const initial = reducer(reducer([], { type: 'add', item }), {
+      type: 'add',
+      item,
+    });
+
+    expect(initial).toHaveLength(2);
+    expect(initial[0]?.id).not.toBe(initial[1]?.id);
+
+    const updated = reducer(initial, {
+      type: 'update-quantity',
+      id: initial[1]?.id,
+      count: 4,
+    });
+
+    expect(updated[0]?.count).toBe(1);
+    expect(updated[1]).toMatchObject({ count: 4, total: 48 });
+    expect(reducer(updated, { type: 'remove', id: initial[0]?.id })).toEqual([
+      { ...item, id: 'duplicate-1', count: 4, total: 48 },
+    ]);
+  });
 });
 
 describe(hydrateCart.name, () => {

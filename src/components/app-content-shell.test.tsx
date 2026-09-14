@@ -142,6 +142,17 @@ afterEach(() => {
 });
 
 describe(AppContentShell.name, () => {
+  it('should keep the empty cart quiet while browsing', () => {
+    renderShell('/');
+
+    const cartLinks = document.querySelectorAll('a[aria-label="Carrinho"]');
+    expect(cartLinks).toHaveLength(2);
+    expect(
+      document.querySelectorAll('a[aria-label="Carrinho"] span.bg-red-500'),
+    ).toHaveLength(0);
+    expect(document.querySelector('div.fixed.inset-x-3')).toBeNull();
+  });
+
   it('should expose active home and cart navigation plus the search trigger', () => {
     renderShell('/cart');
     expect(
@@ -369,6 +380,25 @@ describe(AppContentShell.name, () => {
     expect(
       document.querySelector('[data-search-result-index][aria-current="true"]'),
     ).not.toBeNull();
+  });
+
+  it('should preserve reduced-motion-safe transitions on shell controls', () => {
+    renderShell('/acai');
+
+    const activeCategory = document.querySelector(
+      'nav[aria-label="Categorias do cardápio"] a[aria-current="page"]',
+    );
+    const searchResultClass = 'a[href="/acai"]';
+    expect(activeCategory?.className).toContain(
+      'motion-reduce:transition-none',
+    );
+    expect(document.querySelector(searchResultClass)?.className).toContain(
+      'motion-reduce:transition-none',
+    );
+    expect(
+      document.querySelector('nav[aria-label="Navegação principal"]')
+        ?.textContent,
+    ).toContain('Buscar');
   });
 
   it('should show populated cart count, total, and browsing shortcut', () => {

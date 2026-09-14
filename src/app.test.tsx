@@ -11,6 +11,7 @@ afterEach(() => {
   activeRoot = undefined;
   document.body.innerHTML = '';
   window.localStorage?.clear();
+  window.history.replaceState({}, '', '/');
   vi.restoreAllMocks();
 });
 
@@ -49,5 +50,27 @@ describe(App.name, () => {
 
     act(() => productLink?.click());
     expect(container.textContent).toContain('Tipo de Açaí:');
+  });
+
+  it('should render an existing deep product URL directly', () => {
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        disconnect(): void {}
+        observe(): void {}
+        unobserve(): void {}
+      },
+    );
+    window.history.replaceState({}, '', '/pastel/pastel-de-frango');
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(<App />);
+    });
+
+    expect(container.textContent).toContain('Pastel de Frango');
+    expect(container.textContent).toContain('Tamanho:');
   });
 });

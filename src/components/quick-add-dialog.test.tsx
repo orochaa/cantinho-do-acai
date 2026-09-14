@@ -1,5 +1,5 @@
 import { QuickAddDialog } from '@/components/quick-add-dialog';
-import { CartProvider } from '@/context/cart-provider';
+import { CartProvider, useCart } from '@/context/cart-provider';
 import { ToastProvider } from '@/context/toast-provider';
 import { createOrderItem } from '@/domain/order';
 import { act } from 'react';
@@ -44,6 +44,15 @@ const setTextareaValue = (
   textarea.dispatchEvent(new Event('input', { bubbles: true }));
 };
 
+function CartProbe(): React.JSX.Element {
+  const { cart } = useCart();
+  return (
+    <output data-testid="cart-probe">
+      {cart.map(item => `${item.product.name}:${item.total}`).join('|')}
+    </output>
+  );
+}
+
 beforeEach(() => {
   HTMLButtonElement.prototype.setPointerCapture = vi.fn();
   Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
@@ -63,6 +72,59 @@ afterEach(() => {
 });
 
 describe(QuickAddDialog.name, () => {
+  it('should add a quick product with its selected option and quantity', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <CartProbe />
+            <QuickAddDialog
+              open
+              product={product}
+              onClose={vi.fn()}
+              steps={[
+                {
+                  defaultOptionIndex: 0,
+                  description: 'Escolha a intensidade.',
+                  id: 'intensity',
+                  options: [
+                    { name: 'Suave', price: 0 },
+                    { name: 'Forte', price: 2 },
+                  ],
+                  title: 'Intensidade',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    act(() => {
+      document
+        .querySelector<HTMLButtonElement>('button[aria-pressed="false"]')
+        ?.click();
+    });
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent === 'Continuar')
+        ?.click(),
+    );
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.includes('Adicionar ao pedido'))
+        ?.click(),
+    );
+
+    expect(
+      document.querySelector('[data-testid="cart-probe"]')?.textContent,
+    ).toBe('Produto de teste:12');
+  });
+
   it('should hydrate an edited item and invoke its save callback', () => {
     const editItem = {
       ...createOrderItem({

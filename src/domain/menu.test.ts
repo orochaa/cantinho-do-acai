@@ -47,5 +47,25 @@ describe('menu registry', () => {
     );
     expect(paletaCategory.quickAdd).toBe(true);
     expect(bebidaCategory.quickAdd).toBe(true);
+    expect(
+      new Set(paletaCategory.products.map(product => product.slang)).size,
+    ).toBe(paletaCategory.products.length);
+    expect(
+      new Set(bebidaCategory.products.map(product => product.slang)).size,
+    ).toBe(bebidaCategory.products.length);
+    expect(
+      paletaCategory.products.every(
+        product =>
+          product.description.length > 0 &&
+          product.price > 0 &&
+          product.fullPrice > 0 &&
+          product.people > 0,
+      ),
+    ).toBe(true);
+    expect(
+      bebidaCategory.products.every(product =>
+        product.img.includes('/img/bebidas/'),
+      ),
+    ).toBe(true);
   });
 });
