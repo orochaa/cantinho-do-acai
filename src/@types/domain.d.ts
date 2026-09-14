@@ -19,6 +19,7 @@ interface Product {
   price: number;
   people: number;
   disabled?: boolean;
+  acceptsObservation?: boolean;
 }
 
 interface Option<TName extends string = string> {

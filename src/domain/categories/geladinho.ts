@@ -52,5 +52,6 @@ export const geladinhoCategory: Category<
     people: 1,
     quantity: 70,
     slang: slang(`Geladinho de ${flavor.name}`),
+    acceptsObservation: false,
   })),
 };

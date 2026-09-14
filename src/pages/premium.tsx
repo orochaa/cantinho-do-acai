@@ -91,20 +91,22 @@ export function PremiumPage(): React.JSX.Element {
             />
           )}
 
-          <Container>
-            <label
-              htmlFor="observation"
-              className="m-1 text-xl font-bold text-white">
-              Observação
-            </label>
-            <Textarea
-              id="observation"
-              rows={4}
-              value={observation}
-              onChange={e => setObservation(e.target.value)}
-              placeholder="Exemplo: Favor retirar..."
-            />
-          </Container>
+          {copo.acceptsObservation !== false && (
+            <Container>
+              <label
+                htmlFor="observation"
+                className="m-1 text-xl font-bold text-white">
+                Observação
+              </label>
+              <Textarea
+                id="observation"
+                rows={4}
+                value={observation}
+                onChange={e => setObservation(e.target.value)}
+                placeholder="Exemplo: Favor retirar..."
+              />
+            </Container>
+          )}
         </div>
 
         <OrderButton
@@ -116,7 +118,7 @@ export function PremiumPage(): React.JSX.Element {
           order={count => {
             const { total: _total, ...item } = personalization.createOrderItem(
               count,
-              observation,
+              copo.acceptsObservation === false ? undefined : observation,
             );
 
             if (edit.item) {

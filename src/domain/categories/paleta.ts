@@ -36,5 +36,6 @@ export const paletaCategory: Category<Product> = {
     quantity: 105,
     description: `Paleta italiana de ${product.name.toLowerCase()}.`,
     slang: slang(`Paleta de ${product.name}`),
+    acceptsObservation: false,
   })),
 };

@@ -107,6 +107,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const product = props.product;
   const editItem = props.editItem;
+  const acceptsObservation = product?.acceptsObservation !== false;
   const currentOptionStep = optionSteps[step];
   const selectedOptions = optionSteps.flatMap(optionStep => {
     const option = optionStep.options[optionIndexes[optionStep.id]];
@@ -119,7 +120,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
   const total = unitPrice * count;
   const dirty =
     count !== (editItem?.count ?? 1) ||
-    observation !== (editItem?.observation ?? '') ||
+    (acceptsObservation && observation !== (editItem?.observation ?? '')) ||
     optionSteps.some(
       optionStep =>
         optionIndexes[optionStep.id] !==
@@ -209,7 +210,7 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
       product,
       options: selectedOptions.map(option => ({ ...option, count: 1 })),
       count,
-      observation: observation || undefined,
+      observation: acceptsObservation ? observation || undefined : undefined,
     });
     addCartEvent(
       editItem
@@ -318,18 +319,20 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
                   ))}
                 </div>
               </div>
-              <label
-                className="mt-4 block text-sm font-medium text-purple-950"
-                htmlFor="quick-add-observation">
-                Observação (opcional)
-                <Textarea
-                  id="quick-add-observation"
-                  className="mt-1 text-base font-normal"
-                  placeholder={props.observationPlaceholder}
-                  value={observation}
-                  onChange={event => setObservation(event.target.value)}
-                />
-              </label>
+              {acceptsObservation && (
+                <label
+                  className="mt-4 block text-sm font-medium text-purple-950"
+                  htmlFor="quick-add-observation">
+                  Observação (opcional)
+                  <Textarea
+                    id="quick-add-observation"
+                    className="mt-1 text-base font-normal"
+                    placeholder={props.observationPlaceholder}
+                    value={observation}
+                    onChange={event => setObservation(event.target.value)}
+                  />
+                </label>
+              )}
               <div className="mt-4 flex items-center justify-between gap-3 border-t border-purple-200 pt-4">
                 <QuantityStepper
                   count={count}

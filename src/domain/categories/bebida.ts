@@ -28,5 +28,6 @@ export const bebidaCategory: Category<Product> = {
     people: 1,
     slang: slang(product.name),
     description: 'Bebida gelada para acompanhar seu lanche ou sobremesa.',
+    acceptsObservation: false,
   })),
 };
