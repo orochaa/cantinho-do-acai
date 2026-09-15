@@ -49,7 +49,7 @@ export function MultipleOptionsSelector<TName extends string>(
                 </div>
               )}
               <div className="flex flex-col text-left">
-                <p className="line-clamp-2 text-base font-medium text-ellipsis md:text-lg">
+                <p className="line-clamp-1 break-all text-base font-medium text-ellipsis md:text-lg">
                   {option.name}
                 </p>
                 {!!option.price && (
@@ -60,7 +60,7 @@ export function MultipleOptionsSelector<TName extends string>(
               </div>
             </button>
 
-            <div className="flex min-h-14 h-full min-w-32 items-center justify-end">
+            <div className="flex min-h-14 h-full items-center justify-end">
               {option.count === 0 ? (
                 <AddOptionButton
                   dispatchEvent={dispatchEvent}
