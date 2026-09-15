@@ -9,7 +9,15 @@ import {
   productPersonalizationReducer,
   validateProductPersonalization,
 } from '@/domain/product-personalization';
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
+
+type ProductPersonalizationAction<Groups extends PersonalizationGroups> =
+  | ProductPersonalizationEvent<Groups>
+  | {
+      type: 'reset';
+      groups: Groups;
+      initialItem?: Pick<OrderItem, 'options'>;
+    };
 
 export function useProductPersonalization<Groups extends PersonalizationGroups>(
   product: Product,
@@ -21,12 +29,34 @@ export function useProductPersonalization<Groups extends PersonalizationGroups>(
   validate: () => string | undefined;
   createOrderItem: (count: number, observation?: string) => OrderItem;
 } {
+  const latestInput = useRef({ groups, initialItem });
+  latestInput.current = { groups, initialItem };
+  const previousProduct = useRef(product);
   const [state, dispatch] = useReducer(
-    productPersonalizationReducer,
+    (
+      currentState: ProductPersonalizationState<Groups>,
+      event: ProductPersonalizationAction<Groups>,
+    ): ProductPersonalizationState<Groups> =>
+      event.type === 'reset'
+        ? hydrateProductPersonalizationState(event.groups, event.initialItem)
+        : productPersonalizationReducer(currentState, event),
     { groups, initialItem },
     value =>
       hydrateProductPersonalizationState(value.groups, value.initialItem),
   );
+
+  useEffect(() => {
+    if (previousProduct.current === product) {
+      return;
+    }
+    previousProduct.current = product;
+    dispatch({
+      type: 'reset',
+      groups: latestInput.current.groups,
+      initialItem: latestInput.current.initialItem,
+    });
+  }, [product]);
+
   const dispatchEvent = useCallback(
     (event: ProductPersonalizationEvent<Groups>): void => {
       dispatch(event as never);
