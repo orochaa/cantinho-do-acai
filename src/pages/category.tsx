@@ -64,7 +64,7 @@ export function CategoryPage(): React.JSX.Element {
         description={entry.category.description}
         imgUrl={`https://cantinhodoacai.vercel.app${entry.products[0]?.img ?? ''}`}
       />
-      <div className="mx-auto w-11/12 py-12 sm:py-24">
+      <div className="mx-auto w-3xl max-w-11/12 py-12 sm:py-24">
         <header className="mb-8 text-white">
           <h1 className="text-3xl font-bold sm:text-4xl">{entry.name}</h1>
           {!!entry.category.description && (

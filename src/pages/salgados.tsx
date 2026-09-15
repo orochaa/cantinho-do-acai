@@ -60,7 +60,7 @@ export function SalgadosPage(): React.JSX.Element {
         img={salgado.img}
         name={salgado.name}
       />
-      <div className="mx-auto w-11/12 pb-8 sm:pb-12 lg:pb-16">
+      <div className="mx-auto w-3xl max-w-11/12 pb-8 sm:pb-12 lg:pb-16">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{salgado.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
