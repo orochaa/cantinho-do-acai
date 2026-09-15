@@ -66,7 +66,7 @@ export function AcaiPage(): React.JSX.Element {
         img={acai.img}
         name={acai.name}
       />
-      <div className="mx-auto w-11/12">
+      <div className="mx-auto w-11/12 pb-8 sm:pb-12 lg:pb-16">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{acai.name}</h2>
           <div className="mt-2 flex flex-col gap-1 text-base">
@@ -133,7 +133,6 @@ export function AcaiPage(): React.JSX.Element {
           }}
         />
       </div>
-      <span className="block h-20" />
     </div>
   );
 }

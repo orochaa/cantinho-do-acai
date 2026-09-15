@@ -135,7 +135,7 @@ export function CartPage(): React.JSX.Element {
         description="Confira o seu pedido e finalize a sua compra no Cantinho do Açaí."
         imgUrl="https://cantinhodoacai.vercel.app/img/novo-logo.png"
       />
-      <div className="mx-auto w-11/12 max-w-6xl py-12 sm:py-16">
+      <div className="mx-auto w-11/12 max-w-6xl py-12 sm:py-24">
         {cart.length === 0 ? (
           <section
             aria-labelledby="empty-cart-title"

@@ -52,8 +52,8 @@ export function AppContentShell(
   };
 
   return (
-    <div className="relative min-h-screen bg-linear-to-br from-black to-purple-700">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-8 lg:px-6">
+    <div className="flex flex-col relative min-h-screen bg-linear-to-br from-black to-purple-700">
+      <div className="flex-1 mx-auto grid max-w-6xl grid-cols-1 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-8 lg:px-6">
         <DesktopNavigation
           cartItemCount={cartItemCount}
           isCartActive={isCartActive}
@@ -64,7 +64,7 @@ export function AppContentShell(
             setIsSearchOpen(true);
           }}
         />
-        <main className="min-w-0 pb-[calc(1rem+env(safe-area-inset-bottom))] lg:pb-8">
+        <main className="min-w-0 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
           <div className="mx-auto max-w-3xl">{props.children}</div>
         </main>
       </div>

@@ -20,7 +20,7 @@ export function MobileNavigation(
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-white/20 bg-purple-950/95 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-white shadow-2xl backdrop-blur lg:hidden">
+      className="sticky inset-x-0 bottom-0 z-30 border-t border-white/20 bg-purple-950/95 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-white shadow-2xl backdrop-blur lg:hidden">
       <div className="mx-auto flex max-w-md items-stretch gap-2">
         <Link
           aria-current={props.isHomeActive ? 'page' : undefined}

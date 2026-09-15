@@ -26,7 +26,7 @@ export function DesktopNavigation(
 
   return (
     <aside
-      className={`hidden lg:block ${routeFromPath === '' ? 'pt-96' : 'pt-14'}`}>
+      className={`hidden lg:block ${routeFromPath === '' ? 'pt-96' : 'pt-28'}`}>
       <nav
         aria-label="Categorias do cardápio"
         className="sticky top-8 px-1 text-white">
