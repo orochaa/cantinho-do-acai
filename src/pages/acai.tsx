@@ -1,11 +1,18 @@
 import { Banner } from '@/components/banner';
 import { Description } from '@/components/description';
-import { MultipleOptionsSelector } from '@/components/multiple-options-selector';
+import {
+  GroupedMultipleOptionsSelector,
+  type MultipleOptionsGroup,
+} from '@/components/grouped-multiple-options-selector';
 import { OrderButton } from '@/components/order-button';
 import { Seo } from '@/components/seo';
 import { SingleOptionSelector } from '@/components/single-option-selector';
 import { useCart } from '@/context/cart-provider';
 import { acaiCategory } from '@/domain/categories/acai';
+import { groupAcaiComplements } from '@/domain/categories/acai-complement-groups';
+import type { AcaiComplement } from '@/domain/categories/acai-complements';
+import type { AcaiExtra } from '@/domain/categories/acai-extra';
+import { groupAcaiExtras } from '@/domain/categories/acai-extra-groups';
 import { formatCurrency, singularOrPlural } from '@/domain/format';
 import type {
   MultipleOptionsEvent,
@@ -18,11 +25,12 @@ import type {
 import { useCartEditIntent } from '@/hooks/use-cart-edit-intent';
 import { useProduct } from '@/hooks/use-product';
 import { useProductPersonalization } from '@/hooks/use-product-personalization';
+import { useMemo } from 'react';
 
 interface AcaiPersonalizationGroups {
   type: PersonalizationSingleGroup;
-  complements: PersonalizationMultipleGroup;
-  extras: PersonalizationMultipleGroup;
+  complements: PersonalizationMultipleGroup<AcaiComplement>;
+  extras: PersonalizationMultipleGroup<AcaiExtra>;
 }
 
 export function AcaiPage(): React.JSX.Element {
@@ -53,6 +61,15 @@ export function AcaiPage(): React.JSX.Element {
       },
     },
     edit.item,
+  );
+
+  const extraGroups = useMemo<Array<MultipleOptionsGroup<AcaiExtra>>>(
+    () => groupAcaiExtras(personalization.groups.extras.options),
+    [personalization.groups.extras.options],
+  );
+  const complementGroups = useMemo<Array<MultipleOptionsGroup<AcaiComplement>>>(
+    () => groupAcaiComplements(personalization.groups.complements.options),
+    [personalization.groups.complements.options],
   );
 
   return (
@@ -92,7 +109,7 @@ export function AcaiPage(): React.JSX.Element {
             ctx={personalization.groups.type as SingleOptionState}
             title="Tipo de Açaí:"
           />
-          <MultipleOptionsSelector
+          <GroupedMultipleOptionsSelector
             dispatchEvent={(event: MultipleOptionsEvent) =>
               personalization.dispatch({
                 type: event.type,
@@ -101,9 +118,10 @@ export function AcaiPage(): React.JSX.Element {
               } as ProductPersonalizationEvent<AcaiPersonalizationGroups>)
             }
             ctx={personalization.groups.complements}
+            groups={complementGroups}
             title="Acompanhamentos:"
           />
-          <MultipleOptionsSelector
+          <GroupedMultipleOptionsSelector
             dispatchEvent={(event: MultipleOptionsEvent) =>
               personalization.dispatch({
                 type: event.type,
@@ -112,6 +130,7 @@ export function AcaiPage(): React.JSX.Element {
               } as ProductPersonalizationEvent<AcaiPersonalizationGroups>)
             }
             ctx={personalization.groups.extras}
+            groups={extraGroups}
             title="Adicionais:"
           />
         </div>

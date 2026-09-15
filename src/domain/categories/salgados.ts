@@ -1,5 +1,23 @@
 import { slang } from '@/domain/format';
 
+const complements = [
+  'Rissoles de Carne',
+  'Rissoles de Frango',
+  'Rissoles de Presunto e Queijo',
+  'Rissoles de Palmito e Queijo',
+  'Rissoles de Milho, Orégano e Queijo',
+  'Rissoles de Goiabada e Queijo',
+  'Bolinha de Queijo',
+  'Croquete de Carne',
+  'Coxinha de Frango',
+  'Enroladinho de Salsicha',
+].sort();
+
+const sauces = [
+  // 'Molho Cheddar',
+  'Molho de Catupiri',
+];
+
 export type Salgado = Product & {
   complementsLimit: number;
   complements: Array<string>;
@@ -35,22 +53,8 @@ export const salgadosCategory: Category<Salgado> = {
     },
   ].map(p => ({
     slang: slang(p.name),
-    complements: [
-      'Rissoles de Carne',
-      'Rissoles de Frango',
-      'Rissoles de Presunto e Queijo',
-      'Rissoles de Palmito e Queijo',
-      'Rissoles de Milho, Orégano e Queijo',
-      'Rissoles de Goiabada e Queijo',
-      'Bolinha de Queijo',
-      'Croquete de Carne',
-      'Coxinha de Frango',
-      'Enroladinho de Salsicha',
-    ],
-    sauces: [
-      // 'Molho Cheddar',
-      'Molho de Catupiri',
-    ],
+    complements,
+    sauces,
     ...p,
   })),
 };

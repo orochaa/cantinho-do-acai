@@ -25,7 +25,7 @@ export type AcaiExtra =
   | 'Creme de Pistache'
   | 'Creme de Beijinho'
   | 'Creme de Bombom'
-  | 'Creme Meio Amargo'
+  | 'Creme de Chocolate Meio Amargo'
   | 'Creme de Cappuccino'
   | 'Creme de Doce de Leite'
   | 'Calda de Chocolate'
@@ -64,7 +64,7 @@ export const ACAI_EXTRA: Record<
   'Creme de Kit Kat': {
     img: 'https://static-images.ifood.com.br/pratos/e98d3812-d175-4664-ae77-97f266bc601a/202505201042_6650_i.jpg',
   },
-  'Creme Meio Amargo': {
+  'Creme de Chocolate Meio Amargo': {
     img: 'https://static-images.ifood.com.br/pratos/e98d3812-d175-4664-ae77-97f266bc601a/202511011840_81PU_i.jpg',
   },
   'Creme de Ovomaltine': {

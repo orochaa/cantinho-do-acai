@@ -34,40 +34,11 @@ export function SingleOptionSelector<
 
       <div className="grid auto-rows-[1fr] grid-cols-1 gap-2">
         {ctx.options.map(option => (
-          <div
+          <SingleOptionRow
             key={option.name}
-            className="flex items-center rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:border-purple-200 hover:shadow-md">
-            <button
-              type="button"
-              tabIndex={-1}
-              className="flex min-h-14 grow items-center gap-3 p-3 text-left"
-              onClick={() => onSelectionChange(option)}>
-              {!!option.img && (
-                <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
-                  <img
-                    className="min-h-11 min-w-11 object-center"
-                    src={option.img}
-                    alt={option.name}
-                  />
-                </div>
-              )}
-              <div className="flex flex-col text-left">
-                <p className="line-clamp-2 text-base font-medium text-ellipsis md:text-lg">
-                  {option.name}
-                </p>
-                {!!option.price && (
-                  <span className="text-sm font-light tracking-tight whitespace-nowrap md:text-base">
-                    {formatCurrency(option.price)}
-                  </span>
-                )}
-              </div>
-            </button>
-
-            <ToggleOptionButton
-              onSelectionChange={onSelectionChange}
-              option={option}
-            />
-          </div>
+            option={option}
+            onSelectionChange={onSelectionChange}
+          />
         ))}
       </div>
     </>
@@ -77,6 +48,56 @@ export function SingleOptionSelector<
     <div className="flex flex-col gap-3">{content}</div>
   ) : (
     <Container>{content}</Container>
+  );
+}
+
+interface SingleOptionRowProps<
+  TName extends string,
+  TOption extends SelectableOptionLike<TName>,
+> {
+  option: TOption;
+  onSelectionChange: (option: TOption) => void;
+}
+
+function SingleOptionRow<
+  TName extends string,
+  TOption extends SelectableOptionLike<TName>,
+>(props: SingleOptionRowProps<TName, TOption>): React.JSX.Element {
+  const { option, onSelectionChange } = props;
+
+  return (
+    <div className="flex items-center rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:border-purple-200 hover:shadow-md">
+      <button
+        type="button"
+        tabIndex={-1}
+        className="flex min-h-14 grow items-center gap-3 p-3 text-left"
+        onClick={() => onSelectionChange(option)}>
+        {!!option.img && (
+          <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
+            <img
+              className="min-h-11 min-w-11 object-center"
+              src={option.img}
+              alt={option.name}
+            />
+          </div>
+        )}
+        <div className="flex flex-col text-left">
+          <p className="line-clamp-2 text-base font-medium text-ellipsis md:text-lg">
+            {option.name}
+          </p>
+          {!!option.price && (
+            <span className="text-sm font-light tracking-tight whitespace-nowrap md:text-base">
+              {formatCurrency(option.price)}
+            </span>
+          )}
+        </div>
+      </button>
+
+      <ToggleOptionButton
+        onSelectionChange={onSelectionChange}
+        option={option}
+      />
+    </div>
   );
 }
 

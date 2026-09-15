@@ -16,6 +16,9 @@ export interface QuantityStepperProps {
   decreaseDisabled?: boolean;
 }
 
+const quantityStepperClassName =
+  'flex min-h-11 min-w-9 items-center justify-center rounded-lg text-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400';
+
 export function QuantityStepper(
   props: QuantityStepperProps,
 ): React.JSX.Element {
@@ -41,7 +44,7 @@ export function QuantityStepper(
       )}>
       <button
         type="button"
-        className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400"
+        className={quantityStepperClassName}
         aria-label={decreaseLabel}
         title={decreaseTitle}
         disabled={decreaseDisabled}
@@ -55,7 +58,7 @@ export function QuantityStepper(
       </span>
       <button
         type="button"
-        className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400"
+        className={quantityStepperClassName}
         aria-label={increaseLabel}
         title={increaseTitle}
         disabled={increaseDisabled}
