@@ -49,7 +49,7 @@ export const felicidadeCategory: Category<Product> = {
         'O Copo da Felicidade Cravejado é uma experiência de sabor única. Este prato é uma combinação perfeita de texturas e sabores, começando com o irresistível Cravejado, que oferece uma explosão de sabor a cada mordida. Acompanhado por um cremoso creme de chocolate preto, que adiciona profundidade e riqueza ao prato, e finalizado com um suave creme de chocolate branco, que equilibra a intensidade do chocolate preto com sua doçura delicada. Cada colherada é uma celebração da felicidade, tornando este prato uma escolha perfeita para quem busca uma sobremesa verdadeiramente especial.',
       people: 1,
       fullPrice: 35,
-      price: 25,
+      price: 28,
     },
   ].map(p => ({ slang: slang(p.name), ...p })),
 };
