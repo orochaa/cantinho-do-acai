@@ -11,6 +11,11 @@ export interface QuickAddIntent {
   productSlang: string;
 }
 
+export interface ProductNavigation {
+  path: string;
+  state?: QuickAddIntent;
+}
+
 export const isCartEditIntent = (value: unknown): value is CartEditIntent =>
   typeof value === 'object' &&
   value !== null &&
@@ -38,6 +43,22 @@ export const getProductPath = (product: Product): string => {
   return entry?.category.quickAdd
     ? `/${entry.route}`
     : `/${entry?.route}/${slug}`;
+};
+
+export const getProductNavigation = (product: Product): ProductNavigation => {
+  const entry = visibleMenu.find(item =>
+    item.products.some(
+      candidate =>
+        candidate.slang === product.slang || candidate.name === product.name,
+    ),
+  );
+  const path = getProductPath(product);
+  return entry?.category.quickAdd
+    ? {
+        path,
+        state: { type: 'quick-add-intent', productSlang: product.slang },
+      }
+    : { path };
 };
 
 export const navigateToElement = (elementId: string): void => {

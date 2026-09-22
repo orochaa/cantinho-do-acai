@@ -20,6 +20,37 @@ _Avoid_: item, prato
 A product whose order requires the customer to choose one or more options before it can be added to the order.
 _Avoid_: produto customizado, montagem
 
+**Destaque**:
+An active, customer-facing product promotion or release
+announcement shown in the Destaques section.
+_Avoid_: seção, banner
+
+**Promoção agendada**:
+A Destaque with a defined start and end calendar date and a temporary selling price.
+_Avoid_: promoção temporária
+
+**Promoção semanal**:
+A Destaque with a fixed temporary price that repeats indefinitely on one named
+weekday. It is active for the entire local calendar day and follows the ordered
+first-active rule when another Destaque overlaps it. Its customer-facing
+fallback label is “Promoção do dia”.
+_Avoid_: promoção recorrente
+
+**Lançamento**:
+A Destaque that announces a product during its release period without changing
+the product's regular price.
+_Avoid_: novidade (when referring to the product itself)
+
+**Promoção de lançamento**:
+A Destaque that combines a temporary launch price with a release announcement,
+then continues as a regular-price Lançamento when the price period ends.
+_Avoid_: promoção fixa
+
+**Preço efetivo**:
+The product price currently used by the catalog and captured in a new cart item
+after active Destaque rules are resolved.
+_Avoid_: preço promocional (when no promotion is active)
+
 ## Personalização
 
 **Opção**:

@@ -1,3 +1,4 @@
+import { getResolvedProducts } from '@/domain/menu';
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
 
@@ -7,11 +8,12 @@ export function useProduct<TProduct extends Product>(
   const { slang } = useParams();
 
   return useMemo<TProduct>(() => {
-    const enabledProducts = category.products.filter(
+    const catalogProducts = getResolvedProducts(category);
+    const enabledProducts = catalogProducts.filter(
       product => !product.disabled,
     );
     const products =
-      enabledProducts.length > 0 ? enabledProducts : category.products;
+      enabledProducts.length > 0 ? enabledProducts : catalogProducts;
     const defaultProduct = products[0];
 
     if (!slang) {

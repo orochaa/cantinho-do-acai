@@ -65,7 +65,7 @@ export function AppContentShell(
           }}
         />
         <main className="min-w-0 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
-          <div className="mx-auto max-w-3xl">{props.children}</div>
+          <div className="mx-auto max-w-4xl">{props.children}</div>
         </main>
       </div>
       <MobileNavigation

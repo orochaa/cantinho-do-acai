@@ -6,6 +6,7 @@ import { paletaCategory } from '@/domain/categories/paleta';
 import { pastelCategory } from '@/domain/categories/pastel';
 import { premiumCategory } from '@/domain/categories/premium';
 import { salgadosCategory } from '@/domain/categories/salgados';
+import { resolveProduct } from '@/domain/highlights';
 
 export interface MenuEntry<TProduct extends Product = Product> {
   readonly name: string;
@@ -35,12 +36,24 @@ export const menu = [
   createEntry('Bebidas', bebidaCategory),
 ] as const;
 
-export const visibleMenu = menu
+export const resolvedMenu = menu.map(entry => ({
+  ...entry,
+  products: entry.category.products.map(product => resolveProduct(product)),
+}));
+
+export const visibleMenu = resolvedMenu
   .filter(entry => !entry.category.disabled)
   .map(entry => ({
     ...entry,
-    products: entry.category.products.filter(product => !product.disabled),
+    products: entry.products.filter(product => !product.disabled),
   }));
+
+export function getResolvedProducts<TProduct extends Product>(
+  category: Category<TProduct>,
+): Array<TProduct> {
+  const entry = resolvedMenu.find(item => item.route === category.slang);
+  return (entry?.products ?? []) as Array<TProduct>;
+}
 
 export function getMenuEntry(route: string): MenuEntry | undefined {
   return menu.find(entry => entry.route === route);
@@ -54,7 +67,10 @@ export function getProduct(
   if (!entry || entry.category.disabled) {
     return undefined;
   }
-  return entry.category.products.find(
-    product => product.slang === productRoute && !product.disabled,
-  );
+  const product = resolvedMenu
+    .find(item => item.route === route)
+    ?.products.find(
+      product => product.slang === productRoute && !product.disabled,
+    );
+  return product;
 }

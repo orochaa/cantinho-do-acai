@@ -6,57 +6,56 @@
 
 ## Architecture
 
-- This is a React 19 single-page app built with Vite, TypeScript, and
-  React Router.
+- This is a React 19 single-page app built with Vite, TypeScript, and React
+  Router.
 - `src/index.tsx` mounts the application and composes the global providers.
   `src/router.tsx` owns the browser router, route tree, and page composition.
 - `src/pages` contains route-level components. `src/components` contains
   reusable presentational UI. Keep page-specific pieces in the page module
   unless they are reused or clearly generic.
 - `src/context` contains shared application state and its hooks. Use reducer
-  state for cart and option transitions; use context for state that crosses
-  page boundaries.
+  state for cart and option transitions; use context for state that crosses page
+  boundaries.
 - `src/hooks` contains reusable React hooks. Keep derived calculations and
   browser integration in hooks or `src/lib`, rather than in JSX markup.
 - `src/lib/data` is the static product catalog. `src/lib` also contains
   formatting, navigation, and external API helpers.
-- Shared domain declarations live in `src/@types`. Preserve the existing
-  global domain types unless a change requires a deliberate migration.
+- Shared domain declarations live in `src/@types`. Preserve the existing global
+  domain types unless a change requires a deliberate migration.
 
 ## File and import conventions
 
 - Source modules are flat files named in kebab-case, such as
-  `multiple-options-selector.tsx`. Match each primary exported component,
-  hook, or helper to its file name.
+  `multiple-options-selector.tsx`. Match each primary exported component, hook,
+  or helper to its file name.
 - Use `@/` for imports from `src` and direct imports from implementation
   modules. Avoid barrel files unless a real public module boundary needs one.
-- Keep components, hooks, contexts, data modules, and helpers in their
-  existing top-level directories. Create a new directory only when a feature
-  has enough related files to justify one.
+- Keep components, hooks, contexts, data modules, and helpers in their existing
+  top-level directories. Create a new directory only when a feature has enough
+  related files to justify one.
 - Use PascalCase for React components and types, camelCase for values and
   functions, and descriptive discriminated-union event names.
-- Prefer `const`, immutable updates, and `readonly` types where practical.
-  Keep TypeScript strict: model unknown values explicitly and do not introduce
-  `any`.
+- Prefer `const`, immutable updates, and `readonly` types where practical. Keep
+  TypeScript strict: model unknown values explicitly and do not introduce `any`.
 - Follow the existing Biome configuration for formatting, import ordering,
   naming, and linting. Keep agent-facing Markdown lines at 80 characters or
   fewer.
-- Write source code, identifiers, types, and test descriptions in English.
-  Keep Portuguese only for customer-visible copy and visual test assertions.
+- Write source code, identifiers, types, and test descriptions in English. Keep
+  Portuguese only for customer-visible copy and visual test assertions.
 
 ## React and styling
 
 - Export components as named functions returning `React.JSX.Element`, and use
-  arrow functions for callbacks, reducers, and small helpers in keeping with
-  the surrounding code.
-- Keep components focused on rendering and user interaction. Put reusable
-  state transitions in hooks or reducers and reusable pure logic in `src/lib`.
+  arrow functions for callbacks, reducers, and small helpers in keeping with the
+  surrounding code.
+- Keep components focused on rendering and user interaction. Put reusable state
+  transitions in hooks or reducers and reusable pure logic in `src/lib`.
 - Use semantic HTML, labels, useful image alt text, explicit button types, and
   accessible names for icon-only controls. Preserve keyboard and touch access
   when changing interactions.
 - Styling is Tailwind CSS v4 utility-first. Tailwind is imported by
-  `src/global.css`; component styles are normally expressed in `className`.
-  Keep global CSS limited to genuine application-wide styles.
+  `src/global.css`; component styles are normally expressed in `className`. Keep
+  global CSS limited to genuine application-wide styles.
 - Design mobile-first: make the base classes work on narrow screens, then add
   responsive enhancements. Keep interactive targets usable on touch devices.
 - Preserve the visual language and Portuguese customer-facing copy unless the
@@ -86,8 +85,8 @@
   that affect shared state, routing, configuration, or build output.
 - Tests use Vitest with global APIs. New test case titles start with `should`.
   Use `function.name` instead of a string literal for test description blocks
-  that identify a function, such as `describe(getCepAddress.name, ...)`.
-  Keep page and component-specific tests in sibling files next to their
+  that identify a function, such as `describe(getCepAddress.name, ...)`. Keep
+  page and component-specific tests in sibling files next to their
   implementation, such as `cart-provider.tsx` and `cart-provider.test.tsx`.
   There are currently no test files; add focused tests for non-trivial pure
   logic and state transitions when changing them.

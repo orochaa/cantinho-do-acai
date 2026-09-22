@@ -16,8 +16,8 @@
     "allowSyntheticDefaultImports": true,
 
     "paths": {
-      "*": ["./*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "*": ["./*"]
     },
 
     "jsx": "react-jsx",

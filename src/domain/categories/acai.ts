@@ -6,6 +6,7 @@ import type { AcaiExtra } from '@/domain/categories/acai-extra';
 import { acaiExtraGroup } from '@/domain/categories/acai-extra-group';
 import { acaiType } from '@/domain/categories/acai-type';
 import { slang } from '@/domain/format';
+import type { Highlight } from '@/domain/highlights';
 import { entries } from 'remeda';
 
 export type Acai = Product & {
@@ -48,11 +49,18 @@ export const acaiCategory: Category<Acai> = {
       name: 'Marmitex Turbinada',
       people: 3,
       fullPrice: 50,
-      price: 37,
+      price: 40,
       quantity: 800,
       complementsLimit: 5,
       extrasLimit: 15,
       extras: acaiExtraGroup['Marmita Turbinada'],
+      highlights: [
+        {
+          type: 'weekly-promo',
+          weekday: 'wednesday',
+          price: 35,
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/acai/marmitex.avif',
@@ -75,6 +83,13 @@ export const acaiCategory: Category<Acai> = {
       complementsLimit: 5,
       extrasLimit: 10,
       extras: acaiExtraGroup['Copo Grande'],
+      highlights: [
+        {
+          type: 'weekly-promo',
+          weekday: 'wednesday',
+          price: 27,
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/acai/copo-medio.jpeg',

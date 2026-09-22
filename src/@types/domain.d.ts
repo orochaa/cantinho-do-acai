@@ -20,6 +20,7 @@ interface Product {
   people: number;
   disabled?: boolean;
   acceptsObservation?: boolean;
+  highlights?: Array<import('@/domain/highlights').Highlight>;
 }
 
 interface Option<TName extends string = string> {

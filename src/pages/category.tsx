@@ -1,15 +1,20 @@
-import { MenuCard } from '@/components/menu-card';
+import { CompactMenuCard } from '@/components/compact-menu-card';
 import type { QuickAddDialogProps } from '@/components/quick-add-dialog';
 import { Seo } from '@/components/seo';
+import { getActiveHighlights } from '@/domain/highlights';
 import { visibleMenu } from '@/domain/menu';
-import { isCartEditIntent, isQuickAddIntent } from '@/lib/navigation';
+import {
+  getProductNavigation,
+  isCartEditIntent,
+  isQuickAddIntent,
+} from '@/lib/navigation';
 import { BebidaQuickForm } from '@/pages/bebida.quick';
 import { FelicidadeQuickForm } from '@/pages/felicidade.quick';
 import { GeladinhoQuickForm } from '@/pages/geladinho.quick';
 import { PaletaQuickForm } from '@/pages/paleta.quick';
 import { PastelQuickForm } from '@/pages/pastel.quick';
 import { PremiumQuickForm } from '@/pages/premium.quick';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 
 type CategoryQuickForm = (props: QuickAddDialogProps) => React.JSX.Element;
@@ -30,6 +35,23 @@ export function CategoryPage(): React.JSX.Element {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const entry = visibleMenu.find(item => item.route === categoryRoute);
   const QuickForm = entry ? quickForms[entry.route] : undefined;
+  const highlights = useMemo(
+    () => getActiveHighlights(entry?.category.products ?? []),
+    [entry],
+  );
+  const highlightedProducts = useMemo(
+    () => new Map(highlights.map(item => [item.product.slang, item])),
+    [highlights],
+  );
+  const sortedProducts = useMemo(
+    () =>
+      [...(entry?.products ?? [])].sort(
+        (left, right) =>
+          Number(highlightedProducts.has(right.slang)) -
+          Number(highlightedProducts.has(left.slang)),
+      ),
+    [entry, highlightedProducts],
+  );
 
   useEffect(() => {
     if (!(QuickForm && entry && isQuickAddIntent(location.state))) {
@@ -64,7 +86,7 @@ export function CategoryPage(): React.JSX.Element {
         description={entry.category.description}
         imgUrl={`https://cantinhodoacai.vercel.app${entry.products[0]?.img ?? ''}`}
       />
-      <div className="mx-auto w-3xl max-w-11/12 py-12 sm:py-24">
+      <div className="mx-auto w-4xl max-w-11/12 py-12 sm:py-24">
         <header className="mb-8 text-white">
           <h1 className="text-3xl font-bold sm:text-4xl">{entry.name}</h1>
           {!!entry.category.description && (
@@ -74,16 +96,28 @@ export function CategoryPage(): React.JSX.Element {
           )}
         </header>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          {entry.products.map(product => (
-            <MenuCard
-              href={QuickForm ? undefined : `/${entry.route}/${product.slang}`}
-              key={product.slang}
-              product={product}
-              onClick={
-                QuickForm ? () => setSelectedProduct(product) : undefined
-              }
-            />
-          ))}
+          {sortedProducts.map(product => {
+            const highlightedProduct = highlightedProducts.get(product.slang);
+            const displayProduct = highlightedProduct?.product ?? product;
+            const navigation = getProductNavigation(displayProduct);
+
+            return (
+              <CompactMenuCard
+                highlight={highlightedProduct?.resolved}
+                href={QuickForm ? undefined : navigation.path}
+                key={product.slang}
+                product={displayProduct}
+                onClick={
+                  QuickForm
+                    ? () => setSelectedProduct(product)
+                    : navigation.state
+                      ? () =>
+                          navigate(navigation.path, { state: navigation.state })
+                      : undefined
+                }
+              />
+            );
+          })}
         </div>
       </div>
       {!!QuickForm && (

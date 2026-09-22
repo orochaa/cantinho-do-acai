@@ -1,4 +1,5 @@
 import { slang } from '@/domain/format';
+import type { Highlight } from '@/domain/highlights';
 
 export const felicidadeCategory: Category<Product> = {
   slang: 'felicidade',
@@ -14,6 +15,13 @@ export const felicidadeCategory: Category<Product> = {
       people: 1,
       fullPrice: 25,
       price: 25,
+      highlights: [
+        {
+          type: 'weekly-promo',
+          weekday: 'tuesday',
+          price: 22,
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/felicidade/copo-da-felicidade-uva.avif',
@@ -23,6 +31,13 @@ export const felicidadeCategory: Category<Product> = {
       people: 1,
       fullPrice: 25,
       price: 25,
+      highlights: [
+        {
+          type: 'weekly-promo',
+          weekday: 'tuesday',
+          price: 22,
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/felicidade/copo-da-felicidade-ouro-branco.avif',
@@ -32,6 +47,13 @@ export const felicidadeCategory: Category<Product> = {
       people: 1,
       fullPrice: 25,
       price: 25,
+      highlights: [
+        {
+          type: 'weekly-promo',
+          weekday: 'tuesday',
+          price: 22,
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/felicidade/copo-da-felicidade-kinder-bueno.avif',
@@ -49,7 +71,14 @@ export const felicidadeCategory: Category<Product> = {
         'O Copo da Felicidade Cravejado é uma experiência de sabor única. Este prato é uma combinação perfeita de texturas e sabores, começando com o irresistível Cravejado, que oferece uma explosão de sabor a cada mordida. Acompanhado por um cremoso creme de chocolate preto, que adiciona profundidade e riqueza ao prato, e finalizado com um suave creme de chocolate branco, que equilibra a intensidade do chocolate preto com sua doçura delicada. Cada colherada é uma celebração da felicidade, tornando este prato uma escolha perfeita para quem busca uma sobremesa verdadeiramente especial.',
       people: 1,
       fullPrice: 35,
-      price: 28,
+      price: 30,
+      highlights: [
+        {
+          type: 'weekly-promo',
+          weekday: 'monday',
+          price: 25,
+        } satisfies Highlight,
+      ],
     },
   ].map(p => ({ slang: slang(p.name), ...p })),
 };
