@@ -21,7 +21,7 @@ export function CompactMenuCard(
         <img
           src={props.product.img}
           alt={`Imagem de ${props.product.name}`}
-          className="size-full object-cover transition duration-500 group-hover:scale-105"
+          className={`size-full object-cover ${props.product.slang.includes('felicidade') ? 'object-top' : 'object-center'} transition duration-500 group-hover:scale-105`}
         />
       </div>
       <div className="flex min-w-0 flex-1 flex-col justify-center">

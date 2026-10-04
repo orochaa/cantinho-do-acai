@@ -1,5 +1,4 @@
 import { slang } from '@/domain/format';
-import type { Highlight } from '@/domain/highlights';
 
 export const felicidadeCategory: Category<Product> = {
   slang: 'felicidade',
@@ -7,6 +6,34 @@ export const felicidadeCategory: Category<Product> = {
   description:
     'Nossos copos da felicidade são uma explosão de sabores, com combinações irresistíveis de cremes caseiros, frutas e chocolates que vão te surpreender a cada colherada.',
   products: [
+    {
+      img: '/img/felicidade/copo-da-felicidade-morango-kinder.jpeg',
+      name: 'Copo da Felicidade de Morango com Kinder',
+      description:
+        'Camadas de chocolate, morangos frescos e creme de Kinder, finalizadas com pedaços de chocolate e morango.',
+      people: 1,
+      fullPrice: 34,
+      price: 34,
+    },
+    {
+      img: '/img/felicidade/copo-da-felicidade-morango-ninho-nutella.jpeg',
+      name: 'Copo da Felicidade de Morango, Ninho e Nutella',
+      description:
+        'Morangos frescos em camadas com creme de Ninho e Nutella, finalizados com creme, Nutella e morango.',
+      people: 1,
+      fullPrice: 34,
+      price: 34,
+    },
+    {
+      img: '/img/felicidade/copo-da-felicidade-morango-uva.jpeg',
+      name: 'Copo da Felicidade de Morango com Uva',
+      description:
+        'Morangos e uvas frescas combinados com creme branco e chocolate, finalizados com morango e uva.',
+      people: 1,
+      fullPrice: 34,
+      price: 34,
+    },
+    /*
     {
       img: '/img/felicidade/copo-da-felicidade-morango.avif',
       name: 'Copo da Felicidade de Morango',
@@ -80,5 +107,6 @@ export const felicidadeCategory: Category<Product> = {
         } satisfies Highlight,
       ],
     },
+    */
   ].map(p => ({ slang: slang(p.name), ...p })),
 };
