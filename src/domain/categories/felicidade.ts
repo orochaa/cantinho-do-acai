@@ -7,6 +7,15 @@ export const felicidadeCategory: Category<Product> = {
     'Nossos copos da felicidade são uma explosão de sabores, com combinações irresistíveis de cremes caseiros, frutas e chocolates que vão te surpreender a cada colherada.',
   products: [
     {
+      img: '/img/felicidade/copo-da-felicidade-morango-uva.jpeg',
+      name: 'Copo da Felicidade de Morango com Uva',
+      description:
+        'Morangos e uvas frescas combinados com creme branco e chocolate, finalizados com morango e uva.',
+      people: 1,
+      fullPrice: 34,
+      price: 34,
+    },
+    {
       img: '/img/felicidade/copo-da-felicidade-morango-kinder.jpeg',
       name: 'Copo da Felicidade de Morango com Kinder',
       description:
@@ -20,15 +29,6 @@ export const felicidadeCategory: Category<Product> = {
       name: 'Copo da Felicidade de Morango, Ninho e Nutella',
       description:
         'Morangos frescos em camadas com creme de Ninho e Nutella, finalizados com creme, Nutella e morango.',
-      people: 1,
-      fullPrice: 34,
-      price: 34,
-    },
-    {
-      img: '/img/felicidade/copo-da-felicidade-morango-uva.jpeg',
-      name: 'Copo da Felicidade de Morango com Uva',
-      description:
-        'Morangos e uvas frescas combinados com creme branco e chocolate, finalizados com morango e uva.',
       people: 1,
       fullPrice: 34,
       price: 34,

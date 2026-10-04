@@ -16,7 +16,7 @@ export function CategoryCard(props: CategoryCardProps): React.JSX.Element {
       to={props.href}>
       <img
         alt={`Imagem da categoria ${props.name}`}
-        className="size-full object-cover transition duration-500 group-hover:scale-110 motion-reduce:transition-none"
+        className={`size-full object-cover ${props.image.includes('felicidade') ? 'object-top' : 'object-center'}  transition duration-500 group-hover:scale-110 motion-reduce:transition-none`}
         loading={props.loading ?? 'lazy'}
         src={props.image}
       />
