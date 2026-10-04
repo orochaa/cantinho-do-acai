@@ -1,3 +1,4 @@
+import { ProductImage } from '@/components/product-image';
 import { formatCurrency } from '@/domain/format';
 import { visibleMenu } from '@/domain/menu';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -199,10 +200,9 @@ export function MenuSearch(props: MenuSearchProps): React.JSX.Element | null {
                       moveResultFocus(index - 1);
                     }
                   }}>
-                  <img
-                    alt=""
-                    className="size-16 rounded-lg object-cover"
-                    src={product.img}
+                  <ProductImage
+                    product={product}
+                    className="size-16 rounded-lg"
                   />
                   <span className="min-w-0 flex-1">
                     <span className="block text-xs text-zinc-500">

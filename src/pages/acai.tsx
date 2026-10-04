@@ -79,10 +79,7 @@ export function AcaiPage(): React.JSX.Element {
         description={acai.description}
         imgUrl={`https://cantinhodoacai.vercel.app${acai.img}`}
       />
-      <Banner
-        img={acai.img}
-        name={acai.name}
-      />
+      <Banner product={acai} />
       <div className="mx-auto w-4xl max-w-11/12 pb-8 sm:pb-12 lg:pb-16">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{acai.name}</h2>

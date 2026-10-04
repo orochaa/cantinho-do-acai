@@ -55,11 +55,7 @@ export function PremiumPage(): React.JSX.Element {
         description={copo.description}
         imgUrl={`https://cantinhodoacai.vercel.app${copo.img}`}
       />
-      <Banner
-        img={copo.img}
-        name={copo.name}
-        imgClassName="object-top"
-      />
+      <Banner product={copo} />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{copo.name}</h2>

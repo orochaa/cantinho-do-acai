@@ -1,3 +1,4 @@
+import { ProductImage } from '@/components/product-image';
 import { useCart } from '@/context/cart-provider';
 import { useToast } from '@/context/toast-provider';
 import type { CartItem } from '@/domain/cart';
@@ -62,10 +63,9 @@ function ProductDetailsDialog(
           titleId="product-details-title"
         />
         <div className="mt-1 rounded-xl bg-purple-50 p-4">
-          <img
-            src={props.product.img}
-            alt={`Imagem de ${props.product.name}`}
-            className="aspect-video w-full rounded-lg object-cover"
+          <ProductImage
+            product={props.product}
+            className="aspect-video w-full rounded-lg"
           />
           <div className="mt-2 text-zinc-700">
             <Description>{props.product.description}</Description>
@@ -302,10 +302,9 @@ export function QuickAddDialog(props: QuickAddDialogProps): React.JSX.Element {
                 Revise seu pedido
               </h3>
               <div className="mt-3 flex gap-3">
-                <img
-                  src={product.img}
-                  alt={`Imagem de ${product.name}`}
-                  className="size-16 rounded-lg object-cover"
+                <ProductImage
+                  product={product}
+                  className="size-16 rounded-lg"
                 />
                 <div className="min-w-0">
                   <p className="font-semibold text-purple-950">

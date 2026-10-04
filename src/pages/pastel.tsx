@@ -48,11 +48,7 @@ export function PastelPage(): React.JSX.Element {
         description={pastel.description}
         imgUrl={`https://cantinhodoacai.vercel.app${pastel.img}`}
       />
-      <Banner
-        img={pastel.img}
-        name={pastel.name}
-        imgClassName="object-top"
-      />
+      <Banner product={pastel} />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{pastel.name}</h2>

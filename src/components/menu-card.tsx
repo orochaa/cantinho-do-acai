@@ -1,4 +1,5 @@
 import { HighlightPill } from '@/components/highlight-pill';
+import { ProductImage } from '@/components/product-image';
 import { singularOrPlural } from '@/domain/format';
 import type { ResolvedHighlight } from '@/domain/highlights';
 import { ChevronRight } from 'lucide-react';
@@ -16,10 +17,9 @@ export function MenuCard(props: MenuCardProps): React.JSX.Element {
   const content = (
     <>
       <div className="relative flex h-full justify-center overflow-hidden rounded-xl">
-        <img
-          src={props.product.img}
-          alt={`Imagem de ${props.product.name}`}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        <ProductImage
+          product={props.product}
+          className="h-full w-full transition duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-black/15 transition-colors group-hover:bg-black/5" />
         <div className="absolute left-3 top-3">

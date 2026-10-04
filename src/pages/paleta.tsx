@@ -20,10 +20,7 @@ export function PaletaPage(): React.JSX.Element {
         description={paleta.description}
         imgUrl={`https://cantinhodoacai.vercel.app${paleta.img}`}
       />
-      <Banner
-        img={paleta.img}
-        name={paleta.name}
-      />
+      <Banner product={paleta} />
       <OrderButton
         product={paleta}
         initialCount={edit.item?.count}

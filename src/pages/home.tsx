@@ -130,7 +130,7 @@ export function HomePage(): React.JSX.Element {
               return product ? (
                 <CategoryCard
                   href={`/${entry.route}`}
-                  image={product.img}
+                  product={product}
                   key={entry.route}
                   loading={index < 4 ? 'eager' : 'lazy'}
                   name={entry.name}

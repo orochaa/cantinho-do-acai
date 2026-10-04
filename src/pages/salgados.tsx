@@ -56,10 +56,7 @@ export function SalgadosPage(): React.JSX.Element {
         description={salgado.description}
         imgUrl={`https://cantinhodoacai.vercel.app${salgado.img}`}
       />
-      <Banner
-        img={salgado.img}
-        name={salgado.name}
-      />
+      <Banner product={salgado} />
       <div className="mx-auto w-4xl max-w-11/12 pb-8 sm:pb-12 lg:pb-16">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{salgado.name}</h2>

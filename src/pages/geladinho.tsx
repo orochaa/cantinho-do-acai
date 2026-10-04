@@ -29,11 +29,7 @@ export function GeladinhoPage(): React.JSX.Element {
         description={geladinho.description}
         imgUrl={`https://cantinhodoacai.vercel.app${geladinho.img}`}
       />
-      <Banner
-        img={geladinho.img}
-        name={geladinho.name}
-        imgClassName="object-top"
-      />
+      <Banner product={geladinho} />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{geladinho.name}</h2>

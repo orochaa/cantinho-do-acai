@@ -1,4 +1,5 @@
 import { HighlightPill } from '@/components/highlight-pill';
+import { ProductImage } from '@/components/product-image';
 import { ProductPrice } from '@/components/product-price';
 import { singularOrPlural } from '@/domain/format';
 import type { ResolvedHighlight } from '@/domain/highlights';
@@ -18,10 +19,9 @@ export function CompactMenuCard(
   const content = (
     <>
       <div className="size-22 shrink-0 overflow-hidden rounded-lg sm:size-24">
-        <img
-          src={props.product.img}
-          alt={`Imagem de ${props.product.name}`}
-          className={`size-full object-cover ${props.product.slang.includes('felicidade') ? 'object-top' : 'object-center'} transition duration-500 group-hover:scale-105`}
+        <ProductImage
+          product={props.product}
+          className="size-full transition duration-500 group-hover:scale-105"
         />
       </div>
       <div className="flex min-w-0 flex-1 flex-col justify-center">

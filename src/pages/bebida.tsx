@@ -24,11 +24,7 @@ export function BebidaPage(): React.JSX.Element {
         description={bebida.description}
         imgUrl={`https://cantinhodoacai.vercel.app${bebida.img}`}
       />
-      <Banner
-        img={bebida.img}
-        name={bebida.name}
-        imgClassName="object-center"
-      />
+      <Banner product={bebida} />
       <div className="mx-auto w-11/12">
         <div className="py-6 text-white">
           <h2 className="text-2xl font-bold">{bebida.name}</h2>

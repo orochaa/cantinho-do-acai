@@ -1,21 +1,15 @@
-import { cn } from '@/lib/format';
+import { ProductImage } from '@/components/product-image';
 
 export interface BannerProps {
-  img: string;
-  name: string;
-  imgClassName?: string;
+  product: Product;
 }
 
 export function Banner(props: BannerProps): React.JSX.Element {
   return (
     <div className="relative">
-      <img
-        src={props.img}
-        alt={props.name}
-        className={cn(
-          'h-60 w-full object-cover sm:h-96 sm:max-h-80',
-          props.imgClassName,
-        )}
+      <ProductImage
+        product={props.product}
+        className="h-60 w-full sm:h-96 sm:max-h-80"
       />
       <div className="absolute inset-0 bg-black/30" />
     </div>
