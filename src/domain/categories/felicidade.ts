@@ -1,4 +1,5 @@
 import { slang } from '@/domain/format';
+import { calendarDate, type Highlight } from '@/domain/highlights';
 
 export const felicidadeCategory: Category<Product> = {
   slang: 'felicidade',
@@ -14,6 +15,12 @@ export const felicidadeCategory: Category<Product> = {
       people: 1,
       fullPrice: 34,
       price: 34,
+      highlights: [
+        {
+          type: 'product-release',
+          start: calendarDate(2026, 10, 4),
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/felicidade/copo-da-felicidade-morango-kinder.jpeg',
@@ -23,6 +30,12 @@ export const felicidadeCategory: Category<Product> = {
       people: 1,
       fullPrice: 34,
       price: 34,
+      highlights: [
+        {
+          type: 'product-release',
+          start: calendarDate(2026, 10, 4),
+        } satisfies Highlight,
+      ],
     },
     {
       img: '/img/felicidade/copo-da-felicidade-morango-ninho-nutella.jpeg',
@@ -32,6 +45,12 @@ export const felicidadeCategory: Category<Product> = {
       people: 1,
       fullPrice: 34,
       price: 34,
+      highlights: [
+        {
+          type: 'product-release',
+          start: calendarDate(2026, 10, 4),
+        } satisfies Highlight,
+      ],
     },
     /*
     {
