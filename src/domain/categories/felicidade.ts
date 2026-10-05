@@ -14,7 +14,7 @@ export const felicidadeCategory: Category<Product> = {
         'Morangos e uvas frescas combinados com creme branco e chocolate, finalizados com morango e uva.',
       people: 1,
       fullPrice: 34,
-      price: 34,
+      price: 29,
       highlights: [
         {
           type: 'product-release',
@@ -29,7 +29,7 @@ export const felicidadeCategory: Category<Product> = {
         'Camadas de chocolate, morangos frescos e creme de Kinder, finalizadas com pedaços de chocolate e morango.',
       people: 1,
       fullPrice: 34,
-      price: 34,
+      price: 29,
       highlights: [
         {
           type: 'product-release',
@@ -44,7 +44,7 @@ export const felicidadeCategory: Category<Product> = {
         'Morangos frescos em camadas com creme de Ninho e Nutella, finalizados com creme, Nutella e morango.',
       people: 1,
       fullPrice: 34,
-      price: 34,
+      price: 29,
       highlights: [
         {
           type: 'product-release',
