@@ -158,7 +158,7 @@ export const sorveteCategory: Category<SorveteProduct> = {
       optionGroups: [
         {
           title: 'Sabor de Sorvete',
-          description: 'Escolha um ou mais sabores.',
+          description: 'Escolha um sabor.',
           selection: 'single' as const,
           required: requiredFlavor,
           options: options([
@@ -172,7 +172,7 @@ export const sorveteCategory: Category<SorveteProduct> = {
         },
         {
           title: 'Calda',
-          description: 'Adicione uma ou mais caldas, se desejar.',
+          description: 'Adicione uma calda, se desejar.',
           selection: 'single' as const,
           options: options([
             {
