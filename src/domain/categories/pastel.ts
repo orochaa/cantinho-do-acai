@@ -2,7 +2,13 @@ import { slang } from '@/domain/format';
 
 export const pastelCategory: Category<
   Product,
-  { size: Array<{ name: string; price: number }> }
+  {
+    size: Array<{
+      name: string;
+      price: number;
+      priceMode: 'adjustment';
+    }>;
+  }
 > = {
   slang: 'pastel',
   quickAdd: true,
@@ -70,14 +76,17 @@ export const pastelCategory: Category<
     {
       name: 'Pastel Pequeno',
       price: -10,
+      priceMode: 'adjustment',
     },
     {
       name: 'Pastel Médio',
       price: 0,
+      priceMode: 'adjustment',
     },
     {
       name: 'Pastel Grande',
       price: 10,
+      priceMode: 'adjustment',
     },
   ],
 };

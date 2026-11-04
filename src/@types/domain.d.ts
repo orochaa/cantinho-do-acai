@@ -27,5 +27,6 @@ interface Option<TName extends string = string> {
   name: TName;
   count: number;
   price?: number;
+  priceMode?: 'adjustment';
   img?: string;
 }

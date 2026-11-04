@@ -2,6 +2,19 @@ import type { CartItem } from '@/domain/cart';
 import { formatCurrency, singularOrPlural } from '@/domain/format';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 
+const getOptionDisplayPrice = (
+  item: CartItem,
+  option: Option,
+): number | undefined => {
+  if (option.price === undefined) {
+    return undefined;
+  }
+
+  return option.priceMode === 'adjustment'
+    ? item.product.price + option.price
+    : option.price;
+};
+
 export function CartItems(props: {
   cart: ReadonlyArray<CartItem>;
   onRemove: (item: CartItem) => void;
@@ -40,20 +53,24 @@ export function CartItems(props: {
             </div>
           </div>
           <ul className="flex flex-col gap-1 text-sm text-zinc-600">
-            {item.options.map(option => (
-              <li
-                key={option.name}
-                className="flex items-center gap-1">
-                <Plus className="size-4 shrink-0 text-pink-600" />
-                {[
-                  option.count,
-                  option.name,
-                  option.price && formatCurrency(option.price),
-                ]
-                  .filter(Boolean)
-                  .join(' - ')}
-              </li>
-            ))}
+            {item.options.map(option => {
+              const displayPrice = getOptionDisplayPrice(item, option);
+
+              return (
+                <li
+                  key={option.name}
+                  className="flex items-center gap-1">
+                  <Plus className="size-4 shrink-0 text-pink-600" />
+                  {[
+                    option.count,
+                    option.name,
+                    displayPrice && formatCurrency(displayPrice),
+                  ]
+                    .filter(Boolean)
+                    .join(' - ')}
+                </li>
+              );
+            })}
           </ul>
           {!!item.observation && (
             <div>
