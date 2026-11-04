@@ -46,9 +46,20 @@ const setTextareaValue = (
 function CartProbe(): React.JSX.Element {
   const { cart } = useCart();
   return (
-    <output data-testid="cart-probe">
-      {cart.map(item => `${item.product.name}:${item.total}`).join('|')}
-    </output>
+    <>
+      <output data-testid="cart-probe">
+        {cart.map(item => `${item.product.name}:${item.total}`).join('|')}
+      </output>
+      <output data-testid="cart-options">
+        {cart
+          .map(item =>
+            item.options
+              .map(option => `${option.name}:${option.count}`)
+              .join(','),
+          )
+          .join('|')}
+      </output>
+    </>
   );
 }
 
@@ -106,7 +117,9 @@ describe(QuickAddDialog.name, () => {
 
     act(() => {
       document
-        .querySelector<HTMLButtonElement>('button[aria-pressed="false"]')
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Selecionar Forte"]',
+        )
         ?.click();
     });
     act(() =>
@@ -170,9 +183,10 @@ describe(QuickAddDialog.name, () => {
     });
 
     expect(
-      document.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
-        ?.textContent,
-    ).toContain('Forte');
+      document.querySelector<HTMLButtonElement>(
+        'button[aria-label="Desselecionar Forte"]',
+      ),
+    ).not.toBeNull();
 
     act(() =>
       Array.from(document.querySelectorAll('button'))
@@ -245,6 +259,291 @@ describe(QuickAddDialog.name, () => {
     );
   });
 
+  it('should render adjusted option prices as final prices', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <QuickAddDialog
+              open
+              observationPlaceholder="Exemplo"
+              onClose={vi.fn()}
+              product={{ ...product, price: 15 }}
+              steps={[
+                {
+                  defaultOptionIndex: 0,
+                  description: 'Escolha o tamanho.',
+                  id: 'size',
+                  options: [
+                    {
+                      name: 'Pastel Grande',
+                      price: 10,
+                      priceMode: 'adjustment',
+                    },
+                  ],
+                  title: 'Tamanho',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    expect(document.body.textContent).toContain('R$ 25,00');
+  });
+
+  it('should require one or more choices for a multi-select step', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <CartProbe />
+            <QuickAddDialog
+              open
+              observationPlaceholder="Exemplo"
+              product={product}
+              onClose={vi.fn()}
+              steps={[
+                {
+                  description: 'Escolha os sabores.',
+                  id: 'flavors',
+                  required: 'Escolha pelo menos um sabor.',
+                  selection: 'multiple',
+                  options: [
+                    { name: 'Morango', price: 0 },
+                    { name: 'Chocolate', price: 0 },
+                  ],
+                  title: 'Sabores',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    const continueButton = Array.from(document.querySelectorAll('button')).find(
+      button => button.textContent?.trim() === 'Continuar',
+    );
+    expect(continueButton?.disabled).toBe(false);
+    expect(document.body.textContent).not.toContain(
+      'Escolha pelo menos um sabor.',
+    );
+
+    act(() => continueButton?.click());
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.includes('Adicionar ao pedido'))
+        ?.click(),
+    );
+    expect(document.body.textContent).toContain('Escolha pelo menos um sabor.');
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Adicionar Morango"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Adicionar Chocolate"]',
+        )
+        ?.click(),
+    );
+    act(() => continueButton?.click());
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.includes('Adicionar ao pedido'))
+        ?.click(),
+    );
+
+    expect(
+      document.querySelector('[data-testid="cart-options"]')?.textContent,
+    ).toBe('Morango:1,Chocolate:1');
+  });
+
+  it('should require a selection for a required single-choice step', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <QuickAddDialog
+              open
+              observationPlaceholder="Exemplo"
+              product={product}
+              onClose={vi.fn()}
+              steps={[
+                {
+                  description: 'Escolha um sabor.',
+                  id: 'flavor',
+                  selection: 'single',
+                  required: 'Escolha um sabor.',
+                  options: [{ name: 'Morango', price: 0 }],
+                  title: 'Sabor',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    const continueButton = Array.from(document.querySelectorAll('button')).find(
+      button => button.textContent?.trim() === 'Continuar',
+    );
+    expect(continueButton?.disabled).toBe(false);
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+
+    act(() => continueButton?.click());
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.includes('Adicionar ao pedido'))
+        ?.click(),
+    );
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe(
+      'Escolha um sabor.',
+    );
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Selecionar Morango"]',
+        )
+        ?.click(),
+    );
+    expect(document.querySelector('[role="alert"]')).toBeNull();
+    expect(
+      document.querySelector<HTMLButtonElement>(
+        'button[aria-label="Selecionado Morango"]',
+      )?.disabled,
+    ).toBe(true);
+  });
+
+  it('should allow adding the same option multiple times', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <CartProbe />
+            <QuickAddDialog
+              open
+              observationPlaceholder="Exemplo"
+              product={product}
+              onClose={vi.fn()}
+              steps={[
+                {
+                  description: 'Escolha os sabores.',
+                  id: 'flavors',
+                  discountProductPrice: true,
+                  required: 'Escolha pelo menos um sabor.',
+                  selection: 'multiple',
+                  options: [{ name: 'Morango', price: product.price }],
+                  title: 'Sabores',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Adicionar Morango"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      document
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Adicionar Morango"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.trim() === 'Continuar')
+        ?.click(),
+    );
+    expect(
+      document.querySelector('button[aria-label="Aumentar quantidade"]'),
+    ).toBeNull();
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.includes('Adicionar ao pedido'))
+        ?.click(),
+    );
+
+    expect(
+      document.querySelector('[data-testid="cart-options"]')?.textContent,
+    ).toBe('Morango:2,Desconto do preço do pote:1');
+    expect(
+      document.querySelector('[data-testid="cart-probe"]')?.textContent,
+    ).toBe('Produto de teste:20');
+  });
+
+  it('should hide the review quantity for a price-discount option group before selection', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <ToastProvider>
+          <CartProvider>
+            <QuickAddDialog
+              open
+              observationPlaceholder="Exemplo"
+              product={product}
+              onClose={vi.fn()}
+              steps={[
+                {
+                  description: 'Escolha um sabor.',
+                  discountProductPrice: true,
+                  id: 'flavors',
+                  options: [{ name: 'Morango', price: product.price }],
+                  required: 'Escolha um sabor.',
+                  selection: 'multiple',
+                  title: 'Sabores',
+                },
+              ]}
+            />
+          </CartProvider>
+        </ToastProvider>,
+      );
+    });
+
+    act(() =>
+      Array.from(document.querySelectorAll('button'))
+        .find(button => button.textContent?.trim() === 'Continuar')
+        ?.click(),
+    );
+
+    expect(
+      document.querySelector('button[aria-label="Aumentar quantidade"]'),
+    ).toBeNull();
+  });
+
   it('should preserve the quick-add draft when viewing product details', () => {
     const container = document.createElement('div');
     document.body.append(container);
@@ -279,7 +578,9 @@ describe(QuickAddDialog.name, () => {
 
     act(() =>
       document
-        .querySelector<HTMLButtonElement>('button[aria-pressed="false"]')
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Selecionar Forte"]',
+        )
         ?.click(),
     );
     act(() =>

@@ -13,7 +13,9 @@ import { FelicidadeQuickForm } from '@/pages/felicidade.quick';
 import { GeladinhoQuickForm } from '@/pages/geladinho.quick';
 import { PaletaQuickForm } from '@/pages/paleta.quick';
 import { PastelQuickForm } from '@/pages/pastel.quick';
+import { PicoleQuickForm } from '@/pages/picole.quick';
 import { PremiumQuickForm } from '@/pages/premium.quick';
+import { SorveteQuickForm } from '@/pages/sorvete.quick';
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 
@@ -24,8 +26,10 @@ const quickForms: Readonly<Partial<Record<string, CategoryQuickForm>>> = {
   felicidade: FelicidadeQuickForm,
   geladinho: GeladinhoQuickForm,
   paleta: PaletaQuickForm,
+  picoles: PicoleQuickForm,
   pastel: PastelQuickForm,
   premium: PremiumQuickForm,
+  sorvetes: SorveteQuickForm,
 };
 
 export function CategoryPage(): React.JSX.Element {

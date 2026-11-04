@@ -15,6 +15,7 @@ interface Product {
   description: string;
   slang: string;
   quantity?: number;
+  count?: number;
   fullPrice: number;
   price: number;
   people: number;
@@ -28,5 +29,6 @@ interface Option<TName extends string = string> {
   count: number;
   price?: number;
   priceMode?: 'adjustment';
+  kind?: 'product-price-discount';
   img?: string;
 }

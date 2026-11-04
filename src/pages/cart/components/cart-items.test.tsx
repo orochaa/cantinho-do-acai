@@ -1,4 +1,4 @@
-import { createOrderItem } from '@/domain/order';
+import { createOrderItem, createProductPriceDiscount } from '@/domain/order';
 import { CartItems } from '@/pages/cart/components/cart-items';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
@@ -81,5 +81,37 @@ describe(CartItems.name, () => {
     });
 
     expect(container.textContent).toContain('Discount - -R$ 10,00');
+  });
+
+  it('should hide the base-price discount while preserving the final total', () => {
+    const item = {
+      ...createOrderItem({
+        product,
+        options: [
+          { name: 'Sorvete Napolitano', count: 1, price: product.price },
+          createProductPriceDiscount(product),
+        ],
+        count: 1,
+      }),
+      id: 'sorvete-item',
+    };
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <CartItems
+          cart={[item]}
+          onEdit={vi.fn()}
+          onRemove={vi.fn()}
+        />,
+      );
+    });
+
+    expect(container.textContent).toContain('Sorvete Napolitano - R$ 15,00');
+    expect(container.textContent).not.toContain('Desconto do preço do pote');
+    expect(container.textContent).not.toContain('-R$ 15,00');
+    expect(container.textContent).toContain('R$ 15,00');
   });
 });

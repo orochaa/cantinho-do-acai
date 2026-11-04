@@ -18,7 +18,7 @@ export interface PersonalizationSingleGroup<TName extends string = string> {
 export interface PersonalizationMultipleGroup<TName extends string = string> {
   type: 'multiple';
   options: Array<Optional<Option<TName>, 'count'>>;
-  countLimit: number;
+  countLimit?: number;
   required?: string;
 }
 
@@ -42,7 +42,7 @@ export interface PersonalizationMultipleGroupState<
 > {
   type: 'multiple';
   options: Array<Option<TName>>;
-  countLimit: number;
+  countLimit?: number;
   countTotal: number;
   required?: string;
 }
@@ -157,11 +157,15 @@ export const selectPersonalizationOption = <
       name === event.group && currentGroup.type === 'single'
         ? {
             ...currentGroup,
-            isSelected: true,
+            isSelected: !event.option.isSelected,
             options: currentGroup.options.map(option => ({
               ...option,
-              isSelected: option.name === event.option.name,
-              count: option.name === event.option.name ? 1 : 0,
+              isSelected:
+                !event.option.isSelected && option.name === event.option.name,
+              count:
+                !event.option.isSelected && option.name === event.option.name
+                  ? 1
+                  : 0,
             })),
           }
         : currentGroup,
@@ -183,7 +187,10 @@ export const addPersonalizationOption = <Groups extends PersonalizationGroups>(
     option => option.name === event.option.name,
   );
 
-  if (!currentOption || group.countTotal >= group.countLimit) {
+  if (
+    !currentOption ||
+    (group.countLimit !== undefined && group.countTotal >= group.countLimit)
+  ) {
     return state;
   }
 

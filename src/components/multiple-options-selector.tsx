@@ -25,7 +25,9 @@ export function MultipleOptionsSelector<TName extends string>(
       <div className="m-1 text-white">
         <h2 className="text-xl font-bold">{title}</h2>
         <p className="text-sm">
-          Escolha até {singularOrPlural(ctx.countLimit, 'opção', 'opções')}
+          {ctx.countLimit === undefined
+            ? 'Escolha quantas opções quiser'
+            : `Escolha até ${singularOrPlural(ctx.countLimit, 'opção', 'opções')}`}
         </p>
       </div>
 
@@ -119,7 +121,9 @@ export function AddOptionButton<TName extends string>(
       className="flex min-h-11 min-w-9 h-full items-center justify-center rounded-lg pr-5.75 text-purple-700 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 disabled:text-zinc-400"
       aria-label={`Adicionar ${option.name}`}
       title="Adicionar"
-      disabled={ctx.countTotal >= ctx.countLimit}
+      disabled={
+        ctx.countLimit !== undefined && ctx.countTotal >= ctx.countLimit
+      }
       onClick={() => dispatchEvent({ type: 'add', option })}>
       <Plus className="size-5" />
     </button>
@@ -146,7 +150,9 @@ export function QuantitySelector<TName extends string>(
         }
         decreaseLabel={`${item.count === 1 ? 'Remover' : 'Diminuir'} ${item.name}`}
         decreaseTitle={item.count === 1 ? 'Remover' : 'Diminuir'}
-        increaseDisabled={ctx.countTotal >= ctx.countLimit}
+        increaseDisabled={
+          ctx.countLimit !== undefined && ctx.countTotal >= ctx.countLimit
+        }
         increaseLabel={`Adicionar ${item.name}`}
         increaseTitle="Adicionar"
         onDecrease={() => onCountChange({ type: 'remove', option: item })}

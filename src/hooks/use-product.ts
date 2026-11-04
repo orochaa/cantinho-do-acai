@@ -4,8 +4,10 @@ import { useParams } from 'react-router';
 
 export function useProduct<TProduct extends Product>(
   category: Category<TProduct>,
+  productSlang?: string,
 ): TProduct {
-  const { slang } = useParams();
+  const { slang: routeSlang } = useParams();
+  const slang = productSlang ?? routeSlang;
 
   return useMemo<TProduct>(() => {
     const catalogProducts = getResolvedProducts(category);

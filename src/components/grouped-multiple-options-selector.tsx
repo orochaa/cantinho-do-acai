@@ -28,7 +28,9 @@ export function GroupedMultipleOptionsSelector<TName extends string>(
       <div className="m-1 text-white">
         <h2 className="text-xl font-bold">{title}</h2>
         <p className="text-sm">
-          Escolha até {singularOrPlural(ctx.countLimit, 'opção', 'opções')}
+          {ctx.countLimit === undefined
+            ? 'Escolha quantas opções quiser'
+            : `Escolha até ${singularOrPlural(ctx.countLimit, 'opção', 'opções')}`}
         </p>
       </div>
 

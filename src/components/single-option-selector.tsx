@@ -17,6 +17,8 @@ export interface SingleOptionSelectorProps<
   ctx: { options: Array<TOption> };
   onSelectionChange: (option: TOption) => void;
   bare?: boolean;
+  description?: string;
+  required?: boolean;
 }
 
 export function SingleOptionSelector<
@@ -29,7 +31,7 @@ export function SingleOptionSelector<
     <>
       <div className={`m-1 ${props.bare ? 'text-zinc-900' : 'text-white'}`}>
         <h2 className="text-xl font-bold">{title}</h2>
-        <p className="text-sm">Escolha uma opção</p>
+        <p className="text-sm">{props.description ?? 'Escolha uma opção'}</p>
       </div>
 
       <div className="grid auto-rows-[1fr] grid-cols-1 gap-2">
@@ -38,6 +40,7 @@ export function SingleOptionSelector<
             key={option.name}
             option={option}
             onSelectionChange={onSelectionChange}
+            required={props.required ?? false}
           />
         ))}
       </div>
@@ -57,13 +60,14 @@ interface SingleOptionRowProps<
 > {
   option: TOption;
   onSelectionChange: (option: TOption) => void;
+  required: boolean;
 }
 
 function SingleOptionRow<
   TName extends string,
   TOption extends SelectableOptionLike<TName>,
 >(props: SingleOptionRowProps<TName, TOption>): React.JSX.Element {
-  const { option, onSelectionChange } = props;
+  const { option, onSelectionChange, required } = props;
 
   return (
     <div className="flex items-center rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:border-purple-200 hover:shadow-md">
@@ -71,7 +75,11 @@ function SingleOptionRow<
         type="button"
         tabIndex={-1}
         className="flex min-h-14 grow items-center gap-3 p-3 text-left"
-        onClick={() => onSelectionChange(option)}>
+        onClick={() => {
+          if (!(option.isSelected && required)) {
+            onSelectionChange(option);
+          }
+        }}>
         {!!option.img && (
           <div className="flex size-11 shrink-0 items-center overflow-hidden rounded shadow-2xl">
             <img
@@ -96,6 +104,7 @@ function SingleOptionRow<
       <ToggleOptionButton
         onSelectionChange={onSelectionChange}
         option={option}
+        required={required}
       />
     </div>
   );
@@ -107,22 +116,23 @@ interface ToggleOptionButtonProps<
 > {
   option: TOption;
   onSelectionChange: (option: TOption) => void;
+  required: boolean;
 }
 
 function ToggleOptionButton<
   TName extends string,
   TOption extends SelectableOptionLike<TName>,
 >(props: ToggleOptionButtonProps<TName, TOption>): React.JSX.Element {
-  const { option, onSelectionChange } = props;
+  const { option, onSelectionChange, required } = props;
 
   return (
     <button
       type="button"
-      aria-label={`${option.isSelected ? 'Selecionado' : 'Selecionar'} ${option.name}`}
+      aria-label={`${option.isSelected ? (required ? 'Selecionado' : 'Desselecionar') : 'Selecionar'} ${option.name}`}
       aria-pressed={option.isSelected}
       title={`${option.isSelected ? 'Selecionado' : 'Selecionar'}`}
       className="flex min-h-11 min-w-11 h-full items-center justify-center p-3 rounded-lg pl-0 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
-      disabled={option.isSelected}
+      disabled={option.isSelected && required}
       onClick={() => onSelectionChange(option)}>
       <span
         data-disabled={option.isSelected}

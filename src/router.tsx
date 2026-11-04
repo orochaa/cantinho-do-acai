@@ -10,14 +10,18 @@ import { GeladinhoPage } from '@/pages/geladinho';
 import { HomePage } from '@/pages/home';
 import { PaletaPage } from '@/pages/paleta';
 import { PastelPage } from '@/pages/pastel';
+import { PicolePage } from '@/pages/picole';
 import { PremiumPage } from '@/pages/premium';
 import { SalgadosPage } from '@/pages/salgados';
+import { SorvetePage } from '@/pages/sorvete';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ScrollToTop } from './scrool-to-top';
 
 const categoryPages: Record<string, React.JSX.Element> = {
   acai: <AcaiPage />,
   paleta: <PaletaPage />,
+  picoles: <PicolePage />,
+  sorvetes: <SorvetePage />,
   salgados: <SalgadosPage />,
   felicidade: <FelicidadePage />,
   premium: <PremiumPage />,

@@ -4,12 +4,14 @@ import { getMenuEntry, getProduct, menu, visibleMenu } from '@/domain/menu';
 
 describe('menu registry', () => {
   it('should expose route metadata for every category', () => {
-    expect(menu).toHaveLength(8);
+    expect(menu).toHaveLength(10);
     expect(menu.map(entry => entry.path)).toEqual([
       'acai/:slang',
       'premium/:slang',
       'felicidade/:slang',
       'paleta/:slang',
+      'sorvetes/:slang',
+      'picoles/:slang',
       'geladinho/:slang',
       'pastel/:slang',
       'salgados/:slang',

@@ -4,8 +4,10 @@ import { felicidadeCategory } from '@/domain/categories/felicidade';
 import { geladinhoCategory } from '@/domain/categories/geladinho';
 import { paletaCategory } from '@/domain/categories/paleta';
 import { pastelCategory } from '@/domain/categories/pastel';
+import { picoleCategory } from '@/domain/categories/picole';
 import { premiumCategory } from '@/domain/categories/premium';
 import { salgadosCategory } from '@/domain/categories/salgados';
+import { sorveteCategory } from '@/domain/categories/sorvete';
 import { resolveProduct } from '@/domain/highlights';
 
 export interface MenuEntry<TProduct extends Product = Product> {
@@ -30,6 +32,8 @@ export const menu = [
   createEntry('Premium', premiumCategory),
   createEntry('Copos da Felicidade', felicidadeCategory),
   createEntry('Paletas', paletaCategory),
+  createEntry('Sorvetes', sorveteCategory),
+  createEntry('Picolés', picoleCategory),
   createEntry('Geladinho Gourmet', geladinhoCategory),
   createEntry('Pastéis', pastelCategory),
   createEntry('Salgados', salgadosCategory),

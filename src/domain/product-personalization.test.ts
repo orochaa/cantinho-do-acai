@@ -64,6 +64,33 @@ describe('product personalization', () => {
     expect(validateProductPersonalization(selected)).toBeUndefined();
   });
 
+  it('should clear a selected optional single option when selected again', () => {
+    const groups: { sauce: PersonalizationSingleGroup } = {
+      sauce: {
+        type: 'single',
+        options: [{ name: 'Morango', isSelected: true }],
+      },
+    };
+    const state = createProductPersonalizationState(groups);
+    const selectedOption = state.groups.sauce.options[0];
+
+    expect(selectedOption).toBeDefined();
+    if (!selectedOption) {
+      return;
+    }
+
+    const cleared = productPersonalizationReducer(state, {
+      type: 'select',
+      group: 'sauce',
+      option: selectedOption,
+    });
+
+    expect(cleared.groups.sauce).toMatchObject({
+      isSelected: false,
+      options: [{ name: 'Morango', count: 0, isSelected: false }],
+    });
+  });
+
   it('should enforce a named multiple option count limit', () => {
     const state = createProductPersonalizationState({
       complements: {
@@ -84,6 +111,30 @@ describe('product personalization', () => {
     });
 
     expect(blocked).toEqual(selected);
+  });
+
+  it('should allow repeated options when no count limit is set', () => {
+    const state = createProductPersonalizationState({
+      flavors: {
+        type: 'multiple',
+        options: [{ name: 'Morango' }],
+      },
+    });
+    const once = productPersonalizationReducer(state, {
+      type: 'add',
+      group: 'flavors',
+      option: { name: 'Morango', count: 0 },
+    });
+    const twice = productPersonalizationReducer(once, {
+      type: 'add',
+      group: 'flavors',
+      option: { name: 'Morango', count: 1 },
+    });
+
+    expect(twice.groups.flavors).toMatchObject({
+      countTotal: 2,
+      options: [{ name: 'Morango', count: 2 }],
+    });
   });
 
   it('should preserve discriminated multiple option names', () => {

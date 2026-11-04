@@ -95,6 +95,13 @@ export function calculateOrderChange(
 const getOptionPrice = (option: Option): number =>
   (option.price ?? 0) * option.count;
 
+export const createProductPriceDiscount = (product: Product): Option => ({
+  name: 'Desconto do preço do pote',
+  count: 1,
+  price: -product.price,
+  kind: 'product-price-discount',
+});
+
 export function calculateOrderItemTotal(item: OrderItemInput): number {
   const optionsTotal = item.options.reduce(
     (total, option) => total + getOptionPrice(option),

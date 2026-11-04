@@ -53,24 +53,26 @@ export function CartItems(props: {
             </div>
           </div>
           <ul className="flex flex-col gap-1 text-sm text-zinc-600">
-            {item.options.map(option => {
-              const displayPrice = getOptionDisplayPrice(item, option);
+            {item.options
+              .filter(option => option.kind !== 'product-price-discount')
+              .map(option => {
+                const displayPrice = getOptionDisplayPrice(item, option);
 
-              return (
-                <li
-                  key={option.name}
-                  className="flex items-center gap-1">
-                  <Plus className="size-4 shrink-0 text-pink-600" />
-                  {[
-                    option.count,
-                    option.name,
-                    displayPrice && formatCurrency(displayPrice),
-                  ]
-                    .filter(Boolean)
-                    .join(' - ')}
-                </li>
-              );
-            })}
+                return (
+                  <li
+                    key={option.name}
+                    className="flex items-center gap-1">
+                    <Plus className="size-4 shrink-0 text-pink-600" />
+                    {[
+                      option.count,
+                      option.name,
+                      displayPrice && formatCurrency(displayPrice),
+                    ]
+                      .filter(Boolean)
+                      .join(' - ')}
+                  </li>
+                );
+              })}
           </ul>
           {!!item.observation && (
             <div>

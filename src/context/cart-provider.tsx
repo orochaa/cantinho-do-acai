@@ -22,7 +22,7 @@ import {
 
 export type { CartEvent, CartItem } from '@/domain/cart';
 
-interface ICartContext {
+export interface ICartContext {
   addCartEvent: (event: CartEvent) => void;
   cart: ReadonlyArray<CartItem>;
   cartRevision: number;

@@ -4,6 +4,7 @@ import {
   calculateOrderTotal,
   createOrder,
   createOrderItem,
+  createProductPriceDiscount,
   updateOrderItemQuantity,
   validateOrder,
 } from '@/domain/order';
@@ -56,6 +57,25 @@ describe('Order pricing', () => {
 
     expect(item.total).toBe(6);
     expect(item.options).toHaveLength(2);
+  });
+
+  it('should discount the base price once when each flavor is fully priced', () => {
+    const item = createOrderItem({
+      product,
+      options: [
+        { name: 'Morango', count: 2, price: product.price },
+        createProductPriceDiscount(product),
+      ],
+      count: 1,
+    });
+
+    expect(item.total).toBe(20);
+    expect(item.options).toContainEqual({
+      name: 'Desconto do preço do pote',
+      count: 1,
+      price: -10,
+      kind: 'product-price-discount',
+    });
   });
 
   it('should recalculate an order item when its quantity changes', () => {

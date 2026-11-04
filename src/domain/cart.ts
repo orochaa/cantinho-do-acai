@@ -103,6 +103,8 @@ const isValidOption = (value: unknown): value is Option => {
     Number.isInteger(value.count) &&
     value.count >= 0 &&
     (value.price === undefined || typeof value.price === 'number') &&
+    (value.priceMode === undefined || value.priceMode === 'adjustment') &&
+    (value.kind === undefined || value.kind === 'product-price-discount') &&
     (value.img === undefined || typeof value.img === 'string')
   );
 };
