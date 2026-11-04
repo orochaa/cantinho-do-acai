@@ -55,6 +55,58 @@ describe(MultipleOptionsSelector.name, () => {
     });
   });
 
+  it('should dispatch only once for a duplicate touch click', () => {
+    const dispatchEvent = vi.fn();
+    const container = document.createElement('div');
+    document.body.append(container);
+    activeRoot = createRoot(container);
+
+    act(() => {
+      activeRoot?.render(
+        <MultipleOptionsSelector
+          title="Sabores"
+          ctx={createState(0)}
+          dispatchEvent={dispatchEvent}
+        />,
+      );
+    });
+
+    const addButton = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Adicionar Morango"]',
+    );
+
+    act(() => {
+      const pointerDown = new Event('pointerdown', { bubbles: true });
+      Object.assign(pointerDown, { pointerId: 0, pointerType: 'touch' });
+      const pointerUp = new Event('pointerup', { bubbles: true });
+      Object.assign(pointerUp, { pointerId: 0, pointerType: 'touch' });
+      addButton?.dispatchEvent(pointerDown);
+      addButton?.dispatchEvent(pointerUp);
+      addButton?.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, detail: 1 }),
+      );
+    });
+
+    expect(dispatchEvent).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      const pointerDown = new Event('pointerdown', { bubbles: true });
+      Object.assign(pointerDown, { pointerId: 0, pointerType: 'touch' });
+      const pointerUp = new Event('pointerup', { bubbles: true });
+      Object.assign(pointerUp, { pointerId: 0, pointerType: 'touch' });
+      addButton?.dispatchEvent(pointerDown);
+      addButton?.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, detail: 1 }),
+      );
+      addButton?.dispatchEvent(pointerUp);
+      addButton?.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, detail: 2 }),
+      );
+    });
+
+    expect(dispatchEvent).toHaveBeenCalledTimes(2);
+  });
+
   it('should disable add controls at the count limit', () => {
     const container = document.createElement('div');
     document.body.append(container);

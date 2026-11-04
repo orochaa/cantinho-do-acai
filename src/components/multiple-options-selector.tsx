@@ -6,8 +6,15 @@ import type {
   MultipleOptionsState,
 } from '@/domain/product-personalization';
 import { Plus, Trash2 } from 'lucide-react';
+import { useRef } from 'react';
 import { Container } from './container';
 import { QuantityStepper } from './quantity-stepper';
+
+interface TouchClickState {
+  pointerActive: boolean;
+  clickedBeforePointerUp: boolean;
+  suppressPostUpClickUntil: number;
+}
 
 export interface MultipleOptionsSelectorProps<TName extends string> {
   title: string;
@@ -55,10 +62,47 @@ export function MultipleOptionRow<TName extends string>(
   props: MultipleOptionRowProps<TName>,
 ): React.JSX.Element {
   const { option, ctx, dispatchEvent } = props;
+  const touchClickState = useRef<TouchClickState>({
+    pointerActive: false,
+    clickedBeforePointerUp: false,
+    suppressPostUpClickUntil: 0,
+  });
 
   return (
     <div
-      className={`flex items-center rounded-xl border bg-white shadow-sm transition ${option.count > 0 ? 'border-purple-300 bg-purple-50/50' : 'border-zinc-200 hover:border-purple-200 hover:shadow-md'}`}>
+      className={`flex items-center rounded-xl border bg-white shadow-sm transition ${option.count > 0 ? 'border-purple-300 bg-purple-50/50' : 'border-zinc-200 hover:border-purple-200 hover:shadow-md'}`}
+      onPointerDownCapture={event => {
+        if (event.pointerType === 'touch') {
+          touchClickState.current.pointerActive = true;
+          touchClickState.current.clickedBeforePointerUp = false;
+          touchClickState.current.suppressPostUpClickUntil = 0;
+        }
+      }}
+      onPointerUpCapture={event => {
+        if (event.pointerType === 'touch') {
+          touchClickState.current.pointerActive = false;
+          // biome-ignore lint/suspicious/noUnnecessaryConditions: Pointer and click callbacks mutate this ref between events.
+          touchClickState.current.suppressPostUpClickUntil = touchClickState
+            .current.clickedBeforePointerUp
+            ? event.timeStamp + 50
+            : 0;
+          touchClickState.current.clickedBeforePointerUp = false;
+        }
+      }}
+      onClickCapture={event => {
+        // biome-ignore lint/suspicious/noUnnecessaryConditions: Pointer and click callbacks mutate this ref between events.
+        if (touchClickState.current.pointerActive) {
+          touchClickState.current.clickedBeforePointerUp = true;
+          return;
+        }
+        if (
+          touchClickState.current.suppressPostUpClickUntil > 0 &&
+          event.timeStamp <= touchClickState.current.suppressPostUpClickUntil
+        ) {
+          touchClickState.current.suppressPostUpClickUntil = 0;
+          event.stopPropagation();
+        }
+      }}>
       <button
         type="button"
         tabIndex={-1}
